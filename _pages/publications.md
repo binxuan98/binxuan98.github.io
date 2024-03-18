@@ -13,4 +13,5 @@ author_profile: true
 
 {% for post in site.publications reversed %}
   {% include archive-single.html %}
+  <img src="{{ post.image }}" alt="Publication Image"> 
 {% endfor %}

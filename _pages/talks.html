@@ -11,6 +11,8 @@ author_profile: true
 
 {% endif %}
 
+
 {% for post in site.talks reversed %}
   {% include archive-single-talk.html %}
+  <img src="{{ post.image }}" alt="Talk Image"> <!-- 这里插入了图像的代码 -->
 {% endfor %}
