@@ -7,5 +7,5 @@ date: 2023-12-27
 venue: 
 paperurl: 'https://link.springer.com/article/10.1007/s00521-023-09345-8'
 citation: 
-image: /images/nanliang.jpg
+image: /images/dlpgan.jpg
 ---
