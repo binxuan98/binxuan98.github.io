@@ -71,6 +71,13 @@ author:
   xing             : # Username
   youtube          : # Username
   zhihu            : # URL
+  
+  # Analytics settings
+
+
+# Google Analytics
+ga_track_id: 'G-JBTEXCJX6L'            # Format: UA-xxxxxx-xx
+ga_domain: auto
 
 
 # Site Settings
