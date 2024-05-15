@@ -9,7 +9,7 @@ redirect_from:
 ---
 
 
-I'm a third year graduate student from [Lanzhou University of Technology](https://www.lut.edu.cn/). My research interest includes computer vision, computer graphics, machine learning, and computational photography.
+I'm a third year graduate student from [Lanzhou University of Technology](https://www.lut.edu.cn/). My research interests include computer vision, natural language processing, and large language models.
 
 I am very fortunate to be advised by [Prof. Xiangquan Gui](https://jitong.lut.edu.cn/info/1317/8626.htm) of 810 Lab from [School of Computer and Communication](https://jitong.lut.edu.cn/index.htm), Lanzhou University of Technology. 
 
