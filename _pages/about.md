@@ -15,6 +15,6 @@ I am very fortunate to be advised by [Prof. Xiangquan Gui](https://jitong.lut.ed
 
 You can find my CV here: [Binxuan Zhang's Curriculum Vitae](../assets/Curriculum_Vitae.pdf).
 
-[Email](mailto:212085400201@lut.edu.cn) / [Github](https://github.com/binxuan98) / [Wechat](../images/wechat.jpg)
+[Email](mailto:zhangbinxuan98@foxmail.com) / [Github](https://github.com/binxuan98) / [Wechat](../images/wechat.jpg)
 
 
