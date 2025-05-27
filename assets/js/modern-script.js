@@ -17,7 +17,8 @@ document.addEventListener('DOMContentLoaded', function() {
         backDelay: 2000,
         startDelay: 500,
         loop: true,
-        showCursor: false
+        showCursor: true,
+        cursorChar: '|'
     });
 
     // Typed.js for inspirational quotes
