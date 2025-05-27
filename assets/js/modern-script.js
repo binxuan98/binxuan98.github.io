@@ -2,7 +2,7 @@
 
 // Typing Animation
 document.addEventListener('DOMContentLoaded', function() {
-    // Typed.js for hero section
+    // Typed.js for hero section - roles
     const typed = new Typed('#typed-text', {
         strings: [
             'AI Developer',
@@ -18,6 +18,28 @@ document.addEventListener('DOMContentLoaded', function() {
         startDelay: 500,
         loop: true,
         showCursor: false
+    });
+
+    // Typed.js for inspirational quotes
+    const typedQuotes = new Typed('#typed-quotes', {
+        strings: [
+            'Though the road is long, the destination is certain; though the task is arduous, success is inevitable',
+            'The journey of a thousand miles begins with a single step',
+            'Believe you can and you're halfway there',
+            'It does not matter how slowly you go as long as you do not stop',
+            'Success is not final, failure is not fatal: It is the courage to continue that counts',
+            'The only way to do great work is to love what you do',
+            'Hardships often prepare ordinary people for an extraordinary destiny',
+            'The future belongs to those who believe in the beauty of their dreams',
+            'Your time is limited, don't waste it living someone else's life'
+        ],
+        typeSpeed: 50,
+        backSpeed: 30,
+        backDelay: 3000,
+        startDelay: 1000,
+        loop: true,
+        showCursor: true,
+        cursorChar: '|'
     });
 
     // Smooth scrolling for navigation links
