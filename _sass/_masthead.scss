@@ -4,8 +4,8 @@
 
 .masthead {
   position: fixed;
-  background: white;
-  border-bottom: 1px solid $border-color;
+  background: #0d1117; /* 更改为与网站背景相同的深色 */
+  border-bottom: 1px solid rgba(255, 215, 0, 0.3); /* 使用金色边框，与网站主题色调一致 */
   height: $masthead-height;
   top: 0;
   width: 100%;
@@ -32,6 +32,12 @@
 
     a {
       text-decoration: none;
+      color: #ffffff; /* 设置链接为白色，与深色背景搭配 */
+      transition: color 0.3s ease;
+      
+      &:hover {
+        color: #ffd700; /* 鼠标悬停时变为金色，与网站主题色调一致 */
+      }
     }
   }
 }
