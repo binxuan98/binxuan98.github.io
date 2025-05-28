@@ -4,8 +4,10 @@
 
 .masthead {
   position: fixed;
-  background: #0d1117; /* 更改为与网站背景相同的深色 */
-  border-bottom: 1px solid rgba(255, 215, 0, 0.3); /* 使用金色边框，与网站主题色调一致 */
+  background: rgba(13, 17, 23, 0.85); /* 半透明背景，更好地融入页面 */
+  backdrop-filter: blur(10px); /* 添加模糊效果 */
+  -webkit-backdrop-filter: blur(10px); /* Safari 兼容性 */
+  border-bottom: 1px solid rgba(255, 215, 0, 0.2); /* 降低边框透明度 */
   height: $masthead-height;
   top: 0;
   width: 100%;
