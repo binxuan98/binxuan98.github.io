@@ -2,45 +2,43 @@
 
 // Typing Animation
 document.addEventListener('DOMContentLoaded', function() {
-    // Typed.js for hero section - roles
-    const typed = new Typed('#typed-text', {
+    // Initialize Typed.js for hero subtitle
+    const typedText = new Typed('#typed-text', {
         strings: [
-            'AI Developer',
-            'Machine Learning Researcher', 
-            'Open Source Contributor',
-            'Computer Vision Enthusiast',
-            'NLP Researcher',
-            'Deep Learning Engineer'
+            'Graduate Student',
+            'AI Researcher', 
+            'Computer Vision Engineer',
+            'NLP Enthusiast',
+            'Deep Learning Developer',
+            'Machine Learning Engineer',
+            'Research Assistant'
         ],
-        typeSpeed: 80,
+        typeSpeed: 100,
         backSpeed: 50,
         backDelay: 2000,
-        startDelay: 500,
+        startDelay: 1000,
         loop: true,
         showCursor: true,
         cursorChar: '|'
     });
 
-    // Typed.js for inspirational quotes
+    // Initialize Typed.js for hero description (quotes)
     const typedQuotes = new Typed('#typed-quotes', {
         strings: [
-            'Though the road is long, the destination is certain; though the task is arduous, success is inevitable',
-            'The journey of a thousand miles begins with a single step',
-            'Believe you can and you're halfway there',
-            'It does not matter how slowly you go as long as you do not stop',
-            'Success is not final, failure is not fatal: It is the courage to continue that counts',
-            'The only way to do great work is to love what you do',
-            'Hardships often prepare ordinary people for an extraordinary destiny',
-            'The future belongs to those who believe in the beauty of their dreams',
-            'Your time is limited, don't waste it living someone else's life'
+            'The future belongs to those who believe in the beauty of their dreams.',
+            'Innovation distinguishes between a leader and a follower.',
+            'The only way to do great work is to love what you do.',
+            'Stay hungry, stay foolish.',
+            'Code is poetry written in logic.',
+            'Artificial Intelligence is the new electricity.',
+            'In the world of AI, imagination is the only limit.'
         ],
-        typeSpeed: 50,
-        backSpeed: 30,
+        typeSpeed: 80,
+        backSpeed: 40,
         backDelay: 3000,
-        startDelay: 1000,
+        startDelay: 2000,
         loop: true,
-        showCursor: true,
-        cursorChar: '|'
+        showCursor: false
     });
 
     // Smooth scrolling for navigation links
