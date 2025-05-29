@@ -27,7 +27,7 @@ repository               : "binxuan98/binxuan98.github.io"
 #               Additional customization can be done by editing /_includes/author-profile.html
 author:
   # Biographic information
-  avatar           : "profile.png"
+  avatar           : "images/profile.png"
   name             : "Binxuan Zhang(张斌轩)"
   pronouns         : # example: "she/her"  
   bio              : "Though the road is long, the destination is certain; though the task is arduous, success is inevitable"
