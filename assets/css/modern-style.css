@@ -1509,3 +1509,305 @@ section {
     padding: 0.3rem 0.6rem;
   }
 }
+
+/* Curved Timeline Styles */
+.curved-timeline {
+  position: relative;
+  max-width: 1000px;
+  margin: 3rem auto;
+  padding: 2rem 0;
+}
+
+.timeline-line {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background: linear-gradient(180deg, 
+    var(--primary-color) 0%, 
+    var(--accent-blue) 30%, 
+    var(--accent-purple) 60%, 
+    var(--primary-color) 100%);
+  transform: translateX(-50%);
+  border-radius: 2px;
+  box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+}
+
+.timeline-line::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 0;
+  width: 8px;
+  height: 8px;
+  background: var(--primary-color);
+  border-radius: 50%;
+  transform: translateX(-50%);
+  box-shadow: 0 0 15px rgba(255, 215, 0, 0.6);
+}
+
+.timeline-line::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  width: 8px;
+  height: 8px;
+  background: var(--primary-color);
+  border-radius: 50%;
+  transform: translateX(-50%);
+  box-shadow: 0 0 15px rgba(255, 215, 0, 0.6);
+}
+
+.timeline-item {
+  position: relative;
+  margin: 4rem 0;
+  display: flex;
+  align-items: center;
+}
+
+.timeline-item.left {
+  justify-content: flex-end;
+  padding-right: calc(50% + 40px);
+}
+
+.timeline-item.right {
+  justify-content: flex-start;
+  padding-left: calc(50% + 40px);
+}
+
+.timeline-content {
+  max-width: 400px;
+  position: relative;
+}
+
+.timeline-date {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--primary-color);
+  margin-bottom: 0.5rem;
+  text-align: center;
+  background: linear-gradient(135deg, rgba(255, 215, 0, 0.1), rgba(88, 166, 255, 0.1));
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 215, 0, 0.3);
+  backdrop-filter: blur(10px);
+}
+
+.timeline-card {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  padding: 1.5rem;
+  margin-top: 1rem;
+  backdrop-filter: blur(20px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.timeline-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--primary-color), var(--accent-blue));
+}
+
+.timeline-card:hover {
+  transform: translateY(-5px) scale(1.02);
+  background: rgba(255, 215, 0, 0.08);
+  border-color: var(--primary-color);
+  box-shadow: 0 15px 40px rgba(255, 215, 0, 0.2);
+}
+
+.timeline-card h3 {
+  font-size: 1.2rem;
+  color: var(--text-primary);
+  margin-bottom: 1rem;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.timeline-description {
+  color: var(--text-secondary);
+  line-height: 1.6;
+  font-size: 0.95rem;
+  margin-top: 0.8rem;
+}
+
+.timeline-dot {
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  background: var(--primary-color);
+  border: 3px solid var(--background-dark);
+  border-radius: 50%;
+  top: 50%;
+  transform: translateY(-50%);
+  box-shadow: 0 0 20px rgba(255, 215, 0, 0.6);
+  z-index: 10;
+}
+
+.timeline-item.left .timeline-dot {
+  right: -58px;
+}
+
+.timeline-item.right .timeline-dot {
+  left: -58px;
+}
+
+.timeline-dot::before {
+  content: '';
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background: var(--background-dark);
+  border-radius: 50%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/* Award Badge Styles */
+.award-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1.2rem;
+  border-radius: 25px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+}
+
+.award-badge:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+}
+
+.award-badge.gold {
+  background: linear-gradient(135deg, #ffd700, #ffed4e);
+  color: var(--background-dark);
+  box-shadow: 0 4px 15px rgba(255, 215, 0, 0.4);
+}
+
+.award-badge.bronze {
+  background: linear-gradient(135deg, #cd7f32, #daa520);
+  color: var(--text-primary);
+  box-shadow: 0 4px 15px rgba(205, 127, 50, 0.4);
+}
+
+.award-badge i {
+  font-size: 1rem;
+}
+
+/* Connection Lines */
+.timeline-item.left .timeline-content::after {
+  content: '';
+  position: absolute;
+  right: -20px;
+  top: 50%;
+  width: 20px;
+  height: 2px;
+  background: linear-gradient(90deg, var(--primary-color), transparent);
+  transform: translateY(-50%);
+}
+
+.timeline-item.right .timeline-content::after {
+  content: '';
+  position: absolute;
+  left: -20px;
+  top: 50%;
+  width: 20px;
+  height: 2px;
+  background: linear-gradient(270deg, var(--primary-color), transparent);
+  transform: translateY(-50%);
+}
+
+/* Responsive Design for Timeline */
+@media (max-width: 768px) {
+  .curved-timeline {
+    margin: 2rem auto;
+    padding: 1rem 0;
+  }
+  
+  .timeline-line {
+    left: 30px;
+  }
+  
+  .timeline-item {
+    margin: 2.5rem 0;
+    padding-left: 70px !important;
+    padding-right: 0 !important;
+    justify-content: flex-start !important;
+  }
+  
+  .timeline-content {
+    max-width: 100%;
+  }
+  
+  .timeline-dot {
+    left: 22px !important;
+    right: auto !important;
+  }
+  
+  .timeline-item .timeline-content::after {
+    left: -20px !important;
+    right: auto !important;
+    background: linear-gradient(270deg, var(--primary-color), transparent) !important;
+  }
+  
+  .timeline-card {
+    padding: 1.2rem;
+  }
+  
+  .timeline-card h3 {
+    font-size: 1.1rem;
+  }
+  
+  .timeline-date {
+    font-size: 1rem;
+    padding: 0.4rem 0.8rem;
+  }
+  
+  .award-badge {
+    padding: 0.5rem 1rem;
+    font-size: 0.85rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .timeline-item {
+    padding-left: 60px !important;
+    margin: 2rem 0;
+  }
+  
+  .timeline-line {
+    left: 25px;
+  }
+  
+  .timeline-dot {
+    left: 17px !important;
+    width: 14px;
+    height: 14px;
+  }
+  
+  .timeline-card {
+    padding: 1rem;
+  }
+  
+  .timeline-card h3 {
+    font-size: 1rem;
+  }
+  
+  .timeline-description {
+    font-size: 0.9rem;
+  }
+}

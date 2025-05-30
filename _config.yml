@@ -14,7 +14,7 @@ minimal_mistakes_skin    : "dark" # "air", "aqua", "contrast", "dark", "dirt", "
 
 # Basic Site Settings
 locale                   : "en-US"
-title                    : "Binxuan Zhang - AI Developer & Researcher"
+title                    : "智研社"
 title_separator          : "|"
 name                     : &name "Binxuan Zhang"
 description              : &description "AI Developer, Machine Learning Researcher, and Open Source Contributor"
