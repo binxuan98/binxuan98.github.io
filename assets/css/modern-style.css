@@ -731,23 +731,29 @@ section {
   }
 }
 
-/* Scroll Animation Classes */
+/* Enhanced Scroll Animation Classes */
 .animate-slide-left {
   opacity: 0;
-  transform: translateX(-100px);
-  transition: opacity 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94), transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  transform: translateX(-100vw);
+  transition: opacity 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94), transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
 .animate-slide-right {
   opacity: 0;
-  transform: translateX(100px);
-  transition: opacity 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94), transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  transform: translateX(100vw);
+  transition: opacity 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94), transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
 .animate-slide-up {
   opacity: 0;
-  transform: translateY(50px);
-  transition: opacity 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94), transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  transform: translateY(100px);
+  transition: opacity 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94), transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* Dynamic scroll-based animation states */
+.scroll-animate {
+  will-change: transform, opacity;
+  transition: none;
 }
 
 .animate-slide-left.animate-in {
@@ -892,14 +898,14 @@ section {
   }
   
   .contact-links {
-    flex-direction: column;
-    align-items: center;
-    gap: 1rem;
+    gap: 1.5rem;
+    justify-content: center;
   }
   
   .contact-link {
-    width: 100%;
-    max-width: 280px;
+    min-width: 100px;
+    max-width: 140px;
+    flex: 1;
   }
   
   .hero-visual {
@@ -988,6 +994,11 @@ section {
     flex-direction: column;
     align-items: center;
     gap: 1rem;
+  }
+  
+  .contact-link {
+    width: 100%;
+    max-width: 280px;
   }
   
   .hero-visual {

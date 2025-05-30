@@ -93,49 +93,122 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
   });
  });
 
-    // Intersection Observer for animations
-    const observerOptions = {
-        threshold: 0.1,
-        rootMargin: '0px 0px -50px 0px'
-    };
+    // Enhanced scroll-based animation system
+    const animatedElements = document.querySelectorAll('.animate-slide-left, .animate-slide-right, .animate-slide-up');
+    
+    // Store original animation classes for each element
+    const elementData = new Map();
+    animatedElements.forEach(element => {
+        const rect = element.getBoundingClientRect();
+        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        elementData.set(element, {
+            originalTop: rect.top + scrollTop,
+            animationClass: element.classList.contains('animate-slide-left') ? 'left' :
+                           element.classList.contains('animate-slide-right') ? 'right' : 'up',
+            hasAnimated: false
+        });
+        element.classList.add('scroll-animate');
+    });
 
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('animate-in');
+    // Scroll-based animation function
+    function updateScrollAnimations() {
+        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        const windowHeight = window.innerHeight;
+        
+        animatedElements.forEach(element => {
+            const data = elementData.get(element);
+            if (!data) return;
+            
+            const elementTop = data.originalTop;
+            const elementBottom = elementTop + element.offsetHeight;
+            const viewportTop = scrollTop;
+            const viewportBottom = scrollTop + windowHeight;
+            
+            // Calculate visibility progress (0 to 1)
+            const visibleTop = Math.max(elementTop, viewportTop);
+            const visibleBottom = Math.min(elementBottom, viewportBottom);
+            const visibleHeight = Math.max(0, visibleBottom - visibleTop);
+            const elementHeight = element.offsetHeight;
+            const visibilityRatio = visibleHeight / elementHeight;
+            
+            // Calculate animation progress based on element position relative to viewport
+            const elementCenter = elementTop + elementHeight / 2;
+            const viewportCenter = viewportTop + windowHeight / 2;
+            const distanceFromCenter = elementCenter - viewportCenter;
+            const maxDistance = windowHeight / 2 + elementHeight / 2;
+            
+            let progress = 1 - Math.abs(distanceFromCenter) / maxDistance;
+            progress = Math.max(0, Math.min(1, progress));
+            
+            // Apply smooth easing
+            progress = progress * progress * (3 - 2 * progress); // smoothstep
+            
+            // Apply animation based on progress
+            if (visibilityRatio > 0) {
+                const opacity = progress;
+                let transform = '';
+                
+                if (data.animationClass === 'left') {
+                    const translateX = -100 * (1 - progress);
+                    transform = `translateX(${translateX}vw)`;
+                } else if (data.animationClass === 'right') {
+                    const translateX = 100 * (1 - progress);
+                    transform = `translateX(${translateX}vw)`;
+                } else if (data.animationClass === 'up') {
+                    const translateY = 100 * (1 - progress);
+                    transform = `translateY(${translateY}px)`;
+                }
+                
+                element.style.opacity = opacity;
+                element.style.transform = transform;
+                
+                if (progress > 0.8) {
+                    element.classList.add('animate-in');
+                    data.hasAnimated = true;
+                } else {
+                    element.classList.remove('animate-in');
+                }
+            } else {
+                // Element is not visible, reset to initial state
+                element.style.opacity = '0';
+                if (data.animationClass === 'left') {
+                    element.style.transform = 'translateX(-100vw)';
+                } else if (data.animationClass === 'right') {
+                    element.style.transform = 'translateX(100vw)';
+                } else if (data.animationClass === 'up') {
+                    element.style.transform = 'translateY(100px)';
+                }
+                element.classList.remove('animate-in');
             }
         });
-    }, observerOptions);
-
-    // Observe all sections for scroll animations
-    document.querySelectorAll('section').forEach(section => {
-        observer.observe(section);
-    });
-
-    // Observe all elements with animation classes
-    document.querySelectorAll('.animate-slide-left, .animate-slide-right, .animate-slide-up').forEach(element => {
-        observer.observe(element);
-    });
-
-    // Enhanced scroll animation for individual elements
-    const elementObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                // Add a small delay to create stagger effect
-                setTimeout(() => {
-                    entry.target.classList.add('animate-in');
-                }, 100);
+    }
+    
+    // Throttled scroll handler for better performance
+    let scrollTimeout;
+    function handleScroll() {
+        if (scrollTimeout) {
+            cancelAnimationFrame(scrollTimeout);
+        }
+        scrollTimeout = requestAnimationFrame(updateScrollAnimations);
+    }
+    
+    // Initialize and bind scroll events
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    window.addEventListener('resize', () => {
+        // Recalculate element positions on resize
+        animatedElements.forEach(element => {
+            const rect = element.getBoundingClientRect();
+            const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+            const data = elementData.get(element);
+            if (data) {
+                data.originalTop = rect.top + scrollTop;
             }
         });
-    }, {
-        threshold: 0.2,
-        rootMargin: '0px 0px -30px 0px'
+        updateScrollAnimations();
     });
-
-    // Observe project cards, skill categories, and contact links separately
-     document.querySelectorAll('.project-card, .skill-category, .contact-link, .about-text, .github-stats').forEach(element => {
-         elementObserver.observe(element);
-     });
+    
+    // Initial animation update
+    updateScrollAnimations();
 
     // Project cards hover effect enhancement
     document.querySelectorAll('.project-card').forEach(card => {
