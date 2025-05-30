@@ -29,12 +29,25 @@ layout: compress
         <button class="mobile-nav-toggle" aria-label="Toggle navigation">
           <i class="fas fa-bars"></i>
         </button>
+        {% if page.title contains '智研社' %}
+        <!-- Society Navigation -->
+        <div class="nav-menu">
+          <a href="{{ '/' | relative_url }}" class="nav-link">返回主页</a>
+          <a href="#introduction" class="nav-link">社团简介</a>
+          <a href="#activities" class="nav-link">活动内容</a>
+          <a href="#achievements" class="nav-link">获奖情况</a>
+          <a href="#organization" class="nav-link">组织架构</a>
+          <a href="#contact-society" class="nav-link">联系我们</a>
+        </div>
+        {% else %}
+        <!-- Main Navigation -->
         <div class="nav-menu">
           <a href="#about" class="nav-link">About</a>
           <a href="#projects" class="nav-link">Projects</a>
-          <a href="{{ '/society.html' | relative_url }}" class="nav-link">智研社</a>
+          <a href="{{ '/society/' | relative_url }}" class="nav-link">智研社</a>
           <a href="#contact" class="nav-link">Contact</a>
         </div>
+        {% endif %}
       </div>
     </nav>
     
