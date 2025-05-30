@@ -112,6 +112,31 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         observer.observe(section);
     });
 
+    // Observe all elements with animation classes
+    document.querySelectorAll('.animate-slide-left, .animate-slide-right, .animate-slide-up').forEach(element => {
+        observer.observe(element);
+    });
+
+    // Enhanced scroll animation for individual elements
+    const elementObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                // Add a small delay to create stagger effect
+                setTimeout(() => {
+                    entry.target.classList.add('animate-in');
+                }, 100);
+            }
+        });
+    }, {
+        threshold: 0.2,
+        rootMargin: '0px 0px -30px 0px'
+    });
+
+    // Observe project cards, skill categories, and contact links separately
+     document.querySelectorAll('.project-card, .skill-category, .contact-link, .about-text, .github-stats').forEach(element => {
+         elementObserver.observe(element);
+     });
+
     // Project cards hover effect enhancement
     document.querySelectorAll('.project-card').forEach(card => {
         card.addEventListener('mouseenter', function() {
