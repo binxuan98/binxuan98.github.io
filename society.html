@@ -337,7 +337,14 @@ title: "智研社 - Artificial Intelligence Research Society"
 
 <script>
 // Society-specific typed text
-document.addEventListener('DOMContentLoaded', function() {
+function initTypedEffects() {
+  // Check if Typed is available
+  if (typeof Typed === 'undefined') {
+    console.log('Typed.js not loaded yet, retrying...');
+    setTimeout(initTypedEffects, 100);
+    return;
+  }
+  
   // Typed text for society page
   if (document.getElementById('typed-text-society')) {
     new Typed('#typed-text-society', {
@@ -377,5 +384,10 @@ document.addEventListener('DOMContentLoaded', function() {
       });
     }, 2000);
   }
+}
+
+// Initialize when DOM is ready
+document.addEventListener('DOMContentLoaded', function() {
+  initTypedEffects();
 });
 </script>
