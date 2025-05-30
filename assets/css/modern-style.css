@@ -57,7 +57,7 @@ body {
 .hero-content {
   z-index: 2;
   text-align: center;
-  max-width: 800px;
+  max-width: 1000px;
   margin: 0 auto;
   padding: 0 24px;
 }
@@ -102,7 +102,7 @@ body {
   -webkit-text-fill-color: transparent;
   background-clip: text;
   margin-bottom: 1.5rem;
-  line-height: 1.1;
+  line-height: 1.2;
   letter-spacing: -0.02em;
   animation: fadeInUp 1s ease-out;
 }
@@ -526,16 +526,17 @@ section {
 
 .nav-menu {
   display: flex;
-  gap: 2rem;
+  gap: 1.2rem;
 }
 
 .nav-link {
   color: var(--text-primary);
   text-decoration: none;
   font-weight: 500;
+  font-size: 0.9rem;
   transition: all 0.3s ease;
   position: relative;
-  padding: 8px 16px;
+  padding: 8px 12px;
   border-radius: 6px;
 }
 
@@ -1084,21 +1085,37 @@ section {
 
 /* Enhanced Scroll Animation Classes */
 .animate-slide-left {
-  opacity: 0;
-  transform: translateX(-100vw);
+  opacity: 1;
+  transform: translateX(0);
   transition: opacity 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94), transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
 .animate-slide-right {
-  opacity: 0;
-  transform: translateX(100vw);
+  opacity: 1;
+  transform: translateX(0);
   transition: opacity 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94), transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
 .animate-slide-up {
-  opacity: 0;
-  transform: translateY(100px);
+  opacity: 1;
+  transform: translateY(0);
   transition: opacity 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94), transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* Initial hidden state for scroll animation */
+.scroll-animate.animate-slide-left {
+  opacity: 0;
+  transform: translateX(-50px);
+}
+
+.scroll-animate.animate-slide-right {
+  opacity: 0;
+  transform: translateX(50px);
+}
+
+.scroll-animate.animate-slide-up {
+  opacity: 0;
+  transform: translateY(50px);
 }
 
 /* Dynamic scroll-based animation states */
@@ -1354,5 +1371,141 @@ section {
   
   .hero-visual {
     height: 200px;
+  }
+}
+
+/* Instructor Section Styles */
+.instructor-info {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+  justify-items: center;
+}
+
+.instructor-card {
+  background: var(--card-background);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  padding: 2rem;
+  max-width: 600px;
+  text-align: center;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.instructor-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 30px rgba(255, 215, 0, 0.2);
+}
+
+.instructor-card h3 {
+  color: var(--primary-color);
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+}
+
+.instructor-title {
+  color: var(--accent-blue);
+  font-size: 1.1rem;
+  font-weight: 500;
+  margin-bottom: 1rem;
+}
+
+.instructor-description {
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+}
+
+.instructor-contact {
+  margin-top: 1.5rem;
+}
+
+.contact-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--primary-color);
+  text-decoration: none;
+  padding: 0.75rem 1.5rem;
+  border: 1px solid var(--primary-color);
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  font-weight: 500;
+}
+
+.contact-link:hover {
+  background: var(--primary-color);
+  color: var(--background-primary);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(255, 215, 0, 0.3);
+}
+
+/* New instructor styles */
+.instructor-positions {
+  margin: 1rem 0;
+  text-align: left;
+}
+
+.instructor-positions p {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  margin: 0.3rem 0;
+  padding-left: 1rem;
+  position: relative;
+}
+
+.instructor-positions p:before {
+  content: "•";
+  color: var(--primary-color);
+  position: absolute;
+  left: 0;
+  font-weight: bold;
+}
+
+.instructor-achievements {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: center;
+  margin: 1.5rem 0;
+}
+
+.achievement-tag {
+  background: linear-gradient(135deg, var(--primary-color), var(--accent-blue));
+  color: var(--background-primary);
+  padding: 0.4rem 0.8rem;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  white-space: nowrap;
+  box-shadow: 0 2px 8px rgba(255, 215, 0, 0.3);
+}
+
+@media (max-width: 768px) {
+  .instructor-info {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  
+  .instructor-card {
+    padding: 1.5rem;
+    margin: 0 1rem;
+    max-width: 100%;
+  }
+  
+  .instructor-card h3 {
+    font-size: 1.3rem;
+  }
+  
+  .instructor-title {
+    font-size: 1rem;
+  }
+  
+  .achievement-tag {
+    font-size: 0.8rem;
+    padding: 0.3rem 0.6rem;
   }
 }

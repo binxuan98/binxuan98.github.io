@@ -119,66 +119,56 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             const data = elementData.get(element);
             if (!data) return;
             
+            // If element has already been animated, keep it in final state
+            if (data.hasAnimated) {
+                element.style.opacity = '1';
+                element.style.transform = 'translateX(0) translateY(0)';
+                element.classList.add('animate-in');
+                return;
+            }
+            
             const elementTop = data.originalTop;
             const elementBottom = elementTop + element.offsetHeight;
             const viewportTop = scrollTop;
             const viewportBottom = scrollTop + windowHeight;
             
-            // Calculate visibility progress (0 to 1)
-            const visibleTop = Math.max(elementTop, viewportTop);
-            const visibleBottom = Math.min(elementBottom, viewportBottom);
-            const visibleHeight = Math.max(0, visibleBottom - visibleTop);
-            const elementHeight = element.offsetHeight;
-            const visibilityRatio = visibleHeight / elementHeight;
+            // Calculate if element is in viewport
+            const isInViewport = elementTop < viewportBottom && elementBottom > viewportTop;
             
-            // Calculate animation progress based on element position relative to viewport
-            const elementCenter = elementTop + elementHeight / 2;
-            const viewportCenter = viewportTop + windowHeight / 2;
-            const distanceFromCenter = elementCenter - viewportCenter;
-            const maxDistance = windowHeight / 2 + elementHeight / 2;
-            
-            let progress = 1 - Math.abs(distanceFromCenter) / maxDistance;
-            progress = Math.max(0, Math.min(1, progress));
-            
-            // Apply smooth easing
-            progress = progress * progress * (3 - 2 * progress); // smoothstep
-            
-            // Apply animation based on progress
-            if (visibilityRatio > 0) {
-                const opacity = progress;
-                let transform = '';
+            if (isInViewport) {
+                // Calculate animation progress based on element position
+                const elementCenter = elementTop + element.offsetHeight / 2;
+                const triggerPoint = viewportTop + windowHeight * 0.8; // Trigger when 80% down the viewport
                 
-                if (data.animationClass === 'left') {
-                    const translateX = -100 * (1 - progress);
-                    transform = `translateX(${translateX}vw)`;
-                } else if (data.animationClass === 'right') {
-                    const translateX = 100 * (1 - progress);
-                    transform = `translateX(${translateX}vw)`;
-                } else if (data.animationClass === 'up') {
-                    const translateY = 100 * (1 - progress);
-                    transform = `translateY(${translateY}px)`;
-                }
-                
-                element.style.opacity = opacity;
-                element.style.transform = transform;
-                
-                if (progress > 0.8) {
+                if (elementCenter < triggerPoint) {
+                    // Element has passed the trigger point, animate it in
+                    element.style.opacity = '1';
+                    element.style.transform = 'translateX(0) translateY(0)';
                     element.classList.add('animate-in');
                     data.hasAnimated = true;
                 } else {
-                    element.classList.remove('animate-in');
+                    // Element hasn't reached trigger point yet, keep in initial state
+                    element.style.opacity = '0';
+                    if (data.animationClass === 'left') {
+                        element.style.transform = 'translateX(-50px)';
+                    } else if (data.animationClass === 'right') {
+                        element.style.transform = 'translateX(50px)';
+                    } else if (data.animationClass === 'up') {
+                        element.style.transform = 'translateY(50px)';
+                    }
                 }
             } else {
-                // Element is not visible, reset to initial state
-                element.style.opacity = '0';
-                if (data.animationClass === 'left') {
-                    element.style.transform = 'translateX(-100vw)';
-                } else if (data.animationClass === 'right') {
-                    element.style.transform = 'translateX(100vw)';
-                } else if (data.animationClass === 'up') {
-                    element.style.transform = 'translateY(100px)';
+                // Element is not in viewport and hasn't been animated yet
+                if (!data.hasAnimated) {
+                    element.style.opacity = '0';
+                    if (data.animationClass === 'left') {
+                        element.style.transform = 'translateX(-50px)';
+                    } else if (data.animationClass === 'right') {
+                        element.style.transform = 'translateX(50px)';
+                    } else if (data.animationClass === 'up') {
+                        element.style.transform = 'translateY(50px)';
+                    }
                 }
-                element.classList.remove('animate-in');
             }
         });
     }
@@ -208,6 +198,10 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     });
     
     // Initial animation update
+    updateScrollAnimations();
+    
+    // Also run after a short delay to ensure all elements are properly positioned
+    setTimeout(updateScrollAnimations, 100);
     updateScrollAnimations();
 
     // Project cards hover effect enhancement

@@ -32,7 +32,7 @@ layout: compress
         {% if page.title contains '智研社' %}
         <!-- Society Navigation -->
         <div class="nav-menu">
-          <a href="{{ '/' | relative_url }}" class="nav-link">返回主页</a>
+          <a href="#instructor" class="nav-link">指导老师</a>
           <a href="#introduction" class="nav-link">社团简介</a>
           <a href="#activities" class="nav-link">活动内容</a>
           <a href="#achievements" class="nav-link">获奖情况</a>
@@ -51,6 +51,7 @@ layout: compress
       </div>
     </nav>
     
+    {% unless page.title contains '智研社' %}
     <!-- Modern Hero Section -->
     <section class="hero-section">
       <div class="hero-background">
@@ -92,14 +93,10 @@ layout: compress
               <i class="fab fa-linkedin"></i>
             </a>
           {% endif %}
-
         </div>
       </div>
-      
-      <div class="scroll-indicator">
-        <div class="scroll-arrow"></div>
-      </div>
     </section>
+    {% endunless %}
     
     <!-- Main Content -->
     <main class="main-content">
