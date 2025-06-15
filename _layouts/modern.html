@@ -51,7 +51,7 @@ layout: compress
       </div>
     </nav>
     
-    {% unless page.title contains '智研社' %}
+    {% if page.url == '/' %}
     <!-- Modern Hero Section -->
     <section class="hero-section">
       <div class="hero-background">
@@ -96,7 +96,7 @@ layout: compress
         </div>
       </div>
     </section>
-    {% endunless %}
+    {% endif %}
     
     <!-- Main Content -->
     <main class="main-content">

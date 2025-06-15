@@ -1,45 +1,91 @@
 // Modern Script for Interactive Effects
 
-// Typing Animation
-document.addEventListener('DOMContentLoaded', function() {
-    // Initialize Typed.js for hero subtitle
-    const typedText = new Typed('#typed-text', {
-        strings: [
-            'Graduate Student',
-            'AI Researcher', 
-            'Computer Vision Engineer',
-            'NLP Enthusiast',
-            'Deep Learning Developer',
-            'Machine Learning Engineer',
-            'Research Assistant'
-        ],
-        typeSpeed: 100,
-        backSpeed: 50,
-        backDelay: 2000,
-        startDelay: 1000,
-        loop: true,
-        showCursor: true,
-        cursorChar: '|'
-    });
+// Typing Animation with enhanced error handling
+function initTypedEffects() {
+    console.log('Initializing Typed effects...');
+    
+    // Check if Typed is available
+    if (typeof Typed === 'undefined') {
+        console.error('Typed.js is not loaded!');
+        // Retry after a short delay
+        setTimeout(initTypedEffects, 500);
+        return;
+    }
+    
+    // Check if elements exist
+    const typedTextElement = document.getElementById('typed-text');
+    const typedQuotesElement = document.getElementById('typed-quotes');
+    
+    if (!typedTextElement) {
+        console.error('Element #typed-text not found!');
+        return;
+    }
+    
+    if (!typedQuotesElement) {
+        console.error('Element #typed-quotes not found!');
+        return;
+    }
+    
+    try {
+        // Initialize Typed.js for hero subtitle
+        const typedText = new Typed('#typed-text', {
+            strings: [
+                'Graduate Student',
+                'AI Researcher', 
+                'Computer Vision Engineer',
+                'NLP Enthusiast',
+                'Deep Learning Developer',
+                'Machine Learning Engineer',
+                'Research Assistant'
+            ],
+            typeSpeed: 100,
+            backSpeed: 50,
+            backDelay: 2000,
+            startDelay: 1000,
+            loop: true,
+            showCursor: true,
+            cursorChar: '|'
+        });
+        console.log('Typed text effect initialized successfully');
 
-    // Initialize Typed.js for hero description (quotes)
-    const typedQuotes = new Typed('#typed-quotes', {
-        strings: [
-            'The future belongs to those who believe in the beauty of their dreams.',
-            'Innovation distinguishes between a leader and a follower.',
-            'The only way to do great work is to love what you do.',
-            'Stay hungry, stay foolish.',
-            'Code is poetry written in logic.',
-            'Artificial Intelligence is the new electricity.',
-            'In the world of AI, imagination is the only limit.'
-        ],
-        typeSpeed: 80,
-        backSpeed: 40,
-        backDelay: 3000,
-        startDelay: 2000,
-        loop: true,
-        showCursor: false
-    });
+        // Initialize Typed.js for hero description (quotes)
+        const typedQuotes = new Typed('#typed-quotes', {
+            strings: [
+                'The future belongs to those who believe in the beauty of their dreams.',
+                'Innovation distinguishes between a leader and a follower.',
+                'The only way to do great work is to love what you do.',
+                'Stay hungry, stay foolish.',
+                'Code is poetry written in logic.',
+                'Artificial Intelligence is the new electricity.',
+                'In the world of AI, imagination is the only limit.'
+            ],
+            typeSpeed: 80,
+            backSpeed: 40,
+            backDelay: 3000,
+            startDelay: 2000,
+            loop: true,
+            showCursor: false
+        });
+        console.log('Typed quotes effect initialized successfully');
+    } catch (error) {
+        console.error('Error initializing Typed effects:', error);
+    }
+}
+
+// Initialize when DOM is ready
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('DOM Content Loaded');
+    initTypedEffects();
+});
+
+// Fallback: Initialize when window is fully loaded
+window.addEventListener('load', function() {
+    console.log('Window fully loaded');
+    // Only initialize if not already done
+    if (typeof Typed !== 'undefined' && document.getElementById('typed-text') && !document.getElementById('typed-text').classList.contains('typed-initialized')) {
+        initTypedEffects();
+    }
+});
 
     // Mobile navigation toggle
 const mobileNavToggle = document.querySelector('.mobile-nav-toggle');
