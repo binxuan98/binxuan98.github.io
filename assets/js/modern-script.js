@@ -1,5 +1,3 @@
-// Modern Script for Interactive Effects
-
 // Typing Animation with enhanced error handling
 function initTypedEffects() {
     console.log('Initializing Typed effects...');
@@ -12,20 +10,32 @@ function initTypedEffects() {
         return;
     }
     
-    // Check if elements exist
+    // Check if elements exist for main page
     const typedTextElement = document.getElementById('typed-text');
     const typedQuotesElement = document.getElementById('typed-quotes');
     
-    if (!typedTextElement) {
-        console.error('Element #typed-text not found!');
-        return;
+    // Check if elements exist for society page
+    const typedTextSocietyElement = document.getElementById('typed-text-society');
+    const typedQuotesSocietyElement = document.getElementById('typed-quotes-society');
+    
+    // Initialize main page elements if they exist
+    if (typedTextElement && typedQuotesElement) {
+        initMainPageTyped();
     }
     
-    if (!typedQuotesElement) {
-        console.error('Element #typed-quotes not found!');
-        return;
+    // Initialize society page elements if they exist
+    if (typedTextSocietyElement && typedQuotesSocietyElement) {
+        initSocietyPageTyped();
     }
     
+    // If no elements found, log warning
+    if (!typedTextElement && !typedQuotesElement && !typedTextSocietyElement && !typedQuotesSocietyElement) {
+        console.warn('No typed elements found on this page');
+    }
+}
+
+// Initialize typing effects for main page
+function initMainPageTyped() {
     try {
         // Initialize Typed.js for hero subtitle
         const typedText = new Typed('#typed-text', {
@@ -46,7 +56,7 @@ function initTypedEffects() {
             showCursor: true,
             cursorChar: '|'
         });
-        console.log('Typed text effect initialized successfully');
+        console.log('Main page typed text effect initialized successfully');
 
         // Initialize Typed.js for hero description (quotes)
         const typedQuotes = new Typed('#typed-quotes', {
@@ -66,9 +76,57 @@ function initTypedEffects() {
             loop: true,
             showCursor: false
         });
-        console.log('Typed quotes effect initialized successfully');
+        console.log('Main page typed quotes effect initialized successfully');
     } catch (error) {
-        console.error('Error initializing Typed effects:', error);
+        console.error('Error initializing main page typed effects:', error);
+    }
+}
+
+// Initialize typing effects for society page
+function initSocietyPageTyped() {
+    try {
+        // Initialize Typed.js for society hero subtitle
+        const typedTextSociety = new Typed('#typed-text-society', {
+            strings: [
+                '人工智能研究社团',
+                'AI Research Society',
+                '智能科学探索者',
+                'Machine Learning Community',
+                '深度学习实践团队',
+                'Computer Vision Lab',
+                '自然语言处理研究组'
+            ],
+            typeSpeed: 120,
+            backSpeed: 60,
+            backDelay: 2500,
+            startDelay: 1000,
+            loop: true,
+            showCursor: true,
+            cursorChar: '|'
+        });
+        console.log('Society page typed text effect initialized successfully');
+
+        // Initialize Typed.js for society hero description (quotes)
+        const typedQuotesSociety = new Typed('#typed-quotes-society', {
+            strings: [
+                '人工智能不是要取代人类，而是要增强人类的能力。',
+                'Artificial Intelligence is not about replacing humans, but augmenting human capabilities.',
+                '在智研社，我们用代码编织未来，用算法点亮梦想。',
+                'In AI Research Society, we weave the future with code and illuminate dreams with algorithms.',
+                '每一行代码都是对未知世界的探索，每一个算法都是智慧的结晶。',
+                'Every line of code is an exploration of the unknown, every algorithm is a crystallization of wisdom.',
+                '让我们一起在人工智能的海洋中遨游，发现科学的奥秘。'
+            ],
+            typeSpeed: 100,
+            backSpeed: 50,
+            backDelay: 4000,
+            startDelay: 2500,
+            loop: true,
+            showCursor: false
+        });
+        console.log('Society page typed quotes effect initialized successfully');
+    } catch (error) {
+        console.error('Error initializing society page typed effects:', error);
     }
 }
 
@@ -87,293 +145,179 @@ window.addEventListener('load', function() {
     }
 });
 
-    // Mobile navigation toggle
+// Mobile navigation toggle
 const mobileNavToggle = document.querySelector('.mobile-nav-toggle');
 const navMenu = document.querySelector('.nav-menu');
 
 if (mobileNavToggle && navMenu) {
-  mobileNavToggle.addEventListener('click', () => {
-    navMenu.classList.toggle('mobile-open');
-    const icon = mobileNavToggle.querySelector('i');
-    if (navMenu.classList.contains('mobile-open')) {
-      icon.classList.remove('fa-bars');
-      icon.classList.add('fa-times');
-    } else {
-      icon.classList.remove('fa-times');
-      icon.classList.add('fa-bars');
-    }
-  });
-
-  // Close mobile menu when clicking on a link
-  document.querySelectorAll('.nav-link').forEach(link => {
-    link.addEventListener('click', () => {
-      navMenu.classList.remove('mobile-open');
-      const icon = mobileNavToggle.querySelector('i');
-      icon.classList.remove('fa-times');
-      icon.classList.add('fa-bars');
+    mobileNavToggle.addEventListener('click', () => {
+        navMenu.classList.toggle('mobile-open');
+        const icon = mobileNavToggle.querySelector('i');
+        if (navMenu.classList.contains('mobile-open')) {
+            icon.classList.remove('fa-bars');
+            icon.classList.add('fa-times');
+        } else {
+            icon.classList.remove('fa-times');
+            icon.classList.add('fa-bars');
+        }
     });
-  });
 
-  // Close mobile menu when clicking outside
-  document.addEventListener('click', (e) => {
-    if (!e.target.closest('.nav-container')) {
-      navMenu.classList.remove('mobile-open');
-      const icon = mobileNavToggle.querySelector('i');
-      icon.classList.remove('fa-times');
-      icon.classList.add('fa-bars');
-    }
-  });
+    // Close mobile menu when clicking on a link
+    document.querySelectorAll('.nav-link').forEach(link => {
+        link.addEventListener('click', () => {
+            navMenu.classList.remove('mobile-open');
+            const icon = mobileNavToggle.querySelector('i');
+            icon.classList.remove('fa-times');
+            icon.classList.add('fa-bars');
+        });
+    });
+
+    // Close mobile menu when clicking outside
+    document.addEventListener('click', (e) => {
+        if (!e.target.closest('.nav-container')) {
+            navMenu.classList.remove('mobile-open');
+            const icon = mobileNavToggle.querySelector('i');
+            icon.classList.remove('fa-times');
+            icon.classList.add('fa-bars');
+        }
+    });
 }
 
 // Smooth scrolling for navigation links
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-  anchor.addEventListener('click', function (e) {
-    e.preventDefault();
-    const target = document.querySelector(this.getAttribute('href'));
-    if (target) {
-      target.scrollIntoView({
-        behavior: 'smooth',
-        block: 'start'
-      });
-    }
-  });
- });
-
-    // Enhanced scroll-based animation system
-    const animatedElements = document.querySelectorAll('.animate-slide-left, .animate-slide-right, .animate-slide-up');
-    
-    // Store original animation classes for each element
-    const elementData = new Map();
-    animatedElements.forEach(element => {
-        const rect = element.getBoundingClientRect();
-        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-        elementData.set(element, {
-            originalTop: rect.top + scrollTop,
-            animationClass: element.classList.contains('animate-slide-left') ? 'left' :
-                           element.classList.contains('animate-slide-right') ? 'right' : 'up',
-            hasAnimated: false
-        });
-        element.classList.add('scroll-animate');
+    anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+            target.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+            });
+        }
     });
+});
 
-    // Scroll-based animation function
-    function updateScrollAnimations() {
-        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-        const windowHeight = window.innerHeight;
+// Enhanced scroll-based animation system
+const animatedElements = document.querySelectorAll('.animate-slide-left, .animate-slide-right, .animate-slide-up');
+
+// Store original animation classes for each element
+const elementData = new Map();
+animatedElements.forEach(element => {
+    const rect = element.getBoundingClientRect();
+    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+    elementData.set(element, {
+        originalTop: rect.top + scrollTop,
+        animationClass: element.classList.contains('animate-slide-left') ? 'left' :
+                       element.classList.contains('animate-slide-right') ? 'right' : 'up',
+        hasAnimated: false
+    });
+    element.classList.add('scroll-animate');
+});
+
+// Scroll-based animation function
+function updateScrollAnimations() {
+    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+    const windowHeight = window.innerHeight;
+    
+    animatedElements.forEach(element => {
+        const data = elementData.get(element);
+        if (!data) return;
         
-        animatedElements.forEach(element => {
-            const data = elementData.get(element);
-            if (!data) return;
+        // If element has already been animated, keep it in final state
+        if (data.hasAnimated) {
+            element.style.opacity = '1';
+            element.style.transform = 'translateX(0) translateY(0)';
+            element.classList.add('animate-in');
+            return;
+        }
+        
+        const elementTop = data.originalTop;
+        const elementBottom = elementTop + element.offsetHeight;
+        const viewportTop = scrollTop;
+        const viewportBottom = scrollTop + windowHeight;
+        
+        // Calculate if element is in viewport
+        const isInViewport = elementTop < viewportBottom && elementBottom > viewportTop;
+        
+        if (isInViewport) {
+            // Calculate animation progress based on element position
+            const elementCenter = elementTop + element.offsetHeight / 2;
+            const triggerPoint = viewportTop + windowHeight * 0.8; // Trigger when 80% down the viewport
             
-            // If element has already been animated, keep it in final state
-            if (data.hasAnimated) {
+            if (elementCenter < triggerPoint) {
+                // Element has passed the trigger point, animate it in
                 element.style.opacity = '1';
                 element.style.transform = 'translateX(0) translateY(0)';
                 element.classList.add('animate-in');
-                return;
-            }
-            
-            const elementTop = data.originalTop;
-            const elementBottom = elementTop + element.offsetHeight;
-            const viewportTop = scrollTop;
-            const viewportBottom = scrollTop + windowHeight;
-            
-            // Calculate if element is in viewport
-            const isInViewport = elementTop < viewportBottom && elementBottom > viewportTop;
-            
-            if (isInViewport) {
-                // Calculate animation progress based on element position
-                const elementCenter = elementTop + element.offsetHeight / 2;
-                const triggerPoint = viewportTop + windowHeight * 0.8; // Trigger when 80% down the viewport
-                
-                if (elementCenter < triggerPoint) {
-                    // Element has passed the trigger point, animate it in
-                    element.style.opacity = '1';
-                    element.style.transform = 'translateX(0) translateY(0)';
-                    element.classList.add('animate-in');
-                    data.hasAnimated = true;
-                } else {
-                    // Element hasn't reached trigger point yet, keep in initial state
-                    element.style.opacity = '0';
-                    if (data.animationClass === 'left') {
-                        element.style.transform = 'translateX(-50px)';
-                    } else if (data.animationClass === 'right') {
-                        element.style.transform = 'translateX(50px)';
-                    } else if (data.animationClass === 'up') {
-                        element.style.transform = 'translateY(50px)';
-                    }
-                }
+                data.hasAnimated = true;
             } else {
-                // Element is not in viewport and hasn't been animated yet
-                if (!data.hasAnimated) {
-                    element.style.opacity = '0';
-                    if (data.animationClass === 'left') {
-                        element.style.transform = 'translateX(-50px)';
-                    } else if (data.animationClass === 'right') {
-                        element.style.transform = 'translateX(50px)';
-                    } else if (data.animationClass === 'up') {
-                        element.style.transform = 'translateY(50px)';
-                    }
+                // Element hasn't reached trigger point yet, keep in initial state
+                element.style.opacity = '0';
+                if (data.animationClass === 'left') {
+                    element.style.transform = 'translateX(-50px)';
+                } else if (data.animationClass === 'right') {
+                    element.style.transform = 'translateX(50px)';
+                } else {
+                    element.style.transform = 'translateY(50px)';
                 }
             }
-        });
-    }
-    
-    // Throttled scroll handler for better performance
-    let scrollTimeout;
-    function handleScroll() {
-        if (scrollTimeout) {
-            cancelAnimationFrame(scrollTimeout);
-        }
-        scrollTimeout = requestAnimationFrame(updateScrollAnimations);
-    }
-    
-    // Initialize and bind scroll events
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    window.addEventListener('resize', () => {
-        // Recalculate element positions on resize
-        animatedElements.forEach(element => {
-            const rect = element.getBoundingClientRect();
-            const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-            const data = elementData.get(element);
-            if (data) {
-                data.originalTop = rect.top + scrollTop;
+        } else {
+            // Element is not in viewport, keep in initial state
+            element.style.opacity = '0';
+            if (data.animationClass === 'left') {
+                element.style.transform = 'translateX(-50px)';
+            } else if (data.animationClass === 'right') {
+                element.style.transform = 'translateX(50px)';
+            } else {
+                element.style.transform = 'translateY(50px)';
             }
-        });
-        updateScrollAnimations();
+        }
     });
-    
-    // Initial animation update
-    updateScrollAnimations();
-    
-    // Also run after a short delay to ensure all elements are properly positioned
-    setTimeout(updateScrollAnimations, 100);
-    updateScrollAnimations();
+}
 
-    // Project cards hover effect enhancement
-    document.querySelectorAll('.project-card').forEach(card => {
-        card.addEventListener('mouseenter', function() {
-            this.style.transform = 'translateY(-10px) scale(1.02)';
-        });
-        
-        card.addEventListener('mouseleave', function() {
-            this.style.transform = 'translateY(0) scale(1)';
-        });
-    });
-
-    // Skill items stagger animation
-    document.querySelectorAll('.skill-item').forEach((item, index) => {
-        item.style.animationDelay = `${index * 0.1}s`;
-    });
-
-    // Parallax effect for floating elements
-    window.addEventListener('scroll', () => {
-        const scrolled = window.pageYOffset;
-        const parallax = document.querySelectorAll('.floating-element');
-        
-        parallax.forEach((element, index) => {
-            const speed = 0.5 + (index * 0.2);
-            element.style.transform = `translateY(${scrolled * speed}px) rotate(${scrolled * 0.1}deg)`;
-        });
-    });
-
-    // Dynamic background particles
-    createParticles();
-
-    // Contact form enhancement (if needed)
-    enhanceContactSection();
+// Scroll event listener with throttling
+let scrollTimeout;
+window.addEventListener('scroll', () => {
+    if (!scrollTimeout) {
+        scrollTimeout = setTimeout(() => {
+            updateScrollAnimations();
+            scrollTimeout = null;
+        }, 16); // ~60fps
+    }
 });
 
-// Create floating particles background
-function createParticles() {
-    const particlesContainer = document.createElement('div');
-    particlesContainer.className = 'particles-container';
-    particlesContainer.style.cssText = `
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        pointer-events: none;
-        z-index: -1;
-        overflow: hidden;
-    `;
-    
-    document.body.appendChild(particlesContainer);
-    
-    for (let i = 0; i < 50; i++) {
-        createParticle(particlesContainer);
-    }
-}
+// Initial animation update
+updateScrollAnimations();
 
-function createParticle(container) {
-    const particle = document.createElement('div');
-    particle.className = 'particle';
-    
-    const size = Math.random() * 3 + 1;
-    const x = Math.random() * window.innerWidth;
-    const y = Math.random() * window.innerHeight;
-    const duration = Math.random() * 20 + 10;
-    
-    particle.style.cssText = `
-        position: absolute;
-        width: ${size}px;
-        height: ${size}px;
-        background: rgba(255, 215, 0, 0.3);
-        border-radius: 50%;
-        left: ${x}px;
-        top: ${y}px;
-        animation: particleFloat ${duration}s linear infinite;
-        box-shadow: 0 0 ${size * 2}px rgba(255, 215, 0, 0.5);
-    `;
-    
-    container.appendChild(particle);
-    
-    // Remove and recreate particle after animation
-    setTimeout(() => {
-        if (particle.parentNode) {
-            particle.parentNode.removeChild(particle);
-            createParticle(container);
-        }
-    }, duration * 1000);
-}
+// Also run after a short delay to ensure all elements are properly positioned
+setTimeout(updateScrollAnimations, 100);
 
-// Add particle animation CSS
-const particleStyle = document.createElement('style');
-particleStyle.textContent = `
-    @keyframes particleFloat {
-        0% {
-            transform: translateY(100vh) rotate(0deg);
-            opacity: 0;
-        }
-        10% {
-            opacity: 1;
-        }
-        90% {
-            opacity: 1;
-        }
-        100% {
-            transform: translateY(-100px) rotate(360deg);
-            opacity: 0;
-        }
-    }
+// Project cards hover effect enhancement
+document.querySelectorAll('.project-card').forEach(card => {
+    card.addEventListener('mouseenter', function() {
+        this.style.transform = 'translateY(-10px) scale(1.02)';
+    });
     
-    .animate-in {
-        animation: fadeInUp 0.8s ease-out forwards;
-    }
+    card.addEventListener('mouseleave', function() {
+        this.style.transform = 'translateY(0) scale(1)';
+    });
+});
+
+// Skill items stagger animation
+document.querySelectorAll('.skill-item').forEach((item, index) => {
+    item.style.animationDelay = `${index * 0.1}s`;
+});
+
+// Parallax effect for floating elements
+window.addEventListener('scroll', () => {
+    const scrolled = window.pageYOffset;
+    const parallax = document.querySelectorAll('.floating-element');
     
-    @keyframes fadeInUp {
-        from {
-            opacity: 0;
-            transform: translateY(30px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
-`;
-document.head.appendChild(particleStyle);
+    parallax.forEach((element, index) => {
+        const speed = 0.5 + (index * 0.2);
+        element.style.transform = `translateY(${scrolled * speed}px) rotate(${scrolled * 0.1}deg)`;
+    });
+});
 
 // Enhanced contact section
 function enhanceContactSection() {
@@ -392,65 +336,8 @@ function enhanceContactSection() {
     });
 }
 
-// GitHub stats refresh functionality
-function refreshGitHubStats() {
-    const statsImages = document.querySelectorAll('.github-stats img');
-    statsImages.forEach(img => {
-        const src = img.src;
-        img.src = '';
-        setTimeout(() => {
-            img.src = src + '&t=' + new Date().getTime();
-        }, 100);
-    });
-}
-
-// Keyboard navigation enhancement
-document.addEventListener('keydown', function(e) {
-    if (e.key === 'Tab') {
-        document.body.classList.add('keyboard-navigation');
-    }
-});
-
-document.addEventListener('mousedown', function() {
-    document.body.classList.remove('keyboard-navigation');
-});
-
-// Performance optimization: Throttle scroll events
-function throttle(func, wait) {
-    let timeout;
-    return function executedFunction(...args) {
-        const later = () => {
-            clearTimeout(timeout);
-            func(...args);
-        };
-        clearTimeout(timeout);
-        timeout = setTimeout(later, wait);
-    };
-}
-
-// Apply throttling to scroll events
-const throttledScroll = throttle(() => {
-    const scrolled = window.pageYOffset;
-    const parallax = document.querySelectorAll('.floating-element');
-    
-    parallax.forEach((element, index) => {
-        const speed = 0.5 + (index * 0.2);
-        element.style.transform = `translateY(${scrolled * speed}px) rotate(${scrolled * 0.1}deg)`;
-    });
-}, 16); // ~60fps
-
-window.addEventListener('scroll', throttledScroll);
-
-// Dark mode toggle (optional enhancement)
-function toggleDarkMode() {
-    document.body.classList.toggle('light-mode');
-    localStorage.setItem('darkMode', !document.body.classList.contains('light-mode'));
-}
-
-// Load saved theme preference
-if (localStorage.getItem('darkMode') === 'false') {
-    document.body.classList.add('light-mode');
-}
+// Initialize contact section enhancement
+enhanceContactSection();
 
 // Add loading animation
 window.addEventListener('load', function() {
