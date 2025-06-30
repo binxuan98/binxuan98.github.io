@@ -113,6 +113,7 @@ body {
   margin-bottom: 1.5rem;
   min-height: 2rem;
   font-weight: 500;
+  text-align: center;
 }
 
 .cursor {
@@ -125,8 +126,11 @@ body {
   color: var(--text-secondary);
   margin-bottom: 2.5rem;
   max-width: 480px;
+  margin-left: auto;
+  margin-right: auto;
   line-height: 1.6;
   animation: fadeInUp 1s ease-out 0.3s both;
+  text-align: center;
 }
 
 .hero-buttons {
