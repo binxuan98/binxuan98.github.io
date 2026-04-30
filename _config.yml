@@ -14,7 +14,7 @@ minimal_mistakes_skin    : "dark" # "air", "aqua", "contrast", "dark", "dirt", "
 
 # Basic Site Settings
 locale                   : "en-US"
-title                    : "智研社"
+title                    : "Binxuan Zhang"
 title_separator          : "|"
 name                     : &name "Binxuan Zhang"
 description              : &description "AI Developer, Machine Learning Researcher, and Open Source Contributor"
@@ -27,14 +27,14 @@ repository               : "binxuan98/binxuan98.github.io"
 #               Additional customization can be done by editing /_includes/author-profile.html
 author:
   # Biographic information
-  avatar           : "images/profile.png"
+  avatar           : "images/zhang-binxuan-academic-id.png"
   name             : "Binxuan Zhang(张斌轩)"
   pronouns         : # example: "she/her"  
   bio              : "Though the road is long, the destination is certain; though the task is arduous, success is inevitable"
   location         : "China"
   employer         : 
   uri              : # URL
-  email            :  
+  email            : "zhangbinxuan98@foxmail.com"
 
   # Academic websites
   arxiv            : # URL - Update with the correct link to your profile
@@ -48,7 +48,7 @@ author:
   bitbucket        : # Username - Update with your username on the site
   codepen          : # Username
   dribbble         : # Username
-  github           : 
+  github           : "binxuan98"
   kaggle           : # Username  
   stackoverflow    : # User number or user number and name (i.e., use "1" or "1/jeff-atwood")    
 

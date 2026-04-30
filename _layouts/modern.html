@@ -16,7 +16,7 @@ layout: compress
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   </head>
 
   <body class="modern-body">
@@ -25,7 +25,7 @@ layout: compress
     <!-- Navigation -->
     <nav class="modern-nav">
       <div class="nav-container">
-        <a href="#" class="nav-brand">{{ site.title | default: "Portfolio" }}</a>
+        <a href="#" class="nav-brand">{% if page.title contains '智研社' %}智研社{% else %}{{ site.title | default: "Portfolio" }}{% endif %}</a>
         <button class="mobile-nav-toggle" aria-label="Toggle navigation">
           <i class="fas fa-bars"></i>
         </button>
@@ -65,6 +65,17 @@ layout: compress
       </div>
       
       <div class="hero-content">
+        <div class="hero-profile">
+          <div class="hero-avatar-frame">
+            <img src="{{ site.author.avatar | relative_url }}" alt="{{ site.author.name }}" class="hero-avatar-img">
+          </div>
+          <div class="hero-orbit" aria-hidden="true">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+        </div>
+
         <h1 class="hero-title">{{ site.author.name }}</h1>
         
         <div class="hero-subtitle">
@@ -74,8 +85,26 @@ layout: compress
         <div class="hero-description">
           <span id="typed-quotes"></span>
         </div>
-        
 
+        <div class="hero-actions">
+          <a href="#projects" class="btn btn-primary">Explore Work</a>
+          <a href="#contact" class="btn btn-outline">Contact Me</a>
+        </div>
+
+        <div class="hero-metrics" aria-label="Research highlights">
+          <div>
+            <strong>AI</strong>
+            <span>Research</span>
+          </div>
+          <div>
+            <strong>CV</strong>
+            <span>Style Transfer</span>
+          </div>
+          <div>
+            <strong>LLM</strong>
+            <span>RAG Apps</span>
+          </div>
+        </div>
         
         <div class="social-links">
           {% if site.author.email %}
@@ -112,7 +141,6 @@ layout: compress
     </footer>
     
     {% include scripts.html %}
-    <!-- Modern JavaScript -->
     <script src="{{ '/assets/js/modern-script.js' | relative_url }}"></script>
   </body>
 </html>
