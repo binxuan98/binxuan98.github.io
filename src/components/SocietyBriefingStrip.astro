@@ -1,0 +1,13 @@
+---
+import { societyModules } from '../data/society';
+---
+
+<div class="briefing-strip" aria-label="汇报主线">
+  {societyModules.map((item, index) => (
+    <button type="button" class:list={[{ 'is-active': index === 0 }]} data-carousel-summary>
+      <span>{item.number}</span>
+      <strong>{item.shortTitle}</strong>
+      <p>{item.summary}</p>
+    </button>
+  ))}
+</div>

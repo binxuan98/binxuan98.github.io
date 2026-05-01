@@ -1,11 +1,13 @@
 ---
 import '../styles/global.css';
+import { navItems, profile } from '../data/profile';
 
 const {
   title = '张斌轩 | Binxuan Zhang',
   description = '张斌轩的个人品牌站，聚焦人工智能、计算机视觉、大语言模型、RAG 与职业教育实践。',
   bodyClass = '',
-  presentation = false
+  presentation = false,
+  enableCarousel = false
 } = Astro.props;
 
 const pageTitle = title.includes('张斌轩') || title.includes('Binxuan')
@@ -28,13 +30,10 @@ const pageTitle = title.includes('张斌轩') || title.includes('Binxuan')
       <header class="site-header" data-site-header>
         <a class="brand-mark" href="/" aria-label="返回首页">
           <span>BX</span>
-          <strong>张斌轩</strong>
+          <strong>{profile.name}</strong>
         </a>
         <nav class="site-nav" aria-label="主导航">
-          <a href="/#work">研究方向</a>
-          <a href="/#projects">项目实践</a>
-          <a href="/society/">智研社</a>
-          <a href="/#contact">联系</a>
+          {navItems.map((item) => <a href={item.href}>{item.label}</a>)}
         </nav>
       </header>
     )}
@@ -44,9 +43,9 @@ const pageTitle = title.includes('张斌轩') || title.includes('Binxuan')
     {!presentation && (
       <footer class="site-footer">
         <span>© {new Date().getFullYear()} Binxuan Zhang</span>
-        <a href="mailto:zhangbinxuan98@foxmail.com">zhangbinxuan98@foxmail.com</a>
+        <a href={`mailto:${profile.email}`}>{profile.email}</a>
       </footer>
     )}
-    <script src="/scripts/site.js" defer></script>
+    {enableCarousel && <script src="/scripts/site.js" defer></script>}
   </body>
 </html>

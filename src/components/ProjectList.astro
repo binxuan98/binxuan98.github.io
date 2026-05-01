@@ -1,0 +1,18 @@
+---
+const { projects = [] } = Astro.props;
+---
+
+<div class="project-list">
+  {projects.map((project: { title: string; text: string; meta: string; href: string }) => (
+    <a
+      class="project-row"
+      href={project.href}
+      target={project.href.startsWith('http') ? '_blank' : undefined}
+      rel={project.href.startsWith('http') ? 'noreferrer' : undefined}
+    >
+      <small>{project.meta}</small>
+      <strong>{project.title}</strong>
+      <p>{project.text}</p>
+    </a>
+  ))}
+</div>

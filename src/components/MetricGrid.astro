@@ -1,0 +1,12 @@
+---
+const { items = [], className = '' } = Astro.props;
+---
+
+<div class:list={['metric-grid', className]} aria-label="关键数据">
+  {items.map((item: { value: string; label: string }) => (
+    <div>
+      <strong>{item.value}</strong>
+      <span>{item.label}</span>
+    </div>
+  ))}
+</div>

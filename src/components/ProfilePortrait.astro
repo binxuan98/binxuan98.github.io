@@ -1,0 +1,17 @@
+---
+import { Image } from 'astro:assets';
+import portrait from '../assets/images/zhang-binxuan-academic-id.png';
+import { profile } from '../data/profile';
+
+const { compact = false } = Astro.props;
+---
+
+<aside class:list={['profile-card', { 'is-compact': compact }]} aria-label="张斌轩个人形象">
+  <div class="profile-card__image">
+    <Image src={portrait} alt="张斌轩学术证件照" widths={[320, 480, 720]} sizes="(max-width: 760px) 78vw, 360px" loading={compact ? 'lazy' : 'eager'} />
+  </div>
+  <div class="profile-card__body">
+    <strong>{profile.role}</strong>
+    <span>{profile.affiliation}</span>
+  </div>
+</aside>

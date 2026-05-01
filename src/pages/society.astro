@@ -1,55 +1,9 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-
-const modules = [
-  {
-    number: '01',
-    icon: 'AI',
-    title: '人工智能通识课程',
-    text: '2024 秋季学期起，面向全校 44 个专业开设人工智能通识课程，以课程作为发现和吸纳 AI 兴趣学生的入口。',
-    tags: ['44 个专业', '通识教育', 'AI 启蒙'],
-    summary: '从全校通识教育中扩大 AI 学习覆盖面。'
-  },
-  {
-    number: '02',
-    icon: '育',
-    title: '智研社学生培养',
-    text: '从课程中遴选对人工智能感兴趣、有潜力的学生进入社团，开展项目训练、竞赛训练、技术讲座和实践指导。',
-    tags: ['社团遴选', '项目训练', '竞赛实践'],
-    summary: '把有兴趣、有潜力的学生沉淀到智研社。'
-  },
-  {
-    number: '03',
-    icon: '研',
-    title: '重点实验室项目牵引',
-    text: '依托甘肃省人工智能与算力技术重点实验室，协助兰州大学杨裔教授推进甘肃省重大科技专项、西部算力技术研究院重大项目-甘肃移动项目。',
-    tags: ['省重大专项', '甘肃移动项目', '真实任务'],
-    summary: '将重点实验室基础性工作转化为训练任务。'
-  },
-  {
-    number: '04',
-    icon: '算',
-    title: '前沿实践方向',
-    text: '将项目中的基础性工作引入社团，让学生了解并参与微调大模型、AI4S、异构算力调度等人工智能前沿方向。',
-    tags: ['微调大模型', 'AI4S', '异构算力调度'],
-    summary: '微调大模型、AI4S、异构算力调度。'
-  },
-  {
-    number: '05',
-    icon: '网',
-    title: '东数西算人才培养',
-    text: '围绕东数西算背景，培养理解 AI 技术、算力调度、行业应用和项目实践的复合型学生，服务区域数字产业发展。',
-    tags: ['算力人才', '行业应用', '区域服务'],
-    summary: '服务东数西算背景下的复合型人才培养。'
-  }
-];
-
-const metrics = [
-  ['44', '专业覆盖'],
-  ['2024', '秋季启动'],
-  ['3', '前沿方向'],
-  ['2', '重大项目支撑']
-];
+import MetricGrid from '../components/MetricGrid.astro';
+import SocietyBriefingStrip from '../components/SocietyBriefingStrip.astro';
+import SocietyCarousel from '../components/SocietyCarousel.astro';
+import { societyMetrics } from '../data/society';
 ---
 
 <BaseLayout
@@ -57,6 +11,7 @@ const metrics = [
   description="庆阳职业技术学院智研社动态展厅大屏，展示人工智能通识课程、学生培养、重点实验室项目牵引、前沿实践与东数西算人才培养。"
   bodyClass="society-page"
   presentation={true}
+  enableCarousel={true}
 >
   <section class="society-screen terrain-grid-bg">
     <div class="society-shell">
@@ -75,79 +30,11 @@ const metrics = [
           以全校人工智能通识课程为入口，发现并吸纳对 AI 感兴趣的学生；以重点实验室真实项目为牵引，把大模型、AI4S、异构算力调度等前沿工作转化为学生可参与、可理解、可成长的实践任务。
         </p>
 
-        <div class="society-metrics" aria-label="智研社建设概览">
-          {metrics.map(([number, label]) => (
-            <div>
-              <strong>{number}</strong>
-              <span>{label}</span>
-            </div>
-          ))}
-        </div>
+        <MetricGrid items={societyMetrics} className="society-metrics" />
       </div>
 
-      <aside class="society-panel" data-carousel data-carousel-interval="6000" aria-label="智研社动态项目展示">
-        <div class="presenter">
-          <img src="/images/zhang-binxuan-academic-id.png" alt="张斌轩学术证件照" />
-          <div>
-            <strong>张斌轩</strong>
-            <span>智研社创始人 · 指导老师</span>
-          </div>
-        </div>
-
-        <div class="showcase-card">
-          <div class="showcase-head">
-            <span>动态展示</span>
-            <strong><span data-carousel-current>01</span><em>/05</em></strong>
-          </div>
-
-          <div class="slide-stack">
-            {modules.map((item, index) => (
-              <article class:list={['showcase-slide', { 'is-active': index === 0 }]} data-carousel-slide>
-                <div class="slide-icon">{item.icon}</div>
-                <small>模块 {item.number}</small>
-                <h2>{item.title}</h2>
-                <p>{item.text}</p>
-                <div class="tag-row">
-                  {item.tags.map((tag) => <span>{tag}</span>)}
-                </div>
-              </article>
-            ))}
-          </div>
-
-          <div class="showcase-progress" aria-hidden="true">
-            <span data-carousel-progress></span>
-          </div>
-
-          <div class="showcase-controls" aria-label="动态展示控制">
-            <button type="button" data-carousel-prev aria-label="上一个模块">
-              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6 9 12l6 6" /></svg>
-            </button>
-            <div class="showcase-dots" aria-label="模块导航">
-              {modules.map((item, index) => (
-                <button
-                  type="button"
-                  class:list={[{ 'is-active': index === 0 }]}
-                  data-carousel-dot
-                  aria-label={`查看模块 ${item.number}`}
-                />
-              ))}
-            </div>
-            <button type="button" data-carousel-next aria-label="下一个模块">
-              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 6 6 6-6 6" /></svg>
-            </button>
-          </div>
-        </div>
-      </aside>
-
-      <div class="briefing-strip" aria-label="汇报主线">
-        {modules.map((item, index) => (
-          <button type="button" class:list={[{ 'is-active': index === 0 }]} data-carousel-summary>
-            <span>{item.number}</span>
-            <strong>{item.title.replace('人工智能', '').replace('重点实验室', '')}</strong>
-            <p>{item.summary}</p>
-          </button>
-        ))}
-      </div>
+      <SocietyCarousel />
+      <SocietyBriefingStrip />
     </div>
   </section>
 </BaseLayout>
