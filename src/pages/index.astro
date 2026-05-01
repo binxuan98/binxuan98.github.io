@@ -1,0 +1,144 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const focusAreas = [
+  {
+    title: '计算机视觉与生成式视觉',
+    text: '围绕中国山水画风格迁移、扩散模型与文化图像生成开展研究，关注技术方法与本土文化表达的结合。',
+    tags: ['Computer Vision', 'Diffusion', 'Style Transfer']
+  },
+  {
+    title: '大语言模型与 RAG 应用',
+    text: '构建面向专业知识、教育场景和行业项目的检索增强流程，把大模型能力落到可解释、可复用的应用系统中。',
+    tags: ['LLM', 'RAG', 'Agent Workflow']
+  },
+  {
+    title: 'AI 教育与人才培养',
+    text: '在庆阳职业技术学院推进人工智能通识课程与智研社建设，面向东数西算背景培养懂 AI、懂项目、懂应用的学生。',
+    tags: ['AI Education', 'Society', 'Practice']
+  }
+];
+
+const proofPoints = [
+  ['44', '专业 AI 通识课程覆盖'],
+  ['2024', '秋季学期启动课程与社团联动'],
+  ['3', '大模型、AI4S、算力调度方向'],
+  ['2', '重点实验室项目牵引']
+];
+
+const projects = [
+  {
+    title: '基于扩散模型的中国山水画风格迁移',
+    text: '聚焦图像风格迁移、扩散生成和传统山水画视觉特征建模，探索文化计算与生成式 AI 的结合路径。',
+    meta: '省级自然科学基金方向',
+    href: 'https://github.com/binxuan98'
+  },
+  {
+    title: '重点实验室 AI 与算力项目实践',
+    text: '协助推进甘肃省人工智能与算力技术重点实验室相关项目，把真实项目中的基础任务转化为学生训练内容。',
+    meta: '甘肃省重大科技专项 · 甘肃移动项目',
+    href: '/society/'
+  },
+  {
+    title: '庆阳职业技术学院智研社',
+    text: '从通识课程中发现学生，通过社团组织项目训练、竞赛实践、技术讲座和前沿方向学习。',
+    meta: '东数西算人才培养基地展示',
+    href: '/society/'
+  }
+];
+---
+
+<BaseLayout title="张斌轩 | AI 研究与教育实践" bodyClass="home-page">
+  <section class="brand-hero">
+    <div class="hero-copy">
+      <p class="hero-line">AI Research · Education Practice · Computing Power</p>
+      <h1>张斌轩</h1>
+      <p class="hero-en">Binxuan Zhang</p>
+      <p class="hero-lead">
+        聚焦计算机视觉、大语言模型、RAG 与 AI 教育实践，连接高校科研项目、职业教育课堂和东数西算人才培养场景。
+      </p>
+      <div class="hero-actions">
+        <a class="button-primary" href="/society/">查看智研社展厅</a>
+        <a class="button-secondary" href="https://github.com/binxuan98" target="_blank" rel="noreferrer">GitHub</a>
+      </div>
+      <div class="hero-proof" aria-label="个人实践概览">
+        {proofPoints.map(([number, label]) => (
+          <div>
+            <strong>{number}</strong>
+            <span>{label}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+
+    <div class="hero-portrait-panel" aria-label="张斌轩个人形象">
+      <div class="portrait-frame">
+        <img src="/images/zhang-binxuan-academic-id.png" alt="张斌轩学术证件照" />
+      </div>
+      <div class="portrait-caption">
+        <strong>智研社创始人 · 指导老师</strong>
+        <span>庆阳职业技术学院 · 人工智能与计算机技术方向</span>
+      </div>
+    </div>
+  </section>
+
+  <section id="work" class="content-band">
+    <div class="section-heading">
+      <span>Research Focus</span>
+      <h2>把人工智能研究做成能被看见、能被学习、能被实践的能力。</h2>
+    </div>
+    <div class="focus-grid">
+      {focusAreas.map((area) => (
+        <article class="focus-card">
+          <h3>{area.title}</h3>
+          <p>{area.text}</p>
+          <div class="tag-row">
+            {area.tags.map((tag) => <span>{tag}</span>)}
+          </div>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section id="projects" class="feature-section">
+    <div class="feature-media" aria-hidden="true">
+      <img src="/images/shanshui.jpg" alt="" />
+    </div>
+    <div class="feature-copy">
+      <span>Selected Work</span>
+      <h2>研究、项目和教学在同一个方向上汇合。</h2>
+      <div class="project-list">
+        {projects.map((project) => (
+          <a class="project-row" href={project.href} target={project.href.startsWith('http') ? '_blank' : undefined} rel={project.href.startsWith('http') ? 'noreferrer' : undefined}>
+            <small>{project.meta}</small>
+            <strong>{project.title}</strong>
+            <p>{project.text}</p>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="society-preview" aria-label="庆阳职业技术学院智研社">
+    <div>
+      <span>Qingyang Vocational & Technical College</span>
+      <h2>庆阳职业技术学院智研社</h2>
+      <p>
+        面向领导与企业来访展示，首屏汇报人工智能通识课程、学生培养、重点实验室项目牵引、前沿实践方向与东数西算人才培养主线。
+      </p>
+    </div>
+    <a class="button-primary" href="/society/">进入动态展厅</a>
+  </section>
+
+  <section id="contact" class="contact-panel">
+    <div>
+      <span>Contact</span>
+      <h2>欢迎交流人工智能研究、项目实践与职业教育合作。</h2>
+    </div>
+    <div class="contact-links">
+      <a href="mailto:zhangbinxuan98@foxmail.com">Email</a>
+      <a href="https://scholar.google.com.hk/citations?user=SO_IDk4AAAAJ&hl=zh-CN&oi=sra" target="_blank" rel="noreferrer">Google Scholar</a>
+      <a href="https://orcid.org/0000-0002-2958-7488" target="_blank" rel="noreferrer">ORCID</a>
+    </div>
+  </section>
+</BaseLayout>

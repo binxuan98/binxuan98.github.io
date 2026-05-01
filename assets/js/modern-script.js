@@ -265,6 +265,142 @@ if (parallax.length && !window.matchMedia('(prefers-reduced-motion: reduce)').ma
     }, { passive: true });
 }
 
+// Society exhibition carousel
+function initSocietyCarousel() {
+    const carousel = document.querySelector('[data-society-carousel]');
+
+    if (!carousel) return;
+    if (carousel.dataset.carouselReady === 'true') return;
+    carousel.dataset.carouselReady = 'true';
+
+    const slides = Array.from(carousel.querySelectorAll('[data-carousel-slide]'));
+    const dots = Array.from(carousel.querySelectorAll('[data-carousel-dot]'));
+    const summaries = Array.from(document.querySelectorAll('[data-carousel-summary]'));
+    const currentLabel = carousel.querySelector('[data-carousel-current]');
+    const progress = carousel.querySelector('[data-carousel-progress]');
+    const prevButton = carousel.querySelector('[data-carousel-prev]');
+    const nextButton = carousel.querySelector('[data-carousel-next]');
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const intervalMs = 6000;
+    let currentIndex = 0;
+    let timer = null;
+    let isPaused = false;
+
+    if (!slides.length) return;
+
+    function formatIndex(index) {
+        return String(index + 1).padStart(2, '0');
+    }
+
+    function updateProgress() {
+        if (!progress) return;
+
+        progress.style.transition = 'none';
+        progress.style.width = reducedMotion ? '100%' : '0%';
+
+        if (!reducedMotion && !isPaused) {
+            window.requestAnimationFrame(() => {
+                progress.style.transition = `width ${intervalMs}ms linear`;
+                progress.style.width = '100%';
+            });
+        }
+    }
+
+    function showSlide(nextIndex) {
+        currentIndex = (nextIndex + slides.length) % slides.length;
+
+        slides.forEach((slide, index) => {
+            slide.classList.toggle('is-active', index === currentIndex);
+        });
+
+        dots.forEach((dot, index) => {
+            dot.classList.toggle('is-active', index === currentIndex);
+        });
+
+        summaries.forEach((summary, index) => {
+            summary.classList.toggle('is-active', index === currentIndex);
+        });
+
+        if (currentLabel) {
+            currentLabel.textContent = formatIndex(currentIndex);
+        }
+
+        updateProgress();
+    }
+
+    function stopAutoPlay() {
+        if (timer) {
+            window.clearInterval(timer);
+            timer = null;
+        }
+    }
+
+    function startAutoPlay() {
+        stopAutoPlay();
+
+        if (reducedMotion || isPaused) return;
+
+        timer = window.setInterval(() => {
+            showSlide(currentIndex + 1);
+        }, intervalMs);
+        updateProgress();
+    }
+
+    prevButton?.addEventListener('click', () => {
+        showSlide(currentIndex - 1);
+        startAutoPlay();
+    });
+
+    nextButton?.addEventListener('click', () => {
+        showSlide(currentIndex + 1);
+        startAutoPlay();
+    });
+
+    dots.forEach((dot, index) => {
+        dot.addEventListener('click', () => {
+            showSlide(index);
+            startAutoPlay();
+        });
+    });
+
+    summaries.forEach((summary, index) => {
+        summary.addEventListener('click', () => {
+            showSlide(index);
+            startAutoPlay();
+        });
+    });
+
+    carousel.addEventListener('mouseenter', () => {
+        isPaused = true;
+        stopAutoPlay();
+        if (progress) {
+            progress.style.transition = 'none';
+        }
+    });
+
+    carousel.addEventListener('mouseleave', () => {
+        isPaused = false;
+        startAutoPlay();
+    });
+
+    carousel.addEventListener('focusin', () => {
+        isPaused = true;
+        stopAutoPlay();
+    });
+
+    carousel.addEventListener('focusout', () => {
+        if (!carousel.contains(document.activeElement)) {
+            isPaused = false;
+            startAutoPlay();
+        }
+    });
+
+    showSlide(0);
+    startAutoPlay();
+}
+
+initSocietyCarousel();
+
 // Add loading animation
 window.addEventListener('load', function() {
     document.body.classList.add('loaded');

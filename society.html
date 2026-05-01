@@ -19,11 +19,6 @@ title: "智研社 - Artificial Intelligence Research Society"
     <div class="society-stage-main">
       <div class="qingyang-city-logo">高天厚土·福地庆阳</div>
 
-      <div class="society-identity">
-        <span>庆阳职业技术学院</span>
-        <span>东数西算人才培养基地展示</span>
-      </div>
-
       <h1 class="society-hero-title">
         <span class="society-school-title">庆阳职业技术学院</span>
         <span class="society-club-title">智研社</span>
@@ -57,7 +52,7 @@ title: "智研社 - Artificial Intelligence Research Society"
       </div>
     </div>
 
-    <aside class="society-stage-panel" aria-label="现场讲解重点">
+    <aside class="society-stage-panel society-carousel-panel" aria-label="智研社动态展示" data-society-carousel>
       <div class="society-presenter">
         <img src="{{ site.author.avatar | relative_url }}" alt="张斌轩学术证件照">
         <div>
@@ -66,51 +61,120 @@ title: "智研社 - Artificial Intelligence Research Society"
         </div>
       </div>
 
-      <div class="society-workstream primary">
-        <div class="workstream-icon"><i class="fas fa-chalkboard-teacher"></i></div>
-        <div>
-          <span class="workstream-label">课程入口</span>
-          <h2>人工智能通识课程</h2>
-          <p>2024 秋季学期起，面向全校 44 个专业开设课程，在课堂中识别兴趣学生并持续吸纳进入社团。</p>
+      <div class="society-showcase-frame">
+        <div class="society-showcase-topline">
+          <div>
+            <span class="society-showcase-kicker">动态展示</span>
+            <strong><span data-carousel-current>01</span><span>/05</span></strong>
+          </div>
+          <span class="society-showcase-state">自动轮播 · 悬停暂停</span>
         </div>
-      </div>
 
-      <div class="society-workstream">
-        <div class="workstream-icon"><i class="fas fa-flask"></i></div>
-        <div>
-          <span class="workstream-label">项目牵引</span>
-          <h2>重点实验室真实任务</h2>
-          <p>参与甘肃省人工智能与算力技术重点实验室项目，协助兰州大学杨裔教授推进甘肃省重大科技专项、西部算力技术研究院重大项目-甘肃移动项目。</p>
+        <div class="society-showcase-slides">
+          <article class="society-showcase-slide is-active" data-carousel-slide>
+            <div class="society-showcase-icon"><i class="fas fa-chalkboard-teacher"></i></div>
+            <span class="society-showcase-label">模块 01</span>
+            <h2>人工智能通识课程</h2>
+            <p>2024 秋季学期起，面向全校 44 个专业开设人工智能通识课程，以课程作为发现和吸纳 AI 兴趣学生的入口。</p>
+            <div class="society-showcase-tags">
+              <span>44 个专业</span>
+              <span>通识教育</span>
+              <span>AI 启蒙</span>
+            </div>
+          </article>
+
+          <article class="society-showcase-slide" data-carousel-slide>
+            <div class="society-showcase-icon"><i class="fas fa-users-gear"></i></div>
+            <span class="society-showcase-label">模块 02</span>
+            <h2>智研社学生培养</h2>
+            <p>从课程中遴选对人工智能感兴趣、有潜力的学生进入社团，开展项目训练、竞赛训练、技术讲座和实践指导。</p>
+            <div class="society-showcase-tags">
+              <span>社团遴选</span>
+              <span>项目训练</span>
+              <span>竞赛实践</span>
+            </div>
+          </article>
+
+          <article class="society-showcase-slide" data-carousel-slide>
+            <div class="society-showcase-icon"><i class="fas fa-flask"></i></div>
+            <span class="society-showcase-label">模块 03</span>
+            <h2>重点实验室项目牵引</h2>
+            <p>依托甘肃省人工智能与算力技术重点实验室，协助兰州大学杨裔教授推进甘肃省重大科技专项、西部算力技术研究院重大项目-甘肃移动项目。</p>
+            <div class="society-showcase-tags">
+              <span>省重大专项</span>
+              <span>甘肃移动项目</span>
+              <span>真实任务</span>
+            </div>
+          </article>
+
+          <article class="society-showcase-slide" data-carousel-slide>
+            <div class="society-showcase-icon"><i class="fas fa-microchip"></i></div>
+            <span class="society-showcase-label">模块 04</span>
+            <h2>前沿实践方向</h2>
+            <p>将项目中的基础性工作引入社团，让学生了解并参与微调大模型、AI4S、异构算力调度等人工智能前沿方向。</p>
+            <div class="society-showcase-tags">
+              <span>微调大模型</span>
+              <span>AI4S</span>
+              <span>异构算力调度</span>
+            </div>
+          </article>
+
+          <article class="society-showcase-slide" data-carousel-slide>
+            <div class="society-showcase-icon"><i class="fas fa-network-wired"></i></div>
+            <span class="society-showcase-label">模块 05</span>
+            <h2>东数西算人才培养</h2>
+            <p>围绕东数西算背景，培养理解 AI 技术、算力调度、行业应用和项目实践的复合型学生，服务区域数字产业发展。</p>
+            <div class="society-showcase-tags">
+              <span>算力人才</span>
+              <span>行业应用</span>
+              <span>区域服务</span>
+            </div>
+          </article>
         </div>
-      </div>
 
-      <div class="society-topic-rail" aria-label="社团实践方向">
-        <span>微调大模型</span>
-        <span>AI4S</span>
-        <span>异构算力调度</span>
+        <div class="society-showcase-progress" aria-hidden="true">
+          <span data-carousel-progress></span>
+        </div>
+
+        <div class="society-showcase-controls" aria-label="动态展示控制">
+          <button type="button" data-carousel-prev aria-label="上一个模块"><i class="fas fa-arrow-left"></i></button>
+          <div class="society-showcase-dots" aria-label="模块导航">
+            <button type="button" class="is-active" data-carousel-dot aria-label="查看模块 01"></button>
+            <button type="button" data-carousel-dot aria-label="查看模块 02"></button>
+            <button type="button" data-carousel-dot aria-label="查看模块 03"></button>
+            <button type="button" data-carousel-dot aria-label="查看模块 04"></button>
+            <button type="button" data-carousel-dot aria-label="查看模块 05"></button>
+          </div>
+          <button type="button" data-carousel-next aria-label="下一个模块"><i class="fas fa-arrow-right"></i></button>
+        </div>
       </div>
     </aside>
 
     <div class="society-briefing-strip" aria-label="汇报主线">
-      <div>
+      <div class="is-active" data-carousel-summary>
         <span>01</span>
-        <strong>课程普及</strong>
+        <strong>通识课程</strong>
         <p>从全校通识教育中扩大 AI 学习覆盖面。</p>
       </div>
-      <div>
+      <div data-carousel-summary>
         <span>02</span>
-        <strong>社团遴选</strong>
+        <strong>学生培养</strong>
         <p>把有兴趣、有潜力的学生沉淀到智研社。</p>
       </div>
-      <div>
+      <div data-carousel-summary>
         <span>03</span>
-        <strong>项目实践</strong>
+        <strong>项目牵引</strong>
         <p>将重点实验室基础性工作转化为训练任务。</p>
       </div>
-      <div>
+      <div data-carousel-summary>
         <span>04</span>
-        <strong>人才培养</strong>
-        <p>服务东数西算背景下的 AI 与算力人才培养。</p>
+        <strong>前沿方向</strong>
+        <p>微调大模型、AI4S、异构算力调度。</p>
+      </div>
+      <div data-carousel-summary>
+        <span>05</span>
+        <strong>算力人才</strong>
+        <p>服务东数西算背景下的复合型人才培养。</p>
       </div>
     </div>
   </div>
@@ -413,63 +477,3 @@ title: "智研社 - Artificial Intelligence Research Society"
     </div>
   </div>
 </section>
-
-<!-- Modern JavaScript -->
-<script src="{{ '/assets/js/modern-script.js' | relative_url }}"></script>
-
-<script>
-// Society-specific typed text
-function initTypedEffects() {
-  // Check if Typed is available
-  if (typeof Typed === 'undefined') {
-    console.log('Typed.js not loaded yet, retrying...');
-    setTimeout(initTypedEffects, 100);
-    return;
-  }
-  
-  // Typed text for society page
-  if (document.getElementById('typed-text-society')) {
-    new Typed('#typed-text-society', {
-      strings: [
-        '庆阳职业技术学院人工智能研究社',
-        'AI Research Society',
-        '探索人工智能的无限可能',
-        'Exploring the Infinite Possibilities of AI'
-      ],
-      typeSpeed: 80,
-      backSpeed: 50,
-      backDelay: 2000,
-      startDelay: 500,
-      loop: true,
-      showCursor: true,
-      cursorChar: '|'
-    });
-  }
-  
-  // Typed quotes for society page
-  if (document.getElementById('typed-quotes-society')) {
-    setTimeout(() => {
-      new Typed('#typed-quotes-society', {
-        strings: [
-          '"智慧研究，创新未来"',
-          '"Intelligent Research, Innovative Future"',
-          '"让AI技术服务于科学发现"',
-          '"Making AI Technology Serve Scientific Discovery"'
-        ],
-        typeSpeed: 60,
-        backSpeed: 40,
-        backDelay: 3000,
-        startDelay: 1000,
-        loop: true,
-        showCursor: true,
-        cursorChar: '_'
-      });
-    }, 2000);
-  }
-}
-
-// Initialize when DOM is ready
-document.addEventListener('DOMContentLoaded', function() {
-  initTypedEffects();
-});
-</script>
