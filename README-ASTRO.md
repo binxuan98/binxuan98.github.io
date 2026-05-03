@@ -11,6 +11,16 @@
 - 头像与山水图在 Astro 页面中使用 `astro:assets`，构建时会生成带尺寸信息的优化资源。
 - 输出目录仍然是纯静态 `dist/`，不需要服务器，部署到 GitHub Pages 成本低、速度快。
 
+## Three.js 展厅实验分支
+
+`codex/threejs-compute-showcase` 分支在 `/society/` 首屏加入了 Three.js/WebGL 场景：
+
+- 3D 算力节点网络：节点、连线和中心枢纽构成空间化算力拓扑。
+- 数据流穿梭：金色脉冲粒子沿节点连线持续移动。
+- 庆阳地脉线条：底部用流动曲线和网格表达“地脉 + 东数西算数据网格”。
+- 按需加载：Three.js 只在 `/society/` 页面加载，首页不加载 WebGL 代码。
+- 可访问性：遵守 `prefers-reduced-motion`，减少动效时保留静态画面。
+
 ## 本地运行
 
 ```bash
