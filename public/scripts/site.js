@@ -38,6 +38,10 @@
         summary.classList.toggle('is-active', itemIndex === index);
       });
       if (current) current.textContent = String(index + 1).padStart(2, '0');
+      root.dataset.activeIndex = String(index);
+      const detail = { index, total: slides.length };
+      root.dispatchEvent(new CustomEvent('society:module-change', { detail, bubbles: true }));
+      window.dispatchEvent(new CustomEvent('society:module-change', { detail }));
       restartProgress();
     }
 

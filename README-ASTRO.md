@@ -13,11 +13,12 @@
 
 ## Three.js 展厅实验分支
 
-`codex/threejs-compute-showcase` 分支在 `/society/` 首屏加入了 Three.js/WebGL 场景：
+`codex/threejs-compute-showcase` 分支在 `/society/` 首屏加入了 Three.js/WebGL 场景。当前实现采用“方案 D + 方案 A”：庆阳地形数据沙盘作为主舞台，5 个智研社模块以空间轮播节点舱环绕中心枢纽。
 
-- 3D 算力节点网络：节点、连线和中心枢纽构成空间化算力拓扑。
+- 3D 算力节点网络：中心枢纽、5 个环绕模块舱、外部数据源节点构成空间化算力拓扑。
 - 数据流穿梭：金色脉冲粒子沿节点连线持续移动。
 - 庆阳地脉线条：底部用流动曲线和网格表达“地脉 + 东数西算数据网格”。
+- 空间轮播联动：HTML 讲解面板切换时，Three.js 舞台同步转向当前模块节点。
 - 按需加载：Three.js 只在 `/society/` 页面加载，首页不加载 WebGL 代码。
 - 可访问性：遵守 `prefers-reduced-motion`，减少动效时保留静态画面。
 
