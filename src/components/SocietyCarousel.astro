@@ -1,59 +1,13 @@
 ---
-import { Image } from 'astro:assets';
-import portrait from '../assets/images/zhang-binxuan-academic-id.png';
 import { societyModules } from '../data/society';
-import { profile } from '../data/profile';
-import TagRow from './TagRow.astro';
 ---
 
-<aside class="society-panel" data-carousel data-carousel-interval="6000" aria-label="智研社动态项目展示">
-  <div class="presenter">
-    <Image src={portrait} alt="张斌轩学术证件照" width={116} height={116} loading="eager" />
-    <div>
-      <strong>{profile.name}</strong>
-      <span>{profile.role}</span>
-    </div>
-  </div>
-
-  <div class="showcase-card">
-        <div class="showcase-head">
-      <span>空间轮播</span>
-      <strong><span data-carousel-current>01</span><em>/05</em></strong>
-    </div>
-
-    <div class="slide-stack">
-      {societyModules.map((item, index) => (
-        <article class:list={['showcase-slide', { 'is-active': index === 0 }]} data-carousel-slide>
-          <div class="slide-icon">{item.icon}</div>
-          <small>模块 {item.number}</small>
-          <h2>{item.title}</h2>
-          <p>{item.text}</p>
-          <TagRow tags={item.tags} />
-        </article>
-      ))}
-    </div>
-
-    <div class="showcase-progress" aria-hidden="true">
-      <span data-carousel-progress></span>
-    </div>
-
-    <div class="showcase-controls" aria-label="动态展示控制">
-      <button type="button" data-carousel-prev aria-label="上一个模块">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6 9 12l6 6" /></svg>
-      </button>
-      <div class="showcase-dots" aria-label="模块导航">
-        {societyModules.map((item, index) => (
-          <button
-            type="button"
-            class:list={[{ 'is-active': index === 0 }]}
-            data-carousel-dot
-            aria-label={`查看模块 ${item.number}`}
-          />
-        ))}
-      </div>
-      <button type="button" data-carousel-next aria-label="下一个模块">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 6 6 6-6 6" /></svg>
-      </button>
-    </div>
-  </div>
-</aside>
+<div class="society-controller" data-carousel data-carousel-interval="6000" aria-hidden="true">
+  <span data-carousel-current>01</span>
+  <span data-carousel-progress></span>
+  {societyModules.map((item, index) => (
+    <article class:list={[{ 'is-active': index === 0 }]} data-carousel-slide>
+      {item.title}
+    </article>
+  ))}
+</div>

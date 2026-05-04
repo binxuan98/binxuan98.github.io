@@ -1,14 +1,28 @@
 ---
+import portrait from '../assets/images/zhang-binxuan-academic-id.png';
 import { societyModules } from '../data/society';
+import { profile } from '../data/profile';
 
-const sceneModules = societyModules.map(({ number, shortTitle, title }) => ({
+const sceneModules = societyModules.map(({ number, icon, shortTitle, title, text, tags, summary }) => ({
   number,
+  icon,
   shortTitle,
-  title
+  title,
+  text,
+  tags,
+  summary
 }));
 ---
 
-<div class="compute-scene" data-compute-scene data-compute-modules={JSON.stringify(sceneModules)} aria-hidden="true">
+<div
+  class="compute-scene"
+  data-compute-scene
+  data-compute-modules={JSON.stringify(sceneModules)}
+  data-presenter-name={profile.name}
+  data-presenter-role={profile.role}
+  data-portrait-src={portrait.src}
+  aria-hidden="true"
+>
   <canvas data-compute-canvas></canvas>
   <div class="compute-scene__overlay"></div>
 </div>
@@ -27,6 +41,12 @@ const sceneModules = societyModules.map(({ number, shortTitle, title }) => ({
     if (!(canvas instanceof HTMLCanvasElement)) return;
 
     const modules = JSON.parse(root.dataset.computeModules || '[]');
+    const presenter = {
+      name: root.dataset.presenterName || '张斌轩',
+      role: root.dataset.presenterRole || '智研社创始人 · 指导老师',
+      portraitSrc: root.dataset.portraitSrc || ''
+    };
+    let portraitImage = null;
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
     const renderer = new THREE.WebGLRenderer({
       canvas,
@@ -136,23 +156,45 @@ const sceneModules = societyModules.map(({ number, shortTitle, title }) => ({
 
     createTerrain(THREE, terrainLayer);
 
-    const particles = createFlowParticles(THREE, radialLinks, 64);
+    const particles = createFlowParticles(THREE, radialLinks, 108);
     particles.forEach((particle) => flowLayer.add(particle.mesh));
 
     const stars = createStars(THREE);
     stage.add(stars);
 
+    const detailCard = createDetailCard(THREE, modules[0], palette[0], 0, modules.length, presenter, portraitImage);
+    detailCard.group.position.set(5.15, 2.08, 5.95);
+    detailCard.group.rotation.set(-0.02, -0.2, 0.006);
+    scene.add(detailCard.group);
+
+    const signalField = createSignalField(THREE);
+    stage.add(signalField);
+
     let activeIndex = 0;
     let targetRotation = 0.2;
+    let activeStartedAt = 0;
     let frameId = 0;
     const clock = new THREE.Clock();
     const lookTarget = new THREE.Vector3(0, 0.5, 0);
+    const moduleDuration = 6;
+
+    if (presenter.portraitSrc) {
+      const image = new Image();
+      image.decoding = 'async';
+      image.onload = () => {
+        portraitImage = image;
+        detailCard.update(modules[activeIndex], palette[activeIndex % palette.length], activeIndex, modules.length, presenter, portraitImage);
+      };
+      image.src = presenter.portraitSrc;
+    }
 
     function setActive(index) {
       activeIndex = (index + moduleObjects.length) % moduleObjects.length;
       const active = moduleObjects[activeIndex];
       targetRotation = Math.atan2(-active.position.x, active.position.z);
+      activeStartedAt = clock.getElapsedTime();
       root.dataset.activeModule = String(activeIndex);
+      detailCard.update(modules[activeIndex], palette[activeIndex % palette.length], activeIndex, modules.length, presenter, portraitImage);
       if (prefersReducedMotion.matches) {
         stage.rotation.y = targetRotation;
         resize();
@@ -183,6 +225,7 @@ const sceneModules = societyModules.map(({ number, shortTitle, title }) => ({
       stage.rotation.x = Math.sin(elapsed * 0.16) * 0.025;
       terrainLayer.position.x = Math.sin(elapsed * 0.22) * 0.3;
       stars.rotation.y = elapsed * 0.02;
+      signalField.rotation.y = Math.sin(elapsed * 0.12) * 0.08;
 
       lookTarget.set(0, 0.92, 1.18);
       camera.position.x += (0 - camera.position.x) * 0.018;
@@ -196,8 +239,8 @@ const sceneModules = societyModules.map(({ number, shortTitle, title }) => ({
         moduleObject.ring.material.opacity = isActive ? 0.95 : 0.18;
         moduleObject.halo.material.opacity = isActive ? 0.7 : 0.06;
         moduleObject.core.material.opacity = isActive ? 1 : 0.36;
-        moduleObject.label.material.opacity = isActive ? 1 : 0.24;
-        moduleObject.panel.material.opacity = isActive ? 0.62 : 0.08;
+        moduleObject.label.material.opacity = isActive ? 0.86 : 0.035;
+        moduleObject.panel.material.opacity = isActive ? 0.46 : 0.018;
         moduleObject.group.rotation.y += isActive ? 0.008 : 0.0018;
       });
 
@@ -219,6 +262,14 @@ const sceneModules = societyModules.map(({ number, shortTitle, title }) => ({
         particle.mesh.scale.setScalar(particle.baseScale * (0.8 + Math.sin(t * Math.PI * 2) * 0.25));
         particle.mesh.material.opacity = particle.moduleIndex === activeIndex ? 0.96 : 0.32;
       });
+
+      const progress = prefersReducedMotion.matches
+        ? 1
+        : Math.min(1, Math.max(0, (elapsed - activeStartedAt) / moduleDuration));
+      detailCard.group.position.y = 2.05 + Math.sin(elapsed * 0.7) * 0.055;
+      detailCard.group.rotation.y = -0.2 + Math.sin(elapsed * 0.24) * 0.012;
+      detailCard.group.rotation.x = -0.02 + Math.sin(elapsed * 0.18) * 0.008;
+      detailCard.updateProgress(progress);
 
       renderer.render(scene, camera);
       if (!prefersReducedMotion.matches) frameId = window.requestAnimationFrame(render);
@@ -361,6 +412,293 @@ const sceneModules = societyModules.map(({ number, shortTitle, title }) => ({
     group.add(label);
 
     return { group, core, ring, halo, panel, label, index };
+  }
+
+  function createDetailCard(THREE, module, color, index, total, presenter, portraitImage) {
+    const group = new THREE.Group();
+    const backing = new THREE.Mesh(
+      new THREE.BoxGeometry(5.95, 4.42, 0.12),
+      new THREE.MeshBasicMaterial({
+        color: 0x071523,
+        transparent: true,
+        opacity: 0.74,
+        depthTest: false,
+        depthWrite: false
+      })
+    );
+    group.add(backing);
+
+    const face = new THREE.Mesh(
+      new THREE.PlaneGeometry(5.78, 4.26),
+      new THREE.MeshBasicMaterial({
+        map: createDetailCardTexture(THREE, module, color, index, total, presenter, portraitImage),
+        transparent: true,
+        opacity: 0.98,
+        depthTest: false,
+        depthWrite: false
+      })
+    );
+    face.position.z = 0.08;
+    group.add(face);
+
+    const rail = new THREE.Mesh(
+      new THREE.PlaneGeometry(4.35, 0.045),
+      new THREE.MeshBasicMaterial({
+        color: 0xffffff,
+        transparent: true,
+        opacity: 0.16,
+        depthTest: false,
+        depthWrite: false
+      })
+    );
+    rail.position.set(0, -1.68, 0.12);
+    group.add(rail);
+
+    const fill = new THREE.Mesh(
+      new THREE.PlaneGeometry(4.35, 0.07),
+      new THREE.MeshBasicMaterial({
+        color,
+        transparent: true,
+        opacity: 0.95,
+        depthTest: false,
+        depthWrite: false,
+        blending: THREE.AdditiveBlending
+      })
+    );
+    fill.position.set(-2.175, -1.68, 0.13);
+    fill.scale.x = 0.001;
+    group.add(fill);
+
+    const accents = [
+      { x: -2.82, y: 2.12, w: 0.85, h: 0.025 },
+      { x: 2.32, y: -2.12, w: 0.85, h: 0.025 },
+      { x: -2.82, y: -2.12, w: 0.025, h: 0.65 },
+      { x: 2.82, y: 2.12, w: 0.025, h: 0.65 }
+    ];
+    accents.forEach((accent) => {
+      const mesh = new THREE.Mesh(
+        new THREE.PlaneGeometry(accent.w, accent.h),
+        new THREE.MeshBasicMaterial({
+          color,
+          transparent: true,
+          opacity: 0.7,
+          depthTest: false,
+          depthWrite: false,
+          blending: THREE.AdditiveBlending
+        })
+      );
+      mesh.position.set(accent.x, accent.y, 0.14);
+      mesh.renderOrder = 20;
+      group.add(mesh);
+    });
+    group.renderOrder = 20;
+    backing.renderOrder = 20;
+    face.renderOrder = 20;
+    rail.renderOrder = 20;
+    fill.renderOrder = 20;
+
+    return {
+      group,
+      update(nextModule, nextColor, nextIndex, nextTotal, nextPresenter, nextPortraitImage) {
+        const nextTexture = createDetailCardTexture(THREE, nextModule, nextColor, nextIndex, nextTotal, nextPresenter, nextPortraitImage);
+        face.material.map?.dispose();
+        face.material.map = nextTexture;
+        face.material.needsUpdate = true;
+        fill.material.color.setHex(nextColor);
+      },
+      updateProgress(value) {
+        const progress = Math.max(0.001, Math.min(1, value));
+        fill.scale.x = progress;
+        fill.position.x = -2.175 + 2.175 * progress;
+      }
+    };
+  }
+
+  function createDetailCardTexture(THREE, module, color, index, total, presenter, portraitImage) {
+    const canvas = document.createElement('canvas');
+    canvas.width = 1280;
+    canvas.height = 960;
+    const ctx = canvas.getContext('2d');
+    const accent = `#${color.toString(16).padStart(6, '0')}`;
+    const panelGradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+    panelGradient.addColorStop(0, 'rgba(11, 31, 48, 0.95)');
+    panelGradient.addColorStop(0.55, 'rgba(14, 45, 60, 0.74)');
+    panelGradient.addColorStop(1, 'rgba(6, 16, 30, 0.9)');
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = panelGradient;
+    roundRect(ctx, 28, 28, 1224, 904, 34);
+    ctx.fill();
+    ctx.strokeStyle = 'rgba(125, 227, 239, 0.58)';
+    ctx.lineWidth = 3;
+    ctx.stroke();
+
+    ctx.fillStyle = 'rgba(125, 227, 239, 0.1)';
+    roundRect(ctx, 52, 52, 1176, 856, 26);
+    ctx.fill();
+
+    ctx.fillStyle = accent;
+    ctx.font = '900 31px "PingFang SC", "Microsoft YaHei", sans-serif';
+    ctx.fillText('空间讲解模块', 86, 118);
+    ctx.fillStyle = '#ffffff';
+    ctx.font = '950 58px "PingFang SC", "Microsoft YaHei", sans-serif';
+    ctx.textAlign = 'right';
+    ctx.fillText(`${module.number}`, 1110, 124);
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.42)';
+    ctx.font = '900 52px "PingFang SC", "Microsoft YaHei", sans-serif';
+    ctx.fillText(`/${String(total).padStart(2, '0')}`, 1200, 124);
+    ctx.textAlign = 'left';
+
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.08)';
+    roundRect(ctx, 86, 170, 430, 116, 22);
+    ctx.fill();
+    if (portraitImage?.complete) {
+      ctx.save();
+      roundRect(ctx, 106, 190, 76, 76, 16);
+      ctx.clip();
+      ctx.drawImage(portraitImage, 106, 190, 76, 76);
+      ctx.restore();
+    } else {
+      ctx.fillStyle = 'rgba(125, 227, 239, 0.26)';
+      roundRect(ctx, 106, 190, 76, 76, 16);
+      ctx.fill();
+      ctx.fillStyle = '#eafcff';
+      ctx.font = '900 28px "PingFang SC", "Microsoft YaHei", sans-serif';
+      ctx.fillText('张', 130, 238);
+    }
+    ctx.fillStyle = '#ffffff';
+    ctx.font = '900 33px "PingFang SC", "Microsoft YaHei", sans-serif';
+    ctx.fillText(presenter.name, 204, 222);
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.68)';
+    ctx.font = '700 23px "PingFang SC", "Microsoft YaHei", sans-serif';
+    ctx.fillText(presenter.role, 204, 258);
+
+    const iconGradient = ctx.createLinearGradient(86, 342, 222, 478);
+    iconGradient.addColorStop(0, '#f3d98a');
+    iconGradient.addColorStop(1, '#7de3ef');
+    ctx.fillStyle = iconGradient;
+    roundRect(ctx, 86, 344, 142, 142, 22);
+    ctx.fill();
+    ctx.fillStyle = '#06101e';
+    ctx.font = '950 64px "PingFang SC", "Microsoft YaHei", sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText(module.icon, 157, 434);
+    ctx.textAlign = 'left';
+
+    ctx.fillStyle = accent;
+    ctx.font = '900 26px "PingFang SC", "Microsoft YaHei", sans-serif';
+    ctx.fillText(`模块 ${module.number}`, 270, 364);
+    ctx.fillStyle = '#ffffff';
+    ctx.font = '950 68px "PingFang SC", "Microsoft YaHei", sans-serif';
+    drawWrappedText(ctx, module.title, 270, 438, 860, 72, 2);
+
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.82)';
+    ctx.font = '750 39px "PingFang SC", "Microsoft YaHei", sans-serif';
+    drawWrappedText(ctx, module.text, 86, 596, 1080, 58, 4);
+
+    let tagX = 86;
+    ctx.font = '800 24px "PingFang SC", "Microsoft YaHei", sans-serif';
+    module.tags.forEach((tag) => {
+      const width = Math.min(300, Math.ceil(ctx.measureText(tag).width) + 52);
+      drawPill(ctx, tag, tagX, 790, width, 52, accent);
+      tagX += width + 20;
+    });
+
+    ctx.strokeStyle = 'rgba(125, 227, 239, 0.22)';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(86, 874);
+    ctx.lineTo(1190, 874);
+    ctx.stroke();
+
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.5)';
+    ctx.font = '800 22px "PingFang SC", "Microsoft YaHei", sans-serif';
+    ctx.fillText(module.summary, 86, 918);
+
+    const texture = new THREE.CanvasTexture(canvas);
+    texture.colorSpace = THREE.SRGBColorSpace;
+    return texture;
+  }
+
+  function drawPill(ctx, text, x, y, width, height, accent) {
+    ctx.fillStyle = 'rgba(125, 227, 239, 0.16)';
+    ctx.strokeStyle = 'rgba(125, 227, 239, 0.38)';
+    ctx.lineWidth = 2;
+    roundRect(ctx, x, y, width, height, height / 2);
+    ctx.fill();
+    ctx.stroke();
+    ctx.fillStyle = '#eafcff';
+    ctx.font = '800 24px "PingFang SC", "Microsoft YaHei", sans-serif';
+    ctx.fillText(text, x + 26, y + 34);
+    ctx.fillStyle = accent;
+    ctx.beginPath();
+    ctx.arc(x + width - 24, y + height / 2, 5, 0, Math.PI * 2);
+    ctx.fill();
+  }
+
+  function drawWrappedText(ctx, text, x, y, maxWidth, lineHeight, maxLines) {
+    let line = '';
+    let lineCount = 0;
+    const chars = Array.from(text);
+
+    for (let index = 0; index < chars.length; index += 1) {
+      const testLine = line + chars[index];
+      if (ctx.measureText(testLine).width > maxWidth && line) {
+        ctx.fillText(line, x, y);
+        y += lineHeight;
+        line = chars[index];
+        lineCount += 1;
+        if (lineCount >= maxLines - 1) {
+          const rest = chars.slice(index + 1).join('');
+          let finalLine = line + rest;
+          while (ctx.measureText(`${finalLine}…`).width > maxWidth && finalLine.length > 0) {
+            finalLine = finalLine.slice(0, -1);
+          }
+          ctx.fillText(`${finalLine}…`, x, y);
+          return;
+        }
+      } else {
+        line = testLine;
+      }
+    }
+
+    if (line) ctx.fillText(line, x, y);
+  }
+
+  function createSignalField(THREE) {
+    const group = new THREE.Group();
+    const materials = [
+      new THREE.LineBasicMaterial({ color: 0x7de3ef, transparent: true, opacity: 0.18, blending: THREE.AdditiveBlending }),
+      new THREE.LineBasicMaterial({ color: 0xf3d98a, transparent: true, opacity: 0.12, blending: THREE.AdditiveBlending })
+    ];
+
+    for (let band = 0; band < 8; band += 1) {
+      const points = [];
+      const radius = 4.2 + band * 0.72;
+      for (let step = 0; step < 180; step += 1) {
+        const t = (step / 179) * Math.PI * 2.1 + band * 0.55;
+        points.push(new THREE.Vector3(
+          Math.cos(t) * radius,
+          -2.75 + Math.sin(t * 1.7 + band) * 0.24 + band * 0.03,
+          Math.sin(t) * radius * 0.62
+        ));
+      }
+      group.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(points), materials[band % materials.length]));
+    }
+
+    for (let beam = 0; beam < 18; beam += 1) {
+      const angle = (beam / 18) * Math.PI * 2;
+      const radius = 4.5 + (beam % 4) * 1.4;
+      const x = Math.cos(angle) * radius;
+      const z = Math.sin(angle) * radius * 0.7;
+      const geometry = new THREE.BufferGeometry().setFromPoints([
+        new THREE.Vector3(x, -2.8, z),
+        new THREE.Vector3(x * 0.74, 3.7 + (beam % 3) * 0.5, z * 0.74)
+      ]);
+      group.add(new THREE.Line(geometry, materials[beam % materials.length]));
+    }
+
+    return group;
   }
 
   function createLabelTexture(THREE, number, title, color) {
