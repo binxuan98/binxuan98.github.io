@@ -1,8 +1,10 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import MetricGrid from '../components/MetricGrid.astro';
+import QingyangComputeScene from '../components/QingyangComputeScene.astro';
 import SocietyCarousel from '../components/SocietyCarousel.astro';
 import ThreeComputeScene from '../components/ThreeComputeScene.astro';
+import { qingyangMetrics, qingyangStory } from '../data/qingyang';
 import { societyMetrics } from '../data/society';
 ---
 
@@ -13,7 +15,29 @@ import { societyMetrics } from '../data/society';
   presentation={true}
   enableCarousel={true}
 >
-  <section class="society-screen terrain-grid-bg">
+  <section class="qingyang-compute-screen qingyang-grid-bg">
+    <QingyangComputeScene />
+    <div class="compute-hero-shell">
+      <div class="compute-hero-copy">
+        <div class="qingyang-logo">{qingyangStory.badge}</div>
+        <h1>
+          <span>东数西算</span>
+          <strong>庆阳枢纽</strong>
+        </h1>
+        <p class="compute-hero-lead">{qingyangStory.subtitle}</p>
+        <p class="compute-hero-proof">{qingyangStory.proof}</p>
+        <MetricGrid items={qingyangMetrics} className="compute-hero-metrics" />
+        <p class="compute-source-note">{qingyangStory.source}</p>
+      </div>
+
+      <a class="screen-scroll-cue" href="#society-cultivation" aria-label="向下进入智研社人才培养沙盘">
+        <span>向下进入</span>
+        <strong>智研社人才培养沙盘</strong>
+      </a>
+    </div>
+  </section>
+
+  <section class="society-screen terrain-grid-bg" id="society-cultivation">
     <ThreeComputeScene />
     <div class="society-shell">
       <div class="society-main">

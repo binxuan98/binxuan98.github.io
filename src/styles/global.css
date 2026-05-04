@@ -591,11 +591,13 @@ button {
   background: #07111f;
 }
 
+.qingyang-compute-screen,
 .society-screen {
   position: relative;
   min-height: 100svh;
   overflow: hidden;
   isolation: isolate;
+  scroll-snap-align: start;
 }
 
 .compute-scene {
@@ -613,6 +615,61 @@ button {
   inset: 0;
   width: 100%;
   height: 100%;
+}
+
+.qingyang-compute-scene {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.qingyang-compute-scene canvas,
+.qingyang-compute-scene__overlay {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.qingyang-compute-scene__overlay {
+  background:
+    radial-gradient(circle at 62% 48%, transparent 0%, transparent 43%, rgba(6, 16, 30, 0.22) 72%, rgba(6, 16, 30, 0.58) 100%),
+    linear-gradient(90deg, rgba(6, 16, 30, 0.94) 0%, rgba(6, 16, 30, 0.64) 28%, rgba(6, 16, 30, 0.08) 54%, rgba(6, 16, 30, 0.2) 100%);
+}
+
+.qingyang-grid-bg {
+  background:
+    radial-gradient(circle at 12% 20%, rgba(24, 150, 125, 0.22), transparent 30%),
+    radial-gradient(circle at 78% 34%, rgba(125, 227, 239, 0.18), transparent 34%),
+    radial-gradient(circle at 58% 76%, rgba(243, 217, 138, 0.12), transparent 32%),
+    linear-gradient(125deg, #06101e 0%, #071a2a 45%, #0e1822 100%);
+}
+
+.qingyang-grid-bg::before,
+.qingyang-grid-bg::after {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  content: "";
+  pointer-events: none;
+}
+
+.qingyang-grid-bg::before {
+  opacity: 0.3;
+  background-image:
+    linear-gradient(rgba(68, 205, 222, 0.14) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(68, 205, 222, 0.14) 1px, transparent 1px);
+  background-position: center;
+  background-size: 92px 92px;
+  mask-image: linear-gradient(90deg, rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0.12) 52%, rgba(0, 0, 0, 0.04));
+}
+
+.qingyang-grid-bg::after {
+  background:
+    linear-gradient(90deg, rgba(6, 16, 30, 0.72), rgba(6, 16, 30, 0.14) 58%, rgba(6, 16, 30, 0.5)),
+    linear-gradient(180deg, rgba(6, 16, 30, 0.12), rgba(6, 16, 30, 0.84));
 }
 
 .compute-scene__overlay {
@@ -663,6 +720,137 @@ button {
   gap: clamp(14px, 1.8vw, 28px);
   min-height: 100svh;
   padding: clamp(28px, 3vw, 46px);
+}
+
+.compute-hero-shell {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  min-height: 100svh;
+  padding: clamp(28px, 3vw, 46px);
+}
+
+.compute-hero-copy {
+  grid-column: 1 / 6;
+  align-self: center;
+  max-width: 760px;
+}
+
+.compute-hero-copy h1 {
+  margin: clamp(18px, 2.4vh, 30px) 0 0;
+  letter-spacing: 0;
+}
+
+.compute-hero-copy h1 span {
+  display: block;
+  color: rgba(255, 255, 255, 0.78);
+  font-size: clamp(34px, 3vw, 58px);
+  line-height: 1.04;
+  font-weight: 900;
+}
+
+.compute-hero-copy h1 strong {
+  display: block;
+  margin-top: 4px;
+  color: #fff;
+  font-size: clamp(70px, 6.5vw, 128px);
+  line-height: 0.92;
+  font-weight: 950;
+  text-shadow: 0 18px 72px rgba(125, 227, 239, 0.18);
+}
+
+.compute-hero-lead {
+  max-width: 720px;
+  margin: clamp(18px, 2.4vh, 28px) 0 0;
+  color: rgba(255, 255, 255, 0.84);
+  font-size: clamp(19px, 1.22vw, 24px);
+  font-weight: 760;
+  line-height: 1.55;
+}
+
+.compute-hero-proof {
+  max-width: 720px;
+  margin: 16px 0 0;
+  padding-left: 18px;
+  color: #f2d480;
+  border-left: 3px solid rgba(243, 217, 138, 0.58);
+  font-size: clamp(16px, 1vw, 20px);
+  font-weight: 850;
+  line-height: 1.5;
+}
+
+.compute-hero-metrics {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1px;
+  max-width: 560px;
+  margin-top: clamp(20px, 2.5vh, 30px);
+  overflow: hidden;
+  border: 1px solid rgba(125, 227, 239, 0.22);
+  border-radius: 8px;
+  background: rgba(125, 227, 239, 0.22);
+}
+
+.compute-hero-metrics div {
+  min-height: 92px;
+  padding: 16px 18px;
+  background: rgba(6, 16, 30, 0.64);
+  backdrop-filter: blur(18px);
+}
+
+.compute-hero-metrics strong {
+  display: block;
+  color: #f2d480;
+  font-size: clamp(26px, 2.25vw, 44px);
+  line-height: 1;
+  font-weight: 950;
+  white-space: nowrap;
+}
+
+.compute-hero-metrics span {
+  display: block;
+  margin-top: 10px;
+  color: rgba(255, 255, 255, 0.72);
+  font-size: clamp(13px, 1vw, 17px);
+  font-weight: 800;
+}
+
+.compute-source-note {
+  max-width: 620px;
+  margin: 16px 0 0;
+  color: rgba(255, 255, 255, 0.48);
+  font-size: clamp(12px, 0.82vw, 15px);
+  font-weight: 700;
+  line-height: 1.45;
+}
+
+.screen-scroll-cue {
+  grid-column: 7 / 13;
+  align-self: end;
+  justify-self: end;
+  display: inline-grid;
+  gap: 4px;
+  min-width: min(420px, 100%);
+  margin-bottom: clamp(10px, 2vh, 24px);
+  padding: 16px 18px;
+  color: #fff;
+  text-align: right;
+  text-decoration: none;
+  background: linear-gradient(90deg, rgba(6, 16, 30, 0), rgba(6, 16, 30, 0.54));
+  border-right: 2px solid rgba(125, 227, 239, 0.62);
+}
+
+.screen-scroll-cue span {
+  color: #7de3ef;
+  font-size: 13px;
+  font-weight: 950;
+  letter-spacing: 0.16em;
+}
+
+.screen-scroll-cue strong {
+  font-size: clamp(18px, 1.35vw, 26px);
+  letter-spacing: 0;
 }
 
 .society-main {
@@ -1103,6 +1291,8 @@ button {
 }
 
 @media (min-width: 1180px) and (min-height: 760px) {
+  .qingyang-compute-screen,
+  .compute-hero-shell,
   .society-screen,
   .society-shell {
     height: 100svh;
@@ -1133,6 +1323,27 @@ button {
     grid-template-columns: 1fr;
     height: auto;
     overflow: visible;
+  }
+
+  .compute-hero-shell {
+    grid-template-columns: 1fr;
+    min-height: 100svh;
+    height: auto;
+    overflow: visible;
+  }
+
+  .compute-hero-copy,
+  .screen-scroll-cue {
+    grid-column: 1 / -1;
+    justify-self: stretch;
+    max-width: none;
+  }
+
+  .screen-scroll-cue {
+    text-align: left;
+    border-right: 0;
+    border-left: 2px solid rgba(125, 227, 239, 0.62);
+    background: linear-gradient(90deg, rgba(6, 16, 30, 0.54), rgba(6, 16, 30, 0));
   }
 
   .society-main,
@@ -1185,6 +1396,31 @@ button {
 
   .hero-proof div {
     min-height: 96px;
+  }
+
+  .compute-hero-shell,
+  .society-shell {
+    padding: 24px 16px;
+  }
+
+  .compute-hero-copy h1 span,
+  .society-main h1 span {
+    font-size: clamp(28px, 8vw, 40px);
+  }
+
+  .compute-hero-copy h1 strong,
+  .society-main h1 strong {
+    font-size: clamp(70px, 21vw, 94px);
+  }
+
+  .compute-hero-metrics,
+  .society-metrics {
+    max-width: none;
+  }
+
+  .compute-hero-metrics div,
+  .society-metrics div {
+    min-height: 88px;
   }
 
   .profile-card__image {
