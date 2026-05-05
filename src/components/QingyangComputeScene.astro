@@ -44,11 +44,12 @@ const scenePayload = {
     scene.fog = new THREE.FogExp2(0x06101e, 0.028);
 
     const camera = new THREE.PerspectiveCamera(39, 1, 0.1, 150);
-    camera.position.set(0.25, 8.8, 15.8);
+    camera.position.set(2.35, 9.35, 15.35);
 
     const stage = new THREE.Group();
-    stage.position.set(2.25, 0.12, 1.0);
-    stage.rotation.x = -0.06;
+    const stageTilt = { x: -0.12, y: -0.26, z: 0.026 };
+    stage.position.set(2.05, 0.04, 0.95);
+    stage.rotation.set(stageTilt.x, stageTilt.y, stageTilt.z);
     stage.scale.setScalar(1.08);
     scene.add(stage);
 
@@ -127,7 +128,8 @@ const scenePayload = {
 
     function render() {
       const elapsed = clock.getElapsedTime();
-      stage.rotation.y = Math.sin(elapsed * 0.07) * 0.035;
+      stage.rotation.x = stageTilt.x + Math.sin(elapsed * 0.045) * 0.01;
+      stage.rotation.y = stageTilt.y + Math.sin(elapsed * 0.07) * 0.032;
       gridLayer.position.x = Math.sin(elapsed * 0.18) * 0.16;
       stars.rotation.y = elapsed * 0.015;
       nodeObjects.forEach((node, index) => node.pulse(elapsed + index * 0.55, Boolean(node.data.isCore)));
@@ -145,7 +147,7 @@ const scenePayload = {
         particle.mesh.scale.setScalar(particle.baseScale * (0.75 + Math.sin(t * Math.PI * 2) * 0.28));
       });
 
-      camera.lookAt(0.7, -0.1, 0.15);
+      camera.lookAt(0.55, -0.35, 0.1);
       renderer.render(scene, camera);
       if (!prefersReducedMotion.matches) frameId = window.requestAnimationFrame(render);
     }
