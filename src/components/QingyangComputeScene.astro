@@ -16,12 +16,23 @@ const scenePayload = {
   const qingyangRoots = document.querySelectorAll('[data-qingyang-scene]');
 
   if (qingyangRoots.length > 0) {
-    import('three').then((THREE) => {
-      qingyangRoots.forEach((root) => initQingyangScene(THREE, root));
+    import('three').then(async (THREE) => {
+      const chinaGeoJson = await loadChinaGeoJson();
+      qingyangRoots.forEach((root) => initQingyangScene(THREE, root, chinaGeoJson));
     });
   }
 
-  function initQingyangScene(THREE, root) {
+  async function loadChinaGeoJson() {
+    try {
+      const response = await fetch('/data/china-provinces.geojson');
+      if (!response.ok) return null;
+      return response.json();
+    } catch {
+      return null;
+    }
+  }
+
+  function initQingyangScene(THREE, root, chinaGeoJson) {
     const canvas = root.querySelector('[data-qingyang-canvas]');
     if (!(canvas instanceof HTMLCanvasElement)) return;
 
@@ -59,9 +70,10 @@ const scenePayload = {
     const towerLayer = new THREE.Group();
     stage.add(gridLayer, flowLayer, nodeLayer, towerLayer);
 
-    createDataTerrain(THREE, gridLayer);
+    createDataTerrain(THREE, gridLayer, chinaGeoJson);
 
-    const nodeObjects = hubNodes.map((node) => {
+    const positionedHubNodes = hubNodes.map((node) => ({ ...node, ...projectHubNode(node) }));
+    const nodeObjects = positionedHubNodes.map((node) => {
       const object = createComputeNode(THREE, node, Boolean(node.isCore));
       object.group.position.set(node.x, node.isCore ? 0.55 : 0.36, node.z);
       nodeLayer.add(object.group);
@@ -70,7 +82,7 @@ const scenePayload = {
     const qingyang = nodeObjects.find((node) => node.data.isCore) || nodeObjects[0];
     const qingyangPosition = new THREE.Vector3(qingyang.data.x, 0.78, qingyang.data.z);
 
-    const flowCurves = hubNodes
+    const flowCurves = positionedHubNodes
       .filter((node) => !node.isCore)
       .map((node, index) => {
       const start = new THREE.Vector3(node.x, 0.62, node.z);
@@ -186,8 +198,16 @@ const scenePayload = {
     }, { once: true });
   }
 
-  function createDataTerrain(THREE, group) {
-    const chinaMap = createChinaMap(THREE);
+  const CHINA_MAP_BOUNDS = {
+    minLon: 73.25,
+    maxLon: 135.25,
+    minLat: 17.6,
+    maxLat: 53.8
+  };
+  const CHINA_MAP_SIZE = { width: 10.8, height: 6.3 };
+
+  function createDataTerrain(THREE, group, chinaGeoJson) {
+    const chinaMap = createChinaMap(THREE, chinaGeoJson);
     group.add(chinaMap);
 
     const grid = new THREE.GridHelper(18, 28, 0x42d9e8, 0x42d9e8);
@@ -210,84 +230,60 @@ const scenePayload = {
     }
   }
 
-  function createChinaMap(THREE) {
+  function projectHubNode(node) {
+    if (typeof node.lon === 'number' && typeof node.lat === 'number') {
+      const [x, z] = projectChinaCoordinate(node.lon, node.lat);
+      return { x, z };
+    }
+    return { x: node.x || 0, z: node.z || 0 };
+  }
+
+  function projectChinaCoordinate(lon, lat) {
+    const xRatio = (lon - CHINA_MAP_BOUNDS.minLon) / (CHINA_MAP_BOUNDS.maxLon - CHINA_MAP_BOUNDS.minLon);
+    const zRatio = (lat - CHINA_MAP_BOUNDS.minLat) / (CHINA_MAP_BOUNDS.maxLat - CHINA_MAP_BOUNDS.minLat);
+    return [
+      (xRatio - 0.5) * CHINA_MAP_SIZE.width,
+      (zRatio - 0.5) * CHINA_MAP_SIZE.height
+    ];
+  }
+
+  function createChinaMap(THREE, chinaGeoJson) {
     const group = new THREE.Group();
-    const outline = [
-      [-6.55, 0.55], [-6.1, 1.32], [-5.15, 1.95], [-4.2, 2.54],
-      [-3.15, 2.22], [-2.08, 2.74], [-0.82, 2.32], [0.26, 2.64],
-      [1.36, 2.12], [2.38, 1.95], [3.06, 1.34], [4.24, 1.1],
-      [5.38, 0.24], [4.92, -0.58], [4.0, -0.72], [3.78, -1.48],
-      [3.15, -2.22], [2.22, -2.06], [1.54, -2.52], [0.72, -2.04],
-      [-0.26, -2.28], [-0.98, -1.72], [-1.92, -1.94], [-2.82, -1.42],
-      [-3.72, -1.58], [-4.6, -0.98], [-5.64, -1.02], [-6.28, -0.32],
-      [-6.55, 0.55]
-    ];
-    const shape = createMapShape(THREE, outline);
+    if (!chinaGeoJson?.features?.length) return group;
 
-    const fill = new THREE.Mesh(
-      new THREE.ShapeGeometry(shape),
-      new THREE.MeshBasicMaterial({
-        color: 0x0d3c4e,
-        transparent: true,
-        opacity: 0.58,
-        side: THREE.DoubleSide,
-        depthWrite: false
-      })
-    );
-    fill.rotation.x = -Math.PI / 2;
-    fill.position.y = -2.32;
-    group.add(fill);
-
-    const regions = [
-      { color: 0x1d6f92, points: [[-6.25, 0.35], [-5.75, 1.25], [-4.72, 1.75], [-3.6, 1.55], [-3.28, 0.62], [-4.2, -0.28], [-5.45, -0.55], [-6.15, -0.12], [-6.25, 0.35]] },
-      { color: 0x2a8c77, points: [[-4.72, 1.75], [-3.2, 2.18], [-2.0, 1.86], [-1.5, 0.92], [-3.28, 0.62], [-3.6, 1.55], [-4.72, 1.75]] },
-      { color: 0x6b84c7, points: [[-2.0, 1.86], [-0.82, 2.32], [0.62, 2.38], [1.52, 1.82], [0.92, 1.02], [-0.82, 0.82], [-1.5, 0.92], [-2.0, 1.86]] },
-      { color: 0x2d9eb5, points: [[1.52, 1.82], [3.06, 1.34], [4.25, 1.0], [4.74, 0.36], [4.1, -0.28], [2.45, 0.08], [0.92, 1.02], [1.52, 1.82]] },
-      { color: 0xcaa45e, points: [[-3.28, 0.62], [-1.5, 0.92], [-0.82, 0.82], [0.92, 1.02], [2.45, 0.08], [1.58, -0.64], [-0.32, -0.72], [-2.18, -0.9], [-3.28, 0.62]] },
-      { color: 0x1f7e64, points: [[-5.45, -0.55], [-4.2, -0.28], [-3.28, 0.62], [-2.18, -0.9], [-1.36, -1.78], [-2.82, -1.42], [-3.72, -1.58], [-4.6, -0.98], [-5.45, -0.55]] },
-      { color: 0x4c72b7, points: [[-2.18, -0.9], [-0.32, -0.72], [0.82, -1.88], [-0.26, -2.28], [-0.98, -1.72], [-1.36, -1.78], [-2.18, -0.9]] },
-      { color: 0x2b9c8c, points: [[-0.32, -0.72], [1.58, -0.64], [0.82, -1.88], [-0.26, -2.28], [-0.32, -0.72]] },
-      { color: 0x36a6c8, points: [[1.58, -0.64], [2.45, 0.08], [4.1, -0.28], [4.0, -0.72], [3.78, -1.48], [3.15, -2.22], [2.22, -2.06], [1.54, -2.52], [0.82, -1.88], [1.58, -0.64]] },
-      { color: 0xd2b16a, points: [[2.45, 0.08], [4.1, -0.28], [5.1, 0.18], [5.38, 0.24], [4.92, -0.58], [4.0, -0.72], [4.1, -0.28], [2.45, 0.08]] }
-    ];
-    regions.forEach((region, index) => {
-      group.add(createMapRegion(THREE, region.points, region.color, -2.3 + index * 0.004));
-      group.add(createMapLine(THREE, region.points, 0xb8f7ff, -2.17 + index * 0.004, 0.28));
+    const regionColors = [0x1d6f92, 0x2a8c77, 0x6b84c7, 0x2d9eb5, 0xcaa45e, 0x1f7e64, 0x4c72b7, 0x2b9c8c, 0x36a6c8, 0xd2b16a];
+    const lineMaterial = new THREE.LineBasicMaterial({
+      color: 0xa9f8ff,
+      transparent: true,
+      opacity: 0.34,
+      depthWrite: false,
+      blending: THREE.AdditiveBlending
     });
 
-    const borderPoints = outline.map(([x, z]) => new THREE.Vector3(x, -2.22, z));
-    const border = new THREE.Line(
-      new THREE.BufferGeometry().setFromPoints(borderPoints),
-      new THREE.LineBasicMaterial({
-        color: 0x7de3ef,
-        transparent: true,
-        opacity: 0.94,
-        depthWrite: false,
-        blending: THREE.AdditiveBlending
-      })
-    );
-    group.add(border);
-    group.add(createMapTube(THREE, outline, 0x98fbff, -2.14, 0.026, 0.62));
+    chinaGeoJson.features.forEach((feature, featureIndex) => {
+      if (feature.geometry?.type === 'MultiPolygon' || feature.geometry?.type === 'Polygon') {
+        const polygons = feature.geometry.type === 'Polygon' ? [feature.geometry.coordinates] : feature.geometry.coordinates;
+        polygons.forEach((polygon, polygonIndex) => {
+          if (!isMainMapPolygon(polygon)) return;
+          const mesh = createProvinceMesh(THREE, polygon, regionColors[featureIndex % regionColors.length], featureIndex, polygonIndex);
+          if (mesh) group.add(mesh);
+          polygon.forEach((ring, ringIndex) => {
+            const points = projectRingToVectors(THREE, ring, -2.08 + ringIndex * 0.002);
+            if (points.length > 2) group.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(points), lineMaterial));
+          });
+        });
+      }
+      if (feature.geometry?.type === 'MultiLineString') {
+        feature.geometry.coordinates.forEach((line, lineIndex) => {
+          const points = projectRingToVectors(THREE, line, -2.04 + lineIndex * 0.002).filter((point) => point.z > -3.05);
+          if (points.length > 2) group.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(points), lineMaterial));
+        });
+      }
+    });
 
-    const internalLines = [
-      [[-4.8, 1.46], [-3.2, 0.76], [-1.5, 0.92], [0.4, 0.28], [2.4, 0.38], [4.2, 0.05]],
-      [[-3.6, -0.86], [-1.8, -0.45], [-0.4, -0.88], [1.3, -0.46], [3.1, -1.12]],
-      [[-2.2, 2.26], [-1.72, 0.64], [-2.18, -0.9], [-1.36, -1.74]],
-      [[0.58, 2.28], [0.84, 0.86], [1.22, -0.48], [0.8, -1.88]],
-      [[2.62, 1.2], [2.86, 0.25], [2.46, -0.88], [3.18, -1.82]]
-    ];
-    internalLines.forEach((line, index) => {
-      const points = line.map(([x, z]) => new THREE.Vector3(x, -2.12 + index * 0.012, z));
-      group.add(new THREE.Line(
-        new THREE.BufferGeometry().setFromPoints(points),
-        new THREE.LineBasicMaterial({
-          color: index % 2 === 0 ? 0xf3d98a : 0x7de3ef,
-          transparent: true,
-          opacity: 0.34,
-          depthWrite: false
-        })
-      ));
-      group.add(createMapTube(THREE, line, index % 2 === 0 ? 0xf3d98a : 0x7de3ef, -2.1 + index * 0.014, 0.008, 0.26));
+    const glowLines = collectProvinceOuterRings(chinaGeoJson).slice(0, 90);
+    glowLines.forEach((ring, index) => {
+      group.add(createMapTube(THREE, ring, index % 3 === 0 ? 0xf3d98a : 0x98fbff, -2.02 + index * 0.0008, index % 3 === 0 ? 0.012 : 0.008, 0.2));
     });
 
     return group;
@@ -302,34 +298,66 @@ const scenePayload = {
     return shape;
   }
 
-  function createMapRegion(THREE, points, color, y) {
+  function createProvinceMesh(THREE, polygon, color, featureIndex, polygonIndex) {
+    const outer = projectRingToShapePoints(polygon[0]);
+    if (outer.length < 3) return null;
+    const shape = createMapShape(THREE, outer);
+    polygon.slice(1).forEach((hole) => {
+      const points = projectRingToShapePoints(hole);
+      if (points.length < 3) return;
+      const path = new THREE.Path();
+      points.forEach(([x, z], index) => {
+        if (index === 0) path.moveTo(x, z);
+        else path.lineTo(x, z);
+      });
+      shape.holes.push(path);
+    });
     const mesh = new THREE.Mesh(
-      new THREE.ShapeGeometry(createMapShape(THREE, points)),
+      new THREE.ShapeGeometry(shape),
       new THREE.MeshBasicMaterial({
         color,
         transparent: true,
-        opacity: 0.54,
+        opacity: 0.48,
         side: THREE.DoubleSide,
         depthWrite: false,
         blending: THREE.AdditiveBlending
       })
     );
-    mesh.rotation.x = -Math.PI / 2;
-    mesh.position.y = y;
+    mesh.rotation.x = Math.PI / 2;
+    mesh.position.y = -2.32 + featureIndex * 0.002 + polygonIndex * 0.0004;
     return mesh;
   }
 
-  function createMapLine(THREE, points, color, y, opacity) {
-    return new THREE.Line(
-      new THREE.BufferGeometry().setFromPoints(points.map(([x, z]) => new THREE.Vector3(x, y, z))),
-      new THREE.LineBasicMaterial({
-        color,
-        transparent: true,
-        opacity,
-        depthWrite: false,
-        blending: THREE.AdditiveBlending
-      })
-    );
+  function projectRingToShapePoints(ring) {
+    return ring
+      .filter(([lon, lat]) => lat >= CHINA_MAP_BOUNDS.minLat)
+      .map(([lon, lat]) => projectChinaCoordinate(lon, lat));
+  }
+
+  function projectRingToVectors(THREE, ring, y) {
+    return ring
+      .filter(([lon, lat]) => lat >= CHINA_MAP_BOUNDS.minLat)
+      .map(([lon, lat]) => {
+        const [x, z] = projectChinaCoordinate(lon, lat);
+        return new THREE.Vector3(x, y, z);
+      });
+  }
+
+  function isMainMapPolygon(polygon) {
+    const outer = polygon[0] || [];
+    return outer.some(([, lat]) => lat >= CHINA_MAP_BOUNDS.minLat);
+  }
+
+  function collectProvinceOuterRings(chinaGeoJson) {
+    const rings = [];
+    chinaGeoJson.features.forEach((feature) => {
+      if (feature.geometry?.type !== 'MultiPolygon' && feature.geometry?.type !== 'Polygon') return;
+      const polygons = feature.geometry.type === 'Polygon' ? [feature.geometry.coordinates] : feature.geometry.coordinates;
+      polygons.forEach((polygon) => {
+        if (isMainMapPolygon(polygon)) rings.push(projectRingToShapePoints(polygon[0]));
+      });
+    });
+    return rings.sort((a, b) => b.length - a.length);
   }
 
   function createMapTube(THREE, points, color, y, radius, opacity) {
