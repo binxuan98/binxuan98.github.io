@@ -1,8 +1,8 @@
 ---
-import { qingyangFlowNodes, qingyangTimeline } from '../data/qingyang';
+import { qingyangHubNodes, qingyangTimeline } from '../data/qingyang';
 
 const scenePayload = {
-  flowNodes: qingyangFlowNodes,
+  hubNodes: qingyangHubNodes,
   timeline: qingyangTimeline
 };
 ---
@@ -26,7 +26,7 @@ const scenePayload = {
     if (!(canvas instanceof HTMLCanvasElement)) return;
 
     const payload = JSON.parse(root.dataset.qingyangPayload || '{}');
-    const flowNodes = payload.flowNodes || [];
+    const hubNodes = payload.hubNodes || [];
     const timeline = payload.timeline || [];
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 
@@ -44,11 +44,12 @@ const scenePayload = {
     scene.fog = new THREE.FogExp2(0x06101e, 0.028);
 
     const camera = new THREE.PerspectiveCamera(39, 1, 0.1, 150);
-    camera.position.set(0.1, 9.8, 18.5);
+    camera.position.set(0.25, 8.8, 15.8);
 
     const stage = new THREE.Group();
-    stage.position.set(1.2, 0.05, 1.2);
-    stage.rotation.x = -0.05;
+    stage.position.set(2.25, 0.12, 1.0);
+    stage.rotation.x = -0.06;
+    stage.scale.setScalar(1.08);
     scene.add(stage);
 
     const gridLayer = new THREE.Group();
@@ -59,34 +60,32 @@ const scenePayload = {
 
     createDataTerrain(THREE, gridLayer);
 
-    const qingyang = createComputeNode(THREE, {
-      name: '庆阳',
-      subtitle: '中国算谷 · 智慧庆阳',
-      x: -1.45,
-      z: 0.05,
-      color: '#f3d98a'
-    }, true);
-    qingyang.group.position.set(-1.45, 0.45, 0.05);
-    nodeLayer.add(qingyang.group);
-
-    const eastNodes = flowNodes.map((node) => {
-      const object = createComputeNode(THREE, node, false);
-      object.group.position.set(node.x, 0.28, node.z);
+    const nodeObjects = hubNodes.map((node) => {
+      const object = createComputeNode(THREE, node, Boolean(node.isCore));
+      object.group.position.set(node.x, node.isCore ? 0.55 : 0.36, node.z);
       nodeLayer.add(object.group);
-      return object;
+      return { ...object, data: node };
     });
+    const qingyang = nodeObjects.find((node) => node.data.isCore) || nodeObjects[0];
+    const qingyangPosition = new THREE.Vector3(qingyang.data.x, 0.78, qingyang.data.z);
 
-    const flowCurves = flowNodes.map((node, index) => {
-      const start = new THREE.Vector3(node.x, 0.55, node.z);
-      const end = new THREE.Vector3(-1.45, 0.78, 0.05);
-      const middle = new THREE.Vector3((node.x - 1.45) * 0.46, 2.4 + index * 0.34, (node.z + 0.05) * 0.42);
+    const flowCurves = hubNodes
+      .filter((node) => !node.isCore)
+      .map((node, index) => {
+      const start = new THREE.Vector3(node.x, 0.62, node.z);
+      const end = qingyangPosition.clone();
+      const middle = new THREE.Vector3(
+        (node.x + qingyang.data.x) * 0.5,
+        2.2 + (index % 5) * 0.28,
+        (node.z + qingyang.data.z) * 0.5 + Math.sin(index) * 0.5
+      );
       const curve = new THREE.CatmullRomCurve3([start, middle, end]);
       const line = new THREE.Line(
-        new THREE.BufferGeometry().setFromPoints(curve.getPoints(110)),
+        new THREE.BufferGeometry().setFromPoints(curve.getPoints(120)),
         new THREE.LineBasicMaterial({
           color: Number.parseInt(node.color.replace('#', '0x')),
           transparent: true,
-          opacity: 0.34,
+          opacity: node.name === '张家口' || node.name === '长三角' || node.name === '韶关' ? 0.48 : 0.24,
           depthWrite: false,
           blending: THREE.AdditiveBlending
         })
@@ -95,20 +94,20 @@ const scenePayload = {
       return { curve, line, color: node.color, index };
     });
 
-    const particles = createFlowParticles(THREE, flowCurves, 132);
+    const particles = createFlowParticles(THREE, flowCurves, 188);
     particles.forEach((particle) => flowLayer.add(particle.mesh));
 
     const growthTower = createGrowthTower(THREE, timeline);
-    growthTower.group.position.set(-1.45, 0.15, 0.05);
+    growthTower.group.position.set(qingyang.data.x, 0.15, qingyang.data.z);
     towerLayer.add(growthTower.group);
 
-    const hologram = createComputeHologram(THREE);
-    hologram.position.set(4.25, 2.15, 4.2);
-    hologram.rotation.set(-0.04, -0.34, 0.01);
-    scene.add(hologram);
+    const legend = createComputeLegend(THREE);
+    legend.position.set(4.95, 3.05, 3.58);
+    legend.rotation.set(-0.04, -0.28, 0.01);
+    scene.add(legend);
 
     const rings = createEnergyRings(THREE);
-    rings.position.set(-1.45, 0.32, 0.05);
+    rings.position.set(qingyang.data.x, 0.42, qingyang.data.z);
     nodeLayer.add(rings);
 
     const stars = createQingyangStars(THREE);
@@ -128,14 +127,13 @@ const scenePayload = {
 
     function render() {
       const elapsed = clock.getElapsedTime();
-      stage.rotation.y = Math.sin(elapsed * 0.08) * 0.05;
-      gridLayer.position.x = Math.sin(elapsed * 0.18) * 0.28;
+      stage.rotation.y = Math.sin(elapsed * 0.07) * 0.035;
+      gridLayer.position.x = Math.sin(elapsed * 0.18) * 0.16;
       stars.rotation.y = elapsed * 0.015;
-      qingyang.pulse(elapsed, true);
-      eastNodes.forEach((node, index) => node.pulse(elapsed + index * 0.8, false));
+      nodeObjects.forEach((node, index) => node.pulse(elapsed + index * 0.55, Boolean(node.data.isCore)));
       growthTower.animate(elapsed);
-      hologram.position.y = 2.15 + Math.sin(elapsed * 0.5) * 0.06;
-      hologram.rotation.y = -0.34 + Math.sin(elapsed * 0.2) * 0.018;
+      legend.position.y = 3.05 + Math.sin(elapsed * 0.5) * 0.05;
+      legend.rotation.y = -0.28 + Math.sin(elapsed * 0.2) * 0.014;
       rings.children.forEach((ring, index) => {
         ring.rotation.z += 0.004 + index * 0.0012;
         ring.material.opacity = 0.22 + Math.sin(elapsed * 1.2 + index) * 0.06;
@@ -147,7 +145,7 @@ const scenePayload = {
         particle.mesh.scale.setScalar(particle.baseScale * (0.75 + Math.sin(t * Math.PI * 2) * 0.28));
       });
 
-      camera.lookAt(0.6, 0.25, 0.4);
+      camera.lookAt(0.7, -0.1, 0.15);
       renderer.render(scene, camera);
       if (!prefersReducedMotion.matches) frameId = window.requestAnimationFrame(render);
     }
@@ -187,41 +185,95 @@ const scenePayload = {
   }
 
   function createDataTerrain(THREE, group) {
-    const grid = new THREE.GridHelper(30, 36, 0x42d9e8, 0x42d9e8);
+    const chinaMap = createChinaMap(THREE);
+    group.add(chinaMap);
+
+    const grid = new THREE.GridHelper(18, 28, 0x42d9e8, 0x42d9e8);
     grid.position.y = -2.6;
     grid.material.transparent = true;
-    grid.material.opacity = 0.18;
+    grid.material.opacity = 0.12;
     group.add(grid);
 
     const gold = new THREE.LineBasicMaterial({ color: 0xd7a43a, transparent: true, opacity: 0.18 });
     const cyan = new THREE.LineBasicMaterial({ color: 0x55dbea, transparent: true, opacity: 0.16 });
-    for (let row = 0; row < 18; row += 1) {
+    for (let row = 0; row < 14; row += 1) {
       const points = [];
-      const z = -8.5 + row * 1.0;
-      for (let col = 0; col < 130; col += 1) {
-        const x = -9.8 + col * 0.16;
+      const z = -4.7 + row * 0.7;
+      for (let col = 0; col < 96; col += 1) {
+        const x = -6.4 + col * 0.14;
         const y = -2.45 + Math.sin(col * 0.12 + row * 0.7) * 0.18 + Math.cos(col * 0.04) * 0.12;
         points.push(new THREE.Vector3(x, y, z + Math.sin(col * 0.05 + row) * 0.22));
       }
       group.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(points), row % 5 === 0 ? gold : cyan));
     }
+  }
 
-    const provinceLine = new THREE.Line(
-      new THREE.BufferGeometry().setFromPoints([
-        new THREE.Vector3(-6.6, -2.05, 1.8),
-        new THREE.Vector3(-5.2, -1.92, 2.5),
-        new THREE.Vector3(-3.8, -2.0, 2.0),
-        new THREE.Vector3(-2.8, -1.86, 1.1),
-        new THREE.Vector3(-1.4, -2.0, 0.4),
-        new THREE.Vector3(-0.2, -1.92, -0.6),
-        new THREE.Vector3(1.4, -2.02, -0.4),
-        new THREE.Vector3(3.0, -1.9, 0.4),
-        new THREE.Vector3(5.0, -2.05, -0.2),
-        new THREE.Vector3(6.4, -1.96, -1.4)
-      ]),
-      new THREE.LineBasicMaterial({ color: 0xf3d98a, transparent: true, opacity: 0.42 })
+  function createChinaMap(THREE) {
+    const group = new THREE.Group();
+    const outline = [
+      [-6.55, 0.55], [-6.1, 1.32], [-5.15, 1.95], [-4.2, 2.54],
+      [-3.15, 2.22], [-2.08, 2.74], [-0.82, 2.32], [0.26, 2.64],
+      [1.36, 2.12], [2.38, 1.95], [3.06, 1.34], [4.24, 1.1],
+      [5.38, 0.24], [4.92, -0.58], [4.0, -0.72], [3.78, -1.48],
+      [3.15, -2.22], [2.22, -2.06], [1.54, -2.52], [0.72, -2.04],
+      [-0.26, -2.28], [-0.98, -1.72], [-1.92, -1.94], [-2.82, -1.42],
+      [-3.72, -1.58], [-4.6, -0.98], [-5.64, -1.02], [-6.28, -0.32],
+      [-6.55, 0.55]
+    ];
+    const shape = new THREE.Shape();
+    outline.forEach(([x, z], index) => {
+      if (index === 0) shape.moveTo(x, z);
+      else shape.lineTo(x, z);
+    });
+
+    const fill = new THREE.Mesh(
+      new THREE.ShapeGeometry(shape),
+      new THREE.MeshBasicMaterial({
+        color: 0x0b3341,
+        transparent: true,
+        opacity: 0.48,
+        side: THREE.DoubleSide,
+        depthWrite: false
+      })
     );
-    group.add(provinceLine);
+    fill.rotation.x = -Math.PI / 2;
+    fill.position.y = -2.32;
+    group.add(fill);
+
+    const borderPoints = outline.map(([x, z]) => new THREE.Vector3(x, -2.22, z));
+    const border = new THREE.Line(
+      new THREE.BufferGeometry().setFromPoints(borderPoints),
+      new THREE.LineBasicMaterial({
+        color: 0x7de3ef,
+        transparent: true,
+        opacity: 0.74,
+        depthWrite: false,
+        blending: THREE.AdditiveBlending
+      })
+    );
+    group.add(border);
+
+    const internalLines = [
+      [[-4.8, 1.46], [-3.2, 0.76], [-1.5, 0.92], [0.4, 0.28], [2.4, 0.38], [4.2, 0.05]],
+      [[-3.6, -0.86], [-1.8, -0.45], [-0.4, -0.88], [1.3, -0.46], [3.1, -1.12]],
+      [[-2.2, 2.26], [-1.72, 0.64], [-2.18, -0.9], [-1.36, -1.74]],
+      [[0.58, 2.28], [0.84, 0.86], [1.22, -0.48], [0.8, -1.88]],
+      [[2.62, 1.2], [2.86, 0.25], [2.46, -0.88], [3.18, -1.82]]
+    ];
+    internalLines.forEach((line, index) => {
+      const points = line.map(([x, z]) => new THREE.Vector3(x, -2.12 + index * 0.012, z));
+      group.add(new THREE.Line(
+        new THREE.BufferGeometry().setFromPoints(points),
+        new THREE.LineBasicMaterial({
+          color: index % 2 === 0 ? 0xf3d98a : 0x7de3ef,
+          transparent: true,
+          opacity: 0.2,
+          depthWrite: false
+        })
+      ));
+    });
+
+    return group;
   }
 
   function createComputeNode(THREE, node, isCore) {
@@ -316,24 +368,24 @@ const scenePayload = {
     };
   }
 
-  function createComputeHologram(THREE) {
+  function createComputeLegend(THREE) {
     const group = new THREE.Group();
     const face = new THREE.Mesh(
-      new THREE.PlaneGeometry(5.8, 3.75),
+      new THREE.PlaneGeometry(3.7, 1.45),
       new THREE.MeshBasicMaterial({
-        map: createHologramTexture(THREE),
+        map: createLegendTexture(THREE),
         transparent: true,
-        opacity: 0.92,
+        opacity: 0.82,
         depthWrite: false
       })
     );
     group.add(face);
 
     const edges = [
-      { x: -2.94, y: 1.92, w: 0.75, h: 0.026 },
-      { x: 2.52, y: -1.92, w: 0.75, h: 0.026 },
-      { x: -2.94, y: -1.58, w: 0.026, h: 0.75 },
-      { x: 2.94, y: 1.58, w: 0.026, h: 0.75 }
+      { x: -1.94, y: 0.76, w: 0.55, h: 0.02 },
+      { x: 1.42, y: -0.76, w: 0.55, h: 0.02 },
+      { x: -1.94, y: -0.48, w: 0.02, h: 0.42 },
+      { x: 1.94, y: 0.48, w: 0.02, h: 0.42 }
     ];
     edges.forEach((edge) => {
       const mesh = new THREE.Mesh(
@@ -407,7 +459,7 @@ const scenePayload = {
     ctx.stroke();
     ctx.fillStyle = accent;
     ctx.font = '900 28px "PingFang SC", "Microsoft YaHei", sans-serif';
-    ctx.fillText(isCore ? '核心节点' : '东部需求', 34, 55);
+    ctx.fillText(isCore ? '核心枢纽' : '数据中心集群', 34, 55);
     ctx.fillStyle = '#ffffff';
     ctx.font = isCore ? '950 48px "PingFang SC", "Microsoft YaHei", sans-serif' : '900 40px "PingFang SC", "Microsoft YaHei", sans-serif';
     ctx.fillText(name, 34, 110);
@@ -442,58 +494,38 @@ const scenePayload = {
     return texture;
   }
 
-  function createHologramTexture(THREE) {
+  function createLegendTexture(THREE) {
     const canvas = document.createElement('canvas');
-    canvas.width = 1280;
-    canvas.height = 820;
+    canvas.width = 900;
+    canvas.height = 360;
     const ctx = canvas.getContext('2d');
     const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
     gradient.addColorStop(0, 'rgba(9, 26, 42, 0.9)');
     gradient.addColorStop(0.58, 'rgba(10, 52, 66, 0.62)');
     gradient.addColorStop(1, 'rgba(4, 12, 24, 0.85)');
     ctx.fillStyle = gradient;
-    roundRect(ctx, 24, 24, 1232, 772, 34);
+    roundRect(ctx, 20, 20, 860, 320, 28);
     ctx.fill();
     ctx.strokeStyle = 'rgba(125, 227, 239, 0.58)';
     ctx.lineWidth = 3;
     ctx.stroke();
 
     ctx.fillStyle = '#7de3ef';
-    ctx.font = '900 34px "PingFang SC", "Microsoft YaHei", sans-serif';
-    ctx.fillText('东数西算数据通道', 78, 108);
+    ctx.font = '900 30px "PingFang SC", "Microsoft YaHei", sans-serif';
+    ctx.fillText('全国一体化算力网络', 58, 82);
     ctx.fillStyle = '#ffffff';
-    ctx.font = '950 68px "PingFang SC", "Microsoft YaHei", sans-serif';
-    ctx.fillText('东部数据需求', 78, 220);
+    ctx.font = '950 54px "PingFang SC", "Microsoft YaHei", sans-serif';
+    ctx.fillText('十个数据中心集群', 58, 158);
     ctx.fillStyle = 'rgba(255, 255, 255, 0.54)';
-    ctx.font = '900 46px "PingFang SC", "Microsoft YaHei", sans-serif';
-    ctx.fillText('→ 西部绿色算力 → 庆阳智能集群', 78, 288);
+    ctx.font = '850 33px "PingFang SC", "Microsoft YaHei", sans-serif';
+    ctx.fillText('东部需求穿梭至西部绿色算力', 58, 214);
 
-    const rows = [
-      ['增速最快 / 增量最大', '全国八大枢纽节点公开报道口径'],
-      ['中国算谷 · 智慧庆阳', '算力、网络、能源、产业协同发展'],
-      ['职业教育人才入口', '把算力产业转化为课程、项目和社团实践']
-    ];
-    rows.forEach((row, index) => {
-      const y = 390 + index * 112;
-      ctx.fillStyle = 'rgba(125, 227, 239, 0.13)';
-      roundRect(ctx, 78, y - 46, 1080, 78, 18);
-      ctx.fill();
-      ctx.fillStyle = index === 0 ? '#f3d98a' : '#7de3ef';
-      ctx.font = '900 34px "PingFang SC", "Microsoft YaHei", sans-serif';
-      ctx.fillText(row[0], 108, y);
-      ctx.fillStyle = 'rgba(255, 255, 255, 0.64)';
-      ctx.font = '750 25px "PingFang SC", "Microsoft YaHei", sans-serif';
-      ctx.fillText(row[1], 530, y);
-    });
-
-    ctx.strokeStyle = 'rgba(125, 227, 239, 0.22)';
-    ctx.beginPath();
-    ctx.moveTo(78, 720);
-    ctx.lineTo(1160, 720);
-    ctx.stroke();
-    ctx.fillStyle = 'rgba(255, 255, 255, 0.5)';
-    ctx.font = '800 24px "PingFang SC", "Microsoft YaHei", sans-serif';
-    ctx.fillText('第一屏：庆阳算力枢纽展示  /  向下进入第二屏：智研社人才培养沙盘', 78, 760);
+    ctx.fillStyle = '#f3d98a';
+    ctx.font = '950 42px "PingFang SC", "Microsoft YaHei", sans-serif';
+    ctx.fillText('庆阳 14.2万P', 58, 292);
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.58)';
+    ctx.font = '850 25px "PingFang SC", "Microsoft YaHei", sans-serif';
+    ctx.fillText('算力规模持续跃升', 365, 292);
 
     const texture = new THREE.CanvasTexture(canvas);
     texture.colorSpace = THREE.SRGBColorSpace;
