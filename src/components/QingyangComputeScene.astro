@@ -55,13 +55,13 @@ const scenePayload = {
     scene.fog = new THREE.FogExp2(0x06101e, 0.028);
 
     const camera = new THREE.PerspectiveCamera(39, 1, 0.1, 150);
-    camera.position.set(2.7, 1.45, 17.8);
+    camera.position.set(2.7, 1.45, 16.8);
 
     const stage = new THREE.Group();
     const stageTilt = { x: -1.56, y: -0.018, z: 0 };
     stage.position.set(3.25, 0.18, 0.48);
     stage.rotation.set(stageTilt.x, stageTilt.y, stageTilt.z);
-    stage.scale.setScalar(0.98);
+    stage.scale.setScalar(1.12);
     scene.add(stage);
 
     const gridLayer = new THREE.Group();
@@ -108,20 +108,12 @@ const scenePayload = {
         })
       );
       flowLayer.add(line);
-      flowLayer.add(createFlowTube(THREE, curve, color, node.name === '庆阳' ? 0.03 : 0.018));
+      flowLayer.add(createFlowTube(THREE, curve, color, 0.009));
       return { curve, line, color: node.color, index };
     });
 
-    const particles = createFlowParticles(THREE, flowCurves, 188);
+    const particles = createFlowParticles(THREE, flowCurves, 96);
     particles.forEach((particle) => flowLayer.add(particle.mesh));
-
-    const growthTower = createGrowthTower(THREE, timeline);
-    growthTower.group.position.set(qingyang.data.x, 0.15, qingyang.data.z);
-    towerLayer.add(growthTower.group);
-
-    const rings = createEnergyRings(THREE);
-    rings.position.set(qingyang.data.x, 0.42, qingyang.data.z);
-    nodeLayer.add(rings);
 
     const stars = createQingyangStars(THREE);
     scene.add(stars);
@@ -145,11 +137,6 @@ const scenePayload = {
       gridLayer.position.x = Math.sin(elapsed * 0.18) * 0.16;
       stars.rotation.y = elapsed * 0.015;
       nodeObjects.forEach((node, index) => node.pulse(elapsed + index * 0.55, Boolean(node.data.isCore)));
-      growthTower.animate(elapsed);
-      rings.children.forEach((ring, index) => {
-        ring.rotation.z += 0.004 + index * 0.0012;
-        ring.material.opacity = 0.22 + Math.sin(elapsed * 1.2 + index) * 0.06;
-      });
 
       particles.forEach((particle) => {
         const t = (elapsed * particle.speed + particle.offset) % 1;
@@ -274,10 +261,6 @@ const scenePayload = {
             const points = projectRingToVectors(THREE, ring, -2.08 + ringIndex * 0.002);
             if (points.length > 2) group.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(points), lineMaterial));
           });
-          if (highlightColor && polygonIndex < 3) {
-            const ring = projectRingToShapePoints(polygon[0]);
-            if (ring.length > 2) group.add(createMapTube(THREE, ring, highlightColor, -2.0 + polygonIndex * 0.008, 0.02, 0.68));
-          }
         });
       }
       if (feature.geometry?.type === 'MultiLineString') {
@@ -288,9 +271,9 @@ const scenePayload = {
       }
     });
 
-    const glowLines = collectProvinceOuterRings(chinaGeoJson).slice(0, 46);
+    const glowLines = collectProvinceOuterRings(chinaGeoJson).slice(0, 32);
     glowLines.forEach((ring, index) => {
-      group.add(createMapTube(THREE, ring, index % 3 === 0 ? 0xf3d98a : 0x98fbff, -2.02 + index * 0.0008, index % 3 === 0 ? 0.012 : 0.008, 0.2));
+      group.add(createMapTube(THREE, ring, index % 3 === 0 ? 0xf3d98a : 0x98fbff, -2.02 + index * 0.0008, 0.005, 0.12));
     });
 
     return group;
@@ -410,37 +393,22 @@ const scenePayload = {
     const group = new THREE.Group();
     const color = Number.parseInt(node.color.replace('#', '0x'));
     const core = new THREE.Mesh(
-      new THREE.IcosahedronGeometry(isCore ? 0.5 : 0.28, isCore ? 2 : 1),
+      new THREE.IcosahedronGeometry(isCore ? 0.3 : 0.16, isCore ? 2 : 1),
       new THREE.MeshBasicMaterial({
         color,
         transparent: true,
-        opacity: isCore ? 0.9 : 0.7,
+        opacity: isCore ? 0.82 : 0.76,
         depthWrite: false,
         blending: THREE.AdditiveBlending
       })
     );
     group.add(core);
 
-    const ring = new THREE.Mesh(
-      new THREE.TorusGeometry(isCore ? 0.95 : 0.56, isCore ? 0.02 : 0.013, 16, 100),
-      new THREE.MeshBasicMaterial({
-        color,
-        transparent: true,
-        opacity: isCore ? 0.48 : 0.32,
-        depthWrite: false,
-        blending: THREE.AdditiveBlending
-      })
-    );
-    ring.rotation.x = Math.PI / 2.35;
-    group.add(ring);
-
     return {
       group,
       pulse(elapsed, coreNode) {
-        const pulse = 1 + Math.sin(elapsed * (coreNode ? 2.1 : 1.6)) * (coreNode ? 0.055 : 0.035);
+        const pulse = 1 + Math.sin(elapsed * (coreNode ? 2.1 : 1.6)) * (coreNode ? 0.04 : 0.025);
         core.scale.setScalar(pulse);
-        ring.rotation.z += coreNode ? 0.009 : 0.004;
-        ring.material.opacity = (coreNode ? 0.42 : 0.26) + Math.sin(elapsed * 1.4) * 0.06;
       }
     };
   }
@@ -473,7 +441,7 @@ const scenePayload = {
       group.add(connector);
 
       const dot = new THREE.Mesh(
-        new THREE.SphereGeometry(node.isCore ? 0.08 : 0.055, 10, 10),
+        new THREE.SphereGeometry(node.isCore ? 0.045 : 0.032, 10, 10),
         new THREE.MeshBasicMaterial({
           color,
           transparent: true,
@@ -489,12 +457,14 @@ const scenePayload = {
         new THREE.SpriteMaterial({
           map: createHubCardTexture(THREE, node, color, index + 1),
           transparent: true,
-          opacity: node.isCore ? 0.96 : 0.86,
+          opacity: 0.98,
+          depthTest: false,
           depthWrite: false
         })
       );
       card.position.set(cardX, cardY + 0.05, cardZ);
-      card.scale.set(node.isCore ? 2.25 : 1.92, node.isCore ? 0.82 : 0.68, 1);
+      card.renderOrder = 20 + index;
+      card.scale.set(node.isCore ? 2.36 : 2.05, node.isCore ? 0.86 : 0.72, 1);
       group.add(card);
     });
     return group;
@@ -593,7 +563,7 @@ const scenePayload = {
 
   function createFlowParticles(THREE, curves, count) {
     const particles = [];
-    const geometry = new THREE.SphereGeometry(0.064, 12, 12);
+    const geometry = new THREE.SphereGeometry(0.03, 10, 10);
     for (let index = 0; index < count; index += 1) {
       const flow = curves[index % curves.length];
       const mesh = new THREE.Mesh(
@@ -611,7 +581,7 @@ const scenePayload = {
         curve: flow.curve,
         offset: index / count,
         speed: 0.04 + (index % 9) * 0.006,
-        baseScale: 0.8 + (index % 6) * 0.08
+        baseScale: 0.72 + (index % 6) * 0.045
       });
     }
     return particles;
@@ -653,14 +623,14 @@ const scenePayload = {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
-    gradient.addColorStop(0, 'rgba(5, 16, 29, 0.9)');
-    gradient.addColorStop(0.55, 'rgba(10, 42, 54, 0.72)');
-    gradient.addColorStop(1, 'rgba(4, 10, 20, 0.84)');
+    gradient.addColorStop(0, 'rgba(5, 16, 29, 0.98)');
+    gradient.addColorStop(0.55, 'rgba(10, 42, 54, 0.94)');
+    gradient.addColorStop(1, 'rgba(4, 10, 20, 0.98)');
     ctx.fillStyle = gradient;
     roundRect(ctx, 14, 16, 592, 188, 22);
     ctx.fill();
 
-    ctx.strokeStyle = node.isCore ? 'rgba(243, 217, 138, 0.78)' : `${accent}aa`;
+    ctx.strokeStyle = node.isCore ? 'rgba(243, 217, 138, 0.94)' : `${accent}ee`;
     ctx.lineWidth = node.isCore ? 4 : 3;
     ctx.stroke();
 
@@ -676,7 +646,7 @@ const scenePayload = {
     ctx.font = '850 25px "PingFang SC", "Microsoft YaHei", sans-serif';
     ctx.fillText((node.provinces || []).slice(0, 2).join(' · '), 118, 122);
 
-    ctx.fillStyle = 'rgba(255, 255, 255, 0.66)';
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.82)';
     ctx.font = '760 25px "PingFang SC", "Microsoft YaHei", sans-serif';
     ctx.fillText(node.subtitle, 118, 164);
 
