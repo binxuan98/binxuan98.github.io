@@ -174,7 +174,7 @@ const sceneModules = societyModules.map(({ number, icon, shortTitle, title, text
     let targetRotation = 0.2;
     let activeStartedAt = 0;
     let frameId = 0;
-    const clock = new THREE.Clock();
+    let startedAt = performance.now();
     const lookTarget = new THREE.Vector3(0, 0.5, 0);
     const moduleDuration = 6;
 
@@ -192,7 +192,7 @@ const sceneModules = societyModules.map(({ number, icon, shortTitle, title, text
       activeIndex = (index + moduleObjects.length) % moduleObjects.length;
       const active = moduleObjects[activeIndex];
       targetRotation = Math.atan2(-active.position.x, active.position.z);
-      activeStartedAt = clock.getElapsedTime();
+      activeStartedAt = getElapsedTime();
       root.dataset.activeModule = String(activeIndex);
       detailCard.update(modules[activeIndex], palette[activeIndex % palette.length], activeIndex, modules.length, presenter, portraitImage);
       if (prefersReducedMotion.matches) {
@@ -220,7 +220,7 @@ const sceneModules = societyModules.map(({ number, icon, shortTitle, title, text
     }
 
     function render() {
-      const elapsed = clock.getElapsedTime();
+      const elapsed = getElapsedTime();
       stage.rotation.y += (targetRotation - stage.rotation.y) * 0.13;
       stage.rotation.x = Math.sin(elapsed * 0.16) * 0.025;
       terrainLayer.position.x = Math.sin(elapsed * 0.22) * 0.3;
@@ -287,7 +287,8 @@ const sceneModules = societyModules.map(({ number, icon, shortTitle, title, text
 
     prefersReducedMotion.addEventListener?.('change', () => {
       window.cancelAnimationFrame(frameId);
-      clock.start();
+      startedAt = performance.now();
+      activeStartedAt = 0;
       resize();
       render();
     });
@@ -308,6 +309,10 @@ const sceneModules = societyModules.map(({ number, icon, shortTitle, title, text
         }
       });
     }, { once: true });
+
+    function getElapsedTime() {
+      return (performance.now() - startedAt) / 1000;
+    }
   }
 
   function createHub(THREE) {
