@@ -58,9 +58,21 @@ const sceneModules = societyModules.map(({ number, icon, shortTitle, title, text
 
     renderer.setClearColor(0x000000, 0);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.7));
+    renderer.outputColorSpace = THREE.SRGBColorSpace;
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 1.05;
 
     const scene = new THREE.Scene();
     scene.fog = new THREE.FogExp2(0x06101e, 0.034);
+    scene.add(new THREE.HemisphereLight(0xb8f7ff, 0x06101e, 0.88));
+
+    const keyLight = new THREE.DirectionalLight(0xffffff, 2.2);
+    keyLight.position.set(-4.8, 8.2, 9.4);
+    scene.add(keyLight);
+
+    const rimLight = new THREE.DirectionalLight(0x7de3ef, 1.15);
+    rimLight.position.set(6.2, 4.6, -4.8);
+    scene.add(rimLight);
 
     const camera = new THREE.PerspectiveCamera(38, 1, 0.1, 140);
     camera.position.set(0, 8.4, 19.2);
@@ -77,18 +89,18 @@ const sceneModules = societyModules.map(({ number, icon, shortTitle, title, text
     const palette = [0x7de3ef, 0xf3d98a, 0x74f0a7, 0xaec7ff, 0xffcc8a];
     const moduleObjects = [];
     const radialLinks = [];
-    const orbitRadius = 5.6;
+    const orbitRadius = 5.8;
     const orbitAngles = [-Math.PI * 0.55, -Math.PI * 0.15, Math.PI * 0.22, Math.PI * 0.62, Math.PI * 1.02];
 
     const hub = createHub(THREE);
-    hub.position.set(0, 0.75, 0);
+    hub.position.set(0, 0.58, 0);
     moduleLayer.add(hub);
 
     modules.forEach((module, index) => {
       const angle = orbitAngles[index] ?? (index / Math.max(1, modules.length)) * Math.PI * 2;
       const position = new THREE.Vector3(
         Math.cos(angle) * orbitRadius,
-        1.12 + Math.sin(index * 1.7) * 0.46,
+        0.88 + Math.sin(index * 1.7) * 0.34,
         Math.sin(angle) * orbitRadius * 0.78
       );
       const moduleObject = createModulePod(THREE, module, index, palette[index % palette.length]);
@@ -107,7 +119,7 @@ const sceneModules = societyModules.map(({ number, icon, shortTitle, title, text
         new THREE.LineBasicMaterial({
           color: palette[index % palette.length],
           transparent: true,
-          opacity: 0.28,
+          opacity: 0.2,
           depthWrite: false,
           blending: THREE.AdditiveBlending
         })
@@ -125,11 +137,15 @@ const sceneModules = societyModules.map(({ number, icon, shortTitle, title, text
 
     externalSources.forEach((source, index) => {
       const sourceNode = new THREE.Mesh(
-        new THREE.IcosahedronGeometry(0.18, 1),
-        new THREE.MeshBasicMaterial({
+        new THREE.SphereGeometry(0.08, 24, 14),
+        new THREE.MeshStandardMaterial({
           color: index < 2 ? 0x7de3ef : 0xf3d98a,
+          emissive: index < 2 ? 0x1a8791 : 0x8d6c20,
+          emissiveIntensity: 0.24,
+          roughness: 0.32,
+          metalness: 0.18,
           transparent: true,
-          opacity: 0.72
+          opacity: 0.78
         })
       );
       sourceNode.position.copy(source);
@@ -145,7 +161,7 @@ const sceneModules = societyModules.map(({ number, icon, shortTitle, title, text
         new THREE.LineBasicMaterial({
           color: index < 2 ? 0x7de3ef : 0xf3d98a,
           transparent: true,
-          opacity: 0.18,
+          opacity: 0.11,
           depthWrite: false,
           blending: THREE.AdditiveBlending
         })
@@ -156,7 +172,7 @@ const sceneModules = societyModules.map(({ number, icon, shortTitle, title, text
 
     createTerrain(THREE, terrainLayer);
 
-    const particles = createFlowParticles(THREE, radialLinks, 108);
+    const particles = createFlowParticles(THREE, radialLinks, 66);
     particles.forEach((particle) => flowLayer.add(particle.mesh));
 
     const stars = createStars(THREE);
@@ -234,33 +250,32 @@ const sceneModules = societyModules.map(({ number, icon, shortTitle, title, text
       moduleObjects.forEach((moduleObject, index) => {
         const isActive = index === activeIndex;
         const pulse = 1 + Math.sin(elapsed * 2.2 + index) * 0.04;
-        const baseScale = isActive ? 1.48 : 0.72;
+        const baseScale = isActive ? 1.06 : 0.5;
         moduleObject.group.scale.setScalar(baseScale * pulse);
-        moduleObject.ring.material.opacity = isActive ? 0.95 : 0.18;
-        moduleObject.halo.material.opacity = isActive ? 0.7 : 0.06;
-        moduleObject.core.material.opacity = isActive ? 1 : 0.36;
-        moduleObject.label.material.opacity = isActive ? 0.86 : 0.035;
-        moduleObject.panel.material.opacity = isActive ? 0.46 : 0.018;
-        moduleObject.group.rotation.y += isActive ? 0.008 : 0.0018;
+        moduleObject.glow.material.opacity = isActive ? 0.34 : 0.055;
+        moduleObject.core.material.opacity = isActive ? 0.95 : 0.4;
+        moduleObject.label.material.opacity = isActive ? 0.82 : 0.028;
+        moduleObject.panel.material.opacity = isActive ? 0.34 : 0.014;
+        moduleObject.core.rotation.y += isActive ? 0.006 : 0.0018;
       });
 
       radialLinks.forEach((link) => {
         if (link.moduleIndex === null) {
-          link.line.material.opacity = 0.16;
+          link.line.material.opacity = 0.095;
         } else {
-          link.line.material.opacity = link.moduleIndex === activeIndex ? 0.62 : 0.08;
+          link.line.material.opacity = link.moduleIndex === activeIndex ? 0.42 : 0.045;
         }
       });
 
-      hub.rotation.y -= 0.01;
-      hub.rotation.z = Math.sin(elapsed * 0.6) * 0.12;
+      hub.rotation.y -= 0.0025;
+      hub.rotation.z = Math.sin(elapsed * 0.45) * 0.025;
 
       particles.forEach((particle) => {
         const curve = particle.curve;
         const t = (elapsed * particle.speed + particle.offset) % 1;
         particle.mesh.position.copy(curve.getPointAt(t));
-        particle.mesh.scale.setScalar(particle.baseScale * (0.8 + Math.sin(t * Math.PI * 2) * 0.25));
-        particle.mesh.material.opacity = particle.moduleIndex === activeIndex ? 0.96 : 0.32;
+        particle.mesh.scale.setScalar(particle.baseScale * (0.86 + Math.sin(t * Math.PI * 2) * 0.16));
+        particle.mesh.material.opacity = particle.moduleIndex === activeIndex ? 0.78 : 0.2;
       });
 
       const progress = prefersReducedMotion.matches
@@ -317,35 +332,86 @@ const sceneModules = societyModules.map(({ number, icon, shortTitle, title, text
 
   function createHub(THREE) {
     const group = new THREE.Group();
-    const core = new THREE.Mesh(
-      new THREE.IcosahedronGeometry(0.72, 2),
-      new THREE.MeshBasicMaterial({
-        color: 0xf3d98a,
-        transparent: true,
-        opacity: 0.92
-      })
-    );
-    group.add(core);
+    const bladeMaterial = new THREE.MeshPhysicalMaterial({
+      color: 0x1b3b4d,
+      emissive: 0x092736,
+      emissiveIntensity: 0.18,
+      metalness: 0.48,
+      roughness: 0.24,
+      clearcoat: 1,
+      clearcoatRoughness: 0.12,
+      transparent: true,
+      opacity: 0.9
+    });
 
-    const rings = [
-      new THREE.TorusGeometry(1.25, 0.018, 16, 96),
-      new THREE.TorusGeometry(1.68, 0.012, 16, 96),
-      new THREE.TorusGeometry(2.08, 0.01, 16, 96)
+    const stripMaterials = [
+      new THREE.MeshBasicMaterial({ color: 0xf3d98a, transparent: true, opacity: 0.82, blending: THREE.AdditiveBlending }),
+      new THREE.MeshBasicMaterial({ color: 0x7de3ef, transparent: true, opacity: 0.68, blending: THREE.AdditiveBlending })
     ];
 
-    rings.forEach((geometry, index) => {
-      const ring = new THREE.Mesh(
-        geometry,
-        new THREE.MeshBasicMaterial({
-          color: index === 0 ? 0xf3d98a : 0x7de3ef,
-          transparent: true,
-          opacity: 0.34 - index * 0.07
-        })
+    for (let layer = 0; layer < 5; layer += 1) {
+      const blade = new THREE.Mesh(
+        new THREE.BoxGeometry(0.86 - layer * 0.035, 0.085, 0.58 - layer * 0.025),
+        bladeMaterial.clone()
       );
-      ring.rotation.x = Math.PI / 2 + index * 0.2;
-      ring.rotation.y = index * 0.55;
-      group.add(ring);
-    });
+      blade.position.y = -0.22 + layer * 0.14;
+      blade.rotation.y = 0.24;
+      group.add(blade);
+
+      const strip = new THREE.Mesh(
+        new THREE.BoxGeometry(0.58 - layer * 0.035, 0.012, 0.012),
+        stripMaterials[layer % stripMaterials.length]
+      );
+      strip.position.set(0.04, blade.position.y + 0.006, 0.305 - layer * 0.012);
+      strip.rotation.y = 0.24;
+      group.add(strip);
+    }
+
+    const cap = new THREE.Mesh(
+      new THREE.CylinderGeometry(0.16, 0.18, 0.16, 40),
+      new THREE.MeshPhysicalMaterial({
+        color: 0xf3d98a,
+        emissive: 0x8a681c,
+        emissiveIntensity: 0.16,
+        metalness: 0.42,
+        roughness: 0.2,
+        clearcoat: 1,
+        transparent: true,
+        opacity: 0.86
+      })
+    );
+    cap.position.y = 0.56;
+    group.add(cap);
+
+    const base = new THREE.Mesh(
+      new THREE.CylinderGeometry(0.78, 0.92, 0.1, 96),
+      new THREE.MeshStandardMaterial({
+        color: 0x19364c,
+        metalness: 0.64,
+        roughness: 0.28,
+        transparent: true,
+        opacity: 0.7
+      })
+    );
+    base.position.y = -0.54;
+    group.add(base);
+
+    const glow = new THREE.Sprite(
+      new THREE.SpriteMaterial({
+        map: createGlowTexture(THREE, 0xf3d98a),
+        transparent: true,
+        opacity: 0.22,
+        depthWrite: false,
+        blending: THREE.AdditiveBlending
+      })
+    );
+    glow.scale.set(2.1, 2.1, 1);
+    glow.position.y = -0.05;
+    group.add(glow);
+
+    const light = new THREE.PointLight(0xf3d98a, 0.82, 7.5);
+    light.position.set(0, 0.25, 0.1);
+    group.add(light);
 
     return group;
   }
@@ -353,55 +419,57 @@ const sceneModules = societyModules.map(({ number, icon, shortTitle, title, text
   function createModulePod(THREE, module, index, color) {
     const group = new THREE.Group();
     const core = new THREE.Mesh(
-      new THREE.OctahedronGeometry(0.54, 1),
-      new THREE.MeshBasicMaterial({
+      new THREE.SphereGeometry(0.22, 42, 24),
+      new THREE.MeshPhysicalMaterial({
         color,
+        emissive: color,
+        emissiveIntensity: 0.14,
+        metalness: 0.12,
+        roughness: 0.18,
+        clearcoat: 0.9,
+        clearcoatRoughness: 0.12,
         transparent: true,
-        opacity: 0.78,
-        depthWrite: false,
-        blending: THREE.AdditiveBlending
+        opacity: 0.76
       })
     );
     group.add(core);
 
-    const ring = new THREE.Mesh(
-      new THREE.TorusGeometry(1.08, 0.034, 18, 120),
-      new THREE.MeshBasicMaterial({
-        color,
+    const glow = new THREE.Sprite(
+      new THREE.SpriteMaterial({
+        map: createGlowTexture(THREE, color),
         transparent: true,
-        opacity: 0.42,
+        opacity: 0.11,
         depthWrite: false,
         blending: THREE.AdditiveBlending
       })
     );
-    ring.rotation.x = Math.PI / 2.4;
-    group.add(ring);
+    glow.scale.set(1.55, 1.55, 1);
+    group.add(glow);
 
-    const halo = new THREE.Mesh(
-      new THREE.TorusGeometry(1.42, 0.018, 18, 140),
+    const stem = new THREE.Mesh(
+      new THREE.CylinderGeometry(0.012, 0.012, 0.78, 16),
       new THREE.MeshBasicMaterial({
         color,
         transparent: true,
-        opacity: 0.08,
+        opacity: 0.28,
         depthWrite: false,
         blending: THREE.AdditiveBlending
       })
     );
-    halo.rotation.x = Math.PI / 2.15;
-    halo.rotation.y = Math.PI / 8;
-    group.add(halo);
+    stem.position.y = -0.44;
+    group.add(stem);
 
     const panel = new THREE.Mesh(
-      new THREE.PlaneGeometry(2.95, 0.92),
+      new THREE.PlaneGeometry(2.42, 0.72),
       new THREE.MeshBasicMaterial({
         color: 0x081a29,
         transparent: true,
-        opacity: 0.16,
+        opacity: 0.12,
         side: THREE.DoubleSide,
         depthWrite: false
       })
     );
-    panel.position.set(0, -0.48, 0.16);
+    panel.position.set(0, -0.54, 0.16);
     group.add(panel);
 
     const label = new THREE.Sprite(
@@ -412,11 +480,11 @@ const sceneModules = societyModules.map(({ number, icon, shortTitle, title, text
         depthWrite: false
       })
     );
-    label.position.set(0, -0.48, 0.26);
-    label.scale.set(2.92, 0.92, 1);
+    label.position.set(0, -0.54, 0.26);
+    label.scale.set(2.38, 0.72, 1);
     group.add(label);
 
-    return { group, core, ring, halo, panel, label, index };
+    return { group, core, glow, panel, label, index };
   }
 
   function createDetailCard(THREE, module, color, index, total, presenter, portraitImage) {
@@ -673,32 +741,32 @@ const sceneModules = societyModules.map(({ number, icon, shortTitle, title, text
   function createSignalField(THREE) {
     const group = new THREE.Group();
     const materials = [
-      new THREE.LineBasicMaterial({ color: 0x7de3ef, transparent: true, opacity: 0.18, blending: THREE.AdditiveBlending }),
-      new THREE.LineBasicMaterial({ color: 0xf3d98a, transparent: true, opacity: 0.12, blending: THREE.AdditiveBlending })
+      new THREE.LineBasicMaterial({ color: 0x7de3ef, transparent: true, opacity: 0.075, blending: THREE.AdditiveBlending }),
+      new THREE.LineBasicMaterial({ color: 0xf3d98a, transparent: true, opacity: 0.052, blending: THREE.AdditiveBlending })
     ];
 
-    for (let band = 0; band < 8; band += 1) {
+    for (let band = 0; band < 4; band += 1) {
       const points = [];
-      const radius = 4.2 + band * 0.72;
-      for (let step = 0; step < 180; step += 1) {
-        const t = (step / 179) * Math.PI * 2.1 + band * 0.55;
+      const radius = 5.1 + band * 1.28;
+      for (let step = 0; step < 148; step += 1) {
+        const t = (step / 147) * Math.PI * 2.04 + band * 0.55;
         points.push(new THREE.Vector3(
           Math.cos(t) * radius,
-          -2.75 + Math.sin(t * 1.7 + band) * 0.24 + band * 0.03,
-          Math.sin(t) * radius * 0.62
+          -2.9 + Math.sin(t * 1.4 + band) * 0.08 + band * 0.02,
+          Math.sin(t) * radius * 0.58
         ));
       }
       group.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(points), materials[band % materials.length]));
     }
 
-    for (let beam = 0; beam < 18; beam += 1) {
-      const angle = (beam / 18) * Math.PI * 2;
-      const radius = 4.5 + (beam % 4) * 1.4;
+    for (let beam = 0; beam < 8; beam += 1) {
+      const angle = (beam / 8) * Math.PI * 2;
+      const radius = 5.4 + (beam % 3) * 1.8;
       const x = Math.cos(angle) * radius;
       const z = Math.sin(angle) * radius * 0.7;
       const geometry = new THREE.BufferGeometry().setFromPoints([
         new THREE.Vector3(x, -2.8, z),
-        new THREE.Vector3(x * 0.74, 3.7 + (beam % 3) * 0.5, z * 0.74)
+        new THREE.Vector3(x * 0.8, 2.6 + (beam % 2) * 0.46, z * 0.8)
       ]);
       group.add(new THREE.Line(geometry, materials[beam % materials.length]));
     }
@@ -725,6 +793,24 @@ const sceneModules = societyModules.map(({ number, icon, shortTitle, title, text
     ctx.fillStyle = '#ffffff';
     ctx.font = '900 48px "PingFang SC", "Microsoft YaHei", sans-serif';
     ctx.fillText(title, 38, 128);
+    const texture = new THREE.CanvasTexture(canvas);
+    texture.colorSpace = THREE.SRGBColorSpace;
+    return texture;
+  }
+
+  function createGlowTexture(THREE, color) {
+    const canvas = document.createElement('canvas');
+    canvas.width = 256;
+    canvas.height = 256;
+    const ctx = canvas.getContext('2d');
+    const accent = `#${color.toString(16).padStart(6, '0')}`;
+    const gradient = ctx.createRadialGradient(128, 128, 0, 128, 128, 128);
+    gradient.addColorStop(0, accent);
+    gradient.addColorStop(0.22, `${accent}cc`);
+    gradient.addColorStop(0.56, `${accent}34`);
+    gradient.addColorStop(1, `${accent}00`);
+    ctx.fillStyle = gradient;
+    ctx.fillRect(0, 0, 256, 256);
     const texture = new THREE.CanvasTexture(canvas);
     texture.colorSpace = THREE.SRGBColorSpace;
     return texture;
@@ -765,7 +851,7 @@ const sceneModules = societyModules.map(({ number, icon, shortTitle, title, text
 
   function createFlowParticles(THREE, links, count) {
     const particles = [];
-    const geometry = new THREE.SphereGeometry(0.065, 12, 12);
+    const geometry = new THREE.SphereGeometry(0.036, 18, 12);
     const colors = [0xf3d98a, 0x7de3ef, 0x74f0a7];
 
     for (let index = 0; index < count; index += 1) {
@@ -775,7 +861,7 @@ const sceneModules = societyModules.map(({ number, icon, shortTitle, title, text
         new THREE.MeshBasicMaterial({
           color: colors[index % colors.length],
           transparent: true,
-          opacity: 0.74,
+          opacity: 0.56,
           depthWrite: false,
           blending: THREE.AdditiveBlending
         })
@@ -785,8 +871,8 @@ const sceneModules = societyModules.map(({ number, icon, shortTitle, title, text
         curve: link.curve,
         moduleIndex: link.moduleIndex,
         offset: index / count,
-        speed: 0.045 + (index % 8) * 0.007,
-        baseScale: 0.86 + (index % 5) * 0.1
+        speed: 0.038 + (index % 8) * 0.005,
+        baseScale: 0.72 + (index % 5) * 0.07
       });
     }
     return particles;
