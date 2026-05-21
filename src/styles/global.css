@@ -940,20 +940,25 @@ button {
 
 .society-mission {
   position: relative;
-  max-width: 620px;
-  margin: clamp(16px, 1.8vh, 22px) 0 0;
-  padding: 12px 18px 12px 22px;
+  z-index: 3;
+  grid-column: 1 / -1;
+  grid-row: 3;
+  align-self: end;
+  justify-self: center;
+  width: min(1180px, 100%);
+  margin: 0;
+  padding: 12px 22px;
   color: #ffe49a;
+  text-align: center;
   background:
-    linear-gradient(90deg, rgba(243, 217, 138, 0.16), rgba(6, 16, 30, 0.56) 72%),
-    rgba(6, 16, 30, 0.34);
-  border: 1px solid rgba(243, 217, 138, 0.26);
-  border-left: 3px solid #f3d98a;
-  border-radius: 8px;
+    linear-gradient(90deg, rgba(6, 16, 30, 0), rgba(6, 16, 30, 0.72) 18%, rgba(6, 16, 30, 0.72) 82%, rgba(6, 16, 30, 0)),
+    linear-gradient(90deg, rgba(243, 217, 138, 0), rgba(243, 217, 138, 0.18) 18%, rgba(243, 217, 138, 0.18) 82%, rgba(243, 217, 138, 0));
+  border-top: 1px solid rgba(243, 217, 138, 0.36);
+  border-bottom: 1px solid rgba(243, 217, 138, 0.2);
   box-shadow: 0 18px 60px rgba(243, 217, 138, 0.08);
-  font-size: clamp(16px, 1.05vw, 21px);
+  font-size: clamp(16px, 1.08vw, 22px);
   font-weight: 850;
-  line-height: 1.5;
+  line-height: 1.45;
   text-shadow: 0 10px 30px rgba(243, 217, 138, 0.12);
 }
 
@@ -1366,6 +1371,7 @@ button {
   }
 
   .society-main,
+  .society-mission,
   .society-panel,
   .briefing-strip {
     grid-column: 1 / -1;
@@ -1489,6 +1495,11 @@ button {
 
   .society-metrics {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .society-mission {
+    padding: 10px 12px;
+    font-size: clamp(14px, 4vw, 17px);
   }
 
   .showcase-card {
