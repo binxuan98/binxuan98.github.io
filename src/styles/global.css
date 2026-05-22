@@ -674,8 +674,8 @@ button {
 
 .compute-scene__overlay {
   background:
-    radial-gradient(circle at 54% 48%, transparent 0%, transparent 44%, rgba(6, 16, 30, 0.18) 72%, rgba(6, 16, 30, 0.5) 100%),
-    linear-gradient(90deg, rgba(6, 16, 30, 0.92) 0%, rgba(6, 16, 30, 0.54) 27%, rgba(6, 16, 30, 0.04) 51%, rgba(6, 16, 30, 0.1) 74%, rgba(6, 16, 30, 0.34) 100%);
+    radial-gradient(circle at 55% 48%, transparent 0%, transparent 50%, rgba(6, 16, 30, 0.12) 76%, rgba(6, 16, 30, 0.38) 100%),
+    linear-gradient(90deg, rgba(6, 16, 30, 0.9) 0%, rgba(6, 16, 30, 0.56) 27%, rgba(6, 16, 30, 0.02) 51%, rgba(6, 16, 30, 0.06) 74%, rgba(6, 16, 30, 0.24) 100%);
 }
 
 .terrain-grid-bg {

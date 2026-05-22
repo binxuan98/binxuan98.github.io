@@ -63,14 +63,14 @@ const sceneModules = societyModules.map(({ number, icon, shortTitle, title, text
     renderer.toneMappingExposure = 1.05;
 
     const scene = new THREE.Scene();
-    scene.fog = new THREE.FogExp2(0x06101e, 0.034);
-    scene.add(new THREE.HemisphereLight(0xb8f7ff, 0x06101e, 0.88));
+    scene.fog = new THREE.FogExp2(0x06101e, 0.026);
+    scene.add(new THREE.HemisphereLight(0xd8fbff, 0x0b2434, 1.08));
 
-    const keyLight = new THREE.DirectionalLight(0xffffff, 2.2);
+    const keyLight = new THREE.DirectionalLight(0xffffff, 2.75);
     keyLight.position.set(-4.8, 8.2, 9.4);
     scene.add(keyLight);
 
-    const rimLight = new THREE.DirectionalLight(0x7de3ef, 1.15);
+    const rimLight = new THREE.DirectionalLight(0x7de3ef, 1.45);
     rimLight.position.set(6.2, 4.6, -4.8);
     scene.add(rimLight);
 
@@ -119,7 +119,7 @@ const sceneModules = societyModules.map(({ number, icon, shortTitle, title, text
         new THREE.LineBasicMaterial({
           color: palette[index % palette.length],
           transparent: true,
-          opacity: 0.24,
+          opacity: 0.18,
           depthWrite: false,
           blending: THREE.AdditiveBlending
         })
@@ -128,55 +128,7 @@ const sceneModules = societyModules.map(({ number, icon, shortTitle, title, text
       flowLayer.add(line);
     });
 
-    const externalSources = [
-      new THREE.Vector3(-11.4, 0.3, -6.5),
-      new THREE.Vector3(-10.2, 2.1, 2.4),
-      new THREE.Vector3(10.8, 1.1, -4.8),
-      new THREE.Vector3(9.5, 2.7, 4.1)
-    ];
-
-    externalSources.forEach((source, index) => {
-      const sourceNode = new THREE.Mesh(
-        new THREE.SphereGeometry(0.08, 24, 14),
-        new THREE.MeshStandardMaterial({
-          color: index < 2 ? 0x7de3ef : 0xf3d98a,
-          emissive: index < 2 ? 0x1a8791 : 0x8d6c20,
-          emissiveIntensity: 0.24,
-          roughness: 0.32,
-          metalness: 0.18,
-          transparent: true,
-          opacity: 0.78
-        })
-      );
-      sourceNode.position.copy(source);
-      flowLayer.add(sourceNode);
-
-      const curve = new THREE.CatmullRomCurve3([
-        source,
-        new THREE.Vector3(source.x * 0.42, 2.4 + index * 0.18, source.z * 0.32),
-        hub.position.clone()
-      ]);
-      const line = new THREE.Line(
-        new THREE.BufferGeometry().setFromPoints(curve.getPoints(90)),
-        new THREE.LineBasicMaterial({
-          color: index < 2 ? 0x7de3ef : 0xf3d98a,
-          transparent: true,
-          opacity: 0.11,
-          depthWrite: false,
-          blending: THREE.AdditiveBlending
-        })
-      );
-      radialLinks.push({ curve, line, moduleIndex: null });
-      flowLayer.add(line);
-    });
-
     createTerrain(THREE, terrainLayer);
-
-    const particles = createFlowParticles(THREE, radialLinks, 92);
-    particles.forEach((particle) => flowLayer.add(particle.mesh));
-
-    const stars = createStars(THREE);
-    stage.add(stars);
 
     const detailCard = createDetailCard(THREE, modules[0], palette[0], 0, modules.length, presenter, portraitImage);
     detailCard.group.position.set(5.15, 2.08, 5.95);
@@ -240,7 +192,6 @@ const sceneModules = societyModules.map(({ number, icon, shortTitle, title, text
       stage.rotation.y += (targetRotation - stage.rotation.y) * 0.13;
       stage.rotation.x = Math.sin(elapsed * 0.16) * 0.025;
       terrainLayer.position.x = Math.sin(elapsed * 0.22) * 0.3;
-      stars.rotation.y = elapsed * 0.02;
       signalField.rotation.y = Math.sin(elapsed * 0.12) * 0.08;
 
       lookTarget.set(0, 0.92, 1.18);
@@ -264,23 +215,11 @@ const sceneModules = societyModules.map(({ number, icon, shortTitle, title, text
       });
 
       radialLinks.forEach((link) => {
-        if (link.moduleIndex === null) {
-          link.line.material.opacity = 0.095;
-        } else {
-          link.line.material.opacity = link.moduleIndex === activeIndex ? 0.72 : 0.08;
-        }
+        link.line.material.opacity = link.moduleIndex === activeIndex ? 0.5 : 0.045;
       });
 
       hub.rotation.y -= 0.0012;
       hub.rotation.z = Math.sin(elapsed * 0.45) * 0.018;
-
-      particles.forEach((particle) => {
-        const curve = particle.curve;
-        const t = (elapsed * particle.speed + particle.offset) % 1;
-        particle.mesh.position.copy(curve.getPointAt(t));
-        particle.mesh.scale.setScalar(particle.baseScale * (0.86 + Math.sin(t * Math.PI * 2) * 0.16));
-        particle.mesh.material.opacity = particle.moduleIndex === activeIndex ? 0.92 : 0.26;
-      });
 
       const progress = prefersReducedMotion.matches
         ? 1
@@ -339,15 +278,15 @@ const sceneModules = societyModules.map(({ number, icon, shortTitle, title, text
     const platform = new THREE.Mesh(
       new THREE.BoxGeometry(5.2, 0.18, 3.55),
       new THREE.MeshPhysicalMaterial({
-        color: 0x092033,
-        emissive: 0x062235,
-        emissiveIntensity: 0.14,
-        metalness: 0.36,
-        roughness: 0.28,
+        color: 0x2e5f73,
+        emissive: 0x12384a,
+        emissiveIntensity: 0.2,
+        metalness: 0.28,
+        roughness: 0.34,
         clearcoat: 0.8,
         clearcoatRoughness: 0.18,
         transparent: true,
-        opacity: 0.9
+        opacity: 0.94
       })
     );
     platform.position.y = -0.64;
@@ -356,9 +295,9 @@ const sceneModules = societyModules.map(({ number, icon, shortTitle, title, text
     const platformEdge = new THREE.Mesh(
       new THREE.BoxGeometry(5.42, 0.035, 3.78),
       new THREE.MeshBasicMaterial({
-        color: 0x7de3ef,
+        color: 0xa7f4ff,
         transparent: true,
-        opacity: 0.26,
+        opacity: 0.34,
         depthWrite: false,
         blending: THREE.AdditiveBlending
       })
@@ -367,19 +306,19 @@ const sceneModules = societyModules.map(({ number, icon, shortTitle, title, text
     group.add(platformEdge);
 
     const buildingMaterial = new THREE.MeshPhysicalMaterial({
-      color: 0x24536c,
-      emissive: 0x0d4052,
-      emissiveIntensity: 0.28,
-      metalness: 0.46,
-      roughness: 0.22,
+      color: 0x4e8295,
+      emissive: 0x17485a,
+      emissiveIntensity: 0.32,
+      metalness: 0.34,
+      roughness: 0.26,
       clearcoat: 1,
       clearcoatRoughness: 0.14,
       transparent: true,
-      opacity: 0.92
+      opacity: 0.96
     });
 
     const glassMaterial = new THREE.MeshBasicMaterial({
-      color: 0x7de3ef,
+      color: 0xc5fbff,
       transparent: true,
       opacity: 0.72,
       depthWrite: false,
@@ -415,14 +354,14 @@ const sceneModules = societyModules.map(({ number, icon, shortTitle, title, text
     });
 
     const rackMaterial = new THREE.MeshPhysicalMaterial({
-      color: 0x0c1d2b,
-      emissive: 0x052536,
-      emissiveIntensity: 0.26,
-      metalness: 0.5,
-      roughness: 0.26,
+      color: 0x254e64,
+      emissive: 0x0c3145,
+      emissiveIntensity: 0.3,
+      metalness: 0.38,
+      roughness: 0.3,
       clearcoat: 0.8,
       transparent: true,
-      opacity: 0.9
+      opacity: 0.95
     });
 
     for (let row = 0; row < 3; row += 1) {
@@ -449,14 +388,14 @@ const sceneModules = societyModules.map(({ number, icon, shortTitle, title, text
     const dispatchTower = new THREE.Mesh(
       new THREE.CylinderGeometry(0.23, 0.3, 1.42, 6),
       new THREE.MeshPhysicalMaterial({
-        color: 0x1b465b,
-        emissive: 0x0b3340,
-        emissiveIntensity: 0.18,
-        metalness: 0.42,
-        roughness: 0.22,
+        color: 0x5c8d98,
+        emissive: 0x184b55,
+        emissiveIntensity: 0.24,
+        metalness: 0.34,
+        roughness: 0.28,
         clearcoat: 1,
         transparent: true,
-        opacity: 0.84
+        opacity: 0.92
       })
     );
     dispatchTower.position.set(1.74, 0.12, 0.72);
@@ -507,11 +446,11 @@ const sceneModules = societyModules.map(({ number, icon, shortTitle, title, text
       const unit = new THREE.Mesh(
         new THREE.CylinderGeometry(0.13, 0.13, 0.22, 32),
         new THREE.MeshStandardMaterial({
-          color: 0x9ed8dd,
-          metalness: 0.62,
-          roughness: 0.32,
+          color: 0xd2edf0,
+          metalness: 0.48,
+          roughness: 0.36,
           transparent: true,
-          opacity: 0.62
+          opacity: 0.78
         })
       );
       unit.position.set(x, -0.41, z);
@@ -572,31 +511,31 @@ const sceneModules = societyModules.map(({ number, icon, shortTitle, title, text
 
     const structureMaterial = track(
       new THREE.MeshPhysicalMaterial({
-        color: 0x133248,
-        emissive: 0x071e2d,
-        emissiveIntensity: 0.22,
-        metalness: 0.46,
-        roughness: 0.23,
+        color: 0x5d8795,
+        emissive: 0x173f4d,
+        emissiveIntensity: 0.28,
+        metalness: 0.34,
+        roughness: 0.28,
         clearcoat: 0.9,
         clearcoatRoughness: 0.16
       }),
-      0.92,
-      0.46
+      0.96,
+      0.68
     );
 
     const platform = new THREE.Mesh(
       new THREE.CylinderGeometry(0.58, 0.7, 0.12, 6),
       track(
         new THREE.MeshPhysicalMaterial({
-          color: 0x0d2536,
-          emissive: 0x061b29,
-          emissiveIntensity: 0.16,
-          metalness: 0.48,
-          roughness: 0.26,
+          color: 0x365f73,
+          emissive: 0x123448,
+          emissiveIntensity: 0.22,
+          metalness: 0.32,
+          roughness: 0.32,
           clearcoat: 0.8
         }),
-        0.92,
-        0.5
+        0.96,
+        0.7
       )
     );
     platform.position.y = -0.58;
@@ -604,7 +543,7 @@ const sceneModules = societyModules.map(({ number, icon, shortTitle, title, text
     group.add(platform);
 
     const visual = new THREE.Group();
-    visual.position.y = -0.2;
+    visual.position.y = 0.16;
     group.add(visual);
 
     if (index === 0) {
@@ -616,9 +555,9 @@ const sceneModules = societyModules.map(({ number, icon, shortTitle, title, text
       top.position.set(0, 0.48, 0);
       visual.add(left, right, top);
       materials.push(
-        { material: left.material, activeOpacity: 0.92, idleOpacity: 0.46 },
-        { material: right.material, activeOpacity: 0.92, idleOpacity: 0.46 },
-        { material: top.material, activeOpacity: 0.92, idleOpacity: 0.46 }
+        { material: left.material, activeOpacity: 0.96, idleOpacity: 0.68 },
+        { material: right.material, activeOpacity: 0.96, idleOpacity: 0.68 },
+        { material: top.material, activeOpacity: 0.96, idleOpacity: 0.68 }
       );
     } else if (index === 1) {
       for (let item = 0; item < 3; item += 1) {
@@ -626,7 +565,7 @@ const sceneModules = societyModules.map(({ number, icon, shortTitle, title, text
         pod.position.set(-0.24 + item * 0.24, 0.12, 0);
         pod.rotation.z = Math.PI / 2;
         visual.add(pod);
-        materials.push({ material: pod.material, activeOpacity: 0.92, idleOpacity: 0.46 });
+        materials.push({ material: pod.material, activeOpacity: 0.96, idleOpacity: 0.68 });
       }
     } else if (index === 2) {
       const tower = new THREE.Mesh(new THREE.BoxGeometry(0.36, 0.92, 0.36), structureMaterial.clone());
@@ -636,15 +575,15 @@ const sceneModules = societyModules.map(({ number, icon, shortTitle, title, text
       roof.rotation.y = Math.PI / 4;
       visual.add(tower, roof);
       materials.push(
-        { material: tower.material, activeOpacity: 0.92, idleOpacity: 0.46 },
-        { material: roof.material, activeOpacity: 0.88, idleOpacity: 0.36 }
+        { material: tower.material, activeOpacity: 0.96, idleOpacity: 0.68 },
+        { material: roof.material, activeOpacity: 0.9, idleOpacity: 0.5 }
       );
     } else if (index === 3) {
       for (let rack = 0; rack < 4; rack += 1) {
         const unit = new THREE.Mesh(new THREE.BoxGeometry(0.46, 0.1, 0.34), structureMaterial.clone());
         unit.position.y = -0.02 + rack * 0.16;
         visual.add(unit);
-        materials.push({ material: unit.material, activeOpacity: 0.92, idleOpacity: 0.46 });
+        materials.push({ material: unit.material, activeOpacity: 0.96, idleOpacity: 0.68 });
       }
     } else {
       const tower = new THREE.Mesh(new THREE.CylinderGeometry(0.18, 0.28, 0.92, 5), structureMaterial.clone());
@@ -653,23 +592,10 @@ const sceneModules = societyModules.map(({ number, icon, shortTitle, title, text
       crown.position.y = 0.76;
       visual.add(tower, crown);
       materials.push(
-        { material: tower.material, activeOpacity: 0.92, idleOpacity: 0.46 },
-        { material: crown.material, activeOpacity: 0.88, idleOpacity: 0.36 }
+        { material: tower.material, activeOpacity: 0.96, idleOpacity: 0.68 },
+        { material: crown.material, activeOpacity: 0.9, idleOpacity: 0.5 }
       );
     }
-
-    const iconPlate = new THREE.Sprite(
-      new THREE.SpriteMaterial({
-        map: createNodeIconTexture(THREE, module.icon, color),
-        transparent: true,
-        opacity: 0.78,
-        depthWrite: false
-      })
-    );
-    iconPlate.position.set(0, 0.52, 0.26);
-    iconPlate.scale.set(0.62, 0.62, 1);
-    visual.add(iconPlate);
-    materials.push({ material: iconPlate.material, activeOpacity: 0.92, idleOpacity: 0.42 });
 
     const glow = new THREE.Sprite(
       new THREE.SpriteMaterial({
@@ -698,16 +624,18 @@ const sceneModules = societyModules.map(({ number, icon, shortTitle, title, text
     group.add(beacon);
 
     const panel = new THREE.Mesh(
-      new THREE.PlaneGeometry(2.42, 0.72),
+      new THREE.PlaneGeometry(2.68, 0.84),
       new THREE.MeshBasicMaterial({
-        color: 0x081a29,
+        color: 0x123348,
         transparent: true,
-        opacity: 0.12,
+        opacity: 0.28,
         side: THREE.DoubleSide,
+        depthTest: false,
         depthWrite: false
       })
     );
-    panel.position.set(0, -0.82, 0.18);
+    panel.position.set(0, -1.04, 0.42);
+    panel.renderOrder = 16;
     group.add(panel);
 
     const label = new THREE.Sprite(
@@ -715,11 +643,13 @@ const sceneModules = societyModules.map(({ number, icon, shortTitle, title, text
         map: createLabelTexture(THREE, module.number, module.shortTitle, color),
         transparent: true,
         opacity: 0.56,
+        depthTest: false,
         depthWrite: false
       })
     );
-    label.position.set(0, -0.82, 0.28);
-    label.scale.set(2.38, 0.72, 1);
+    label.position.set(0, -1.04, 0.52);
+    label.scale.set(2.62, 0.84, 1);
+    label.renderOrder = 18;
     group.add(label);
 
     const light = new THREE.PointLight(color, 0.18, 3.2);
@@ -732,11 +662,11 @@ const sceneModules = societyModules.map(({ number, icon, shortTitle, title, text
   function createDetailCard(THREE, module, color, index, total, presenter, portraitImage) {
     const group = new THREE.Group();
     const backing = new THREE.Mesh(
-      new THREE.BoxGeometry(5.95, 4.42, 0.12),
+      new THREE.BoxGeometry(5.82, 4.3, 0.05),
       new THREE.MeshBasicMaterial({
-        color: 0x071523,
+        color: 0x26566a,
         transparent: true,
-        opacity: 0.74,
+        opacity: 0.16,
         depthTest: false,
         depthWrite: false
       })
@@ -748,7 +678,7 @@ const sceneModules = societyModules.map(({ number, icon, shortTitle, title, text
       new THREE.MeshBasicMaterial({
         map: createDetailCardTexture(THREE, module, color, index, total, presenter, portraitImage),
         transparent: true,
-        opacity: 0.98,
+        opacity: 0.94,
         depthTest: false,
         depthWrite: false
       })
@@ -836,19 +766,19 @@ const sceneModules = societyModules.map(({ number, icon, shortTitle, title, text
     const ctx = canvas.getContext('2d');
     const accent = `#${color.toString(16).padStart(6, '0')}`;
     const panelGradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
-    panelGradient.addColorStop(0, 'rgba(11, 31, 48, 0.95)');
-    panelGradient.addColorStop(0.55, 'rgba(14, 45, 60, 0.74)');
-    panelGradient.addColorStop(1, 'rgba(6, 16, 30, 0.9)');
+    panelGradient.addColorStop(0, 'rgba(28, 73, 91, 0.88)');
+    panelGradient.addColorStop(0.55, 'rgba(18, 62, 78, 0.68)');
+    panelGradient.addColorStop(1, 'rgba(13, 42, 58, 0.74)');
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.fillStyle = panelGradient;
     roundRect(ctx, 28, 28, 1224, 904, 34);
     ctx.fill();
-    ctx.strokeStyle = 'rgba(125, 227, 239, 0.58)';
-    ctx.lineWidth = 3;
+    ctx.strokeStyle = 'rgba(177, 246, 255, 0.46)';
+    ctx.lineWidth = 2;
     ctx.stroke();
 
-    ctx.fillStyle = 'rgba(125, 227, 239, 0.1)';
+    ctx.fillStyle = 'rgba(177, 246, 255, 0.08)';
     roundRect(ctx, 52, 52, 1176, 856, 26);
     ctx.fill();
 
@@ -864,7 +794,7 @@ const sceneModules = societyModules.map(({ number, icon, shortTitle, title, text
     ctx.fillText(`/${String(total).padStart(2, '0')}`, 1200, 124);
     ctx.textAlign = 'left';
 
-    ctx.fillStyle = 'rgba(255, 255, 255, 0.08)';
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.12)';
     roundRect(ctx, 86, 170, 430, 116, 22);
     ctx.fill();
     if (portraitImage?.complete) {
@@ -907,7 +837,7 @@ const sceneModules = societyModules.map(({ number, icon, shortTitle, title, text
     ctx.font = '950 68px "PingFang SC", "Microsoft YaHei", sans-serif';
     drawWrappedText(ctx, module.title, 270, 438, 860, 72, 2);
 
-    ctx.fillStyle = 'rgba(255, 255, 255, 0.82)';
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.86)';
     ctx.font = '750 39px "PingFang SC", "Microsoft YaHei", sans-serif';
     drawWrappedText(ctx, module.text, 86, 596, 1080, 58, 4);
 
@@ -919,7 +849,7 @@ const sceneModules = societyModules.map(({ number, icon, shortTitle, title, text
       tagX += width + 20;
     });
 
-    ctx.strokeStyle = 'rgba(125, 227, 239, 0.22)';
+    ctx.strokeStyle = 'rgba(177, 246, 255, 0.24)';
     ctx.lineWidth = 2;
     ctx.beginPath();
     ctx.moveTo(86, 874);
@@ -1023,17 +953,17 @@ const sceneModules = societyModules.map(({ number, icon, shortTitle, title, text
     const ctx = canvas.getContext('2d');
     const accent = `#${color.toString(16).padStart(6, '0')}`;
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.fillStyle = 'rgba(6, 16, 30, 0.78)';
-    ctx.strokeStyle = 'rgba(125, 227, 239, 0.66)';
+    ctx.fillStyle = 'rgba(23, 59, 78, 0.86)';
+    ctx.strokeStyle = 'rgba(199, 247, 255, 0.78)';
     ctx.lineWidth = 3;
     roundRect(ctx, 10, 10, 492, 164, 18);
     ctx.fill();
     ctx.stroke();
     ctx.fillStyle = accent;
-    ctx.font = '700 30px "PingFang SC", "Microsoft YaHei", sans-serif';
+    ctx.font = '850 32px "PingFang SC", "Microsoft YaHei", sans-serif';
     ctx.fillText(number, 38, 66);
     ctx.fillStyle = '#ffffff';
-    ctx.font = '900 48px "PingFang SC", "Microsoft YaHei", sans-serif';
+    ctx.font = '950 50px "PingFang SC", "Microsoft YaHei", sans-serif';
     ctx.fillText(title, 38, 128);
     const texture = new THREE.CanvasTexture(canvas);
     texture.colorSpace = THREE.SRGBColorSpace;
@@ -1064,38 +994,6 @@ const sceneModules = societyModules.map(({ number, icon, shortTitle, title, text
     ctx.fillStyle = 'rgba(255, 255, 255, 0.78)';
     ctx.font = '800 25px "PingFang SC", "Microsoft YaHei", sans-serif';
     ctx.fillText(subtitle, 360, 124);
-    const texture = new THREE.CanvasTexture(canvas);
-    texture.colorSpace = THREE.SRGBColorSpace;
-    return texture;
-  }
-
-  function createNodeIconTexture(THREE, icon, color) {
-    const canvas = document.createElement('canvas');
-    canvas.width = 256;
-    canvas.height = 256;
-    const ctx = canvas.getContext('2d');
-    const accent = `#${color.toString(16).padStart(6, '0')}`;
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    const gradient = ctx.createRadialGradient(128, 128, 10, 128, 128, 118);
-    gradient.addColorStop(0, 'rgba(255, 255, 255, 0.9)');
-    gradient.addColorStop(0.42, accent);
-    gradient.addColorStop(1, 'rgba(6, 16, 30, 0)');
-    ctx.fillStyle = gradient;
-    ctx.beginPath();
-    ctx.arc(128, 128, 118, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.strokeStyle = 'rgba(255, 255, 255, 0.72)';
-    ctx.lineWidth = 5;
-    ctx.beginPath();
-    ctx.arc(128, 128, 72, 0, Math.PI * 2);
-    ctx.stroke();
-    ctx.fillStyle = '#06101e';
-    ctx.font = icon.length > 1
-      ? '950 66px "PingFang SC", "Microsoft YaHei", sans-serif'
-      : '950 88px "PingFang SC", "Microsoft YaHei", sans-serif';
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    ctx.fillText(icon, 128, 132);
     const texture = new THREE.CanvasTexture(canvas);
     texture.colorSpace = THREE.SRGBColorSpace;
     return texture;
@@ -1152,50 +1050,4 @@ const sceneModules = societyModules.map(({ number, icon, shortTitle, title, text
     terrainLayer.add(grid);
   }
 
-  function createFlowParticles(THREE, links, count) {
-    const particles = [];
-    const geometry = new THREE.SphereGeometry(0.036, 18, 12);
-    const colors = [0xf3d98a, 0x7de3ef, 0x74f0a7];
-
-    for (let index = 0; index < count; index += 1) {
-      const link = links[index % links.length];
-      const mesh = new THREE.Mesh(
-        geometry,
-        new THREE.MeshBasicMaterial({
-          color: colors[index % colors.length],
-          transparent: true,
-          opacity: 0.56,
-          depthWrite: false,
-          blending: THREE.AdditiveBlending
-        })
-      );
-      particles.push({
-        mesh,
-        curve: link.curve,
-        moduleIndex: link.moduleIndex,
-        offset: index / count,
-        speed: 0.038 + (index % 8) * 0.005,
-        baseScale: 0.72 + (index % 5) * 0.07
-      });
-    }
-    return particles;
-  }
-
-  function createStars(THREE) {
-    const geometry = new THREE.BufferGeometry();
-    const positions = [];
-    for (let i = 0; i < 360; i += 1) {
-      positions.push((Math.random() - 0.5) * 38, Math.random() * 18 - 1.5, (Math.random() - 0.5) * 28);
-    }
-    geometry.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
-    return new THREE.Points(
-      geometry,
-      new THREE.PointsMaterial({
-        color: 0x7de3ef,
-        size: 0.035,
-        transparent: true,
-        opacity: 0.48
-      })
-    );
-  }
 </script>
