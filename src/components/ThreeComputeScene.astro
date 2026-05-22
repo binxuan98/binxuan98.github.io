@@ -86,7 +86,14 @@ const sceneModules = societyModules.map(({ number, icon, shortTitle, title, text
     stage.position.set(0, 0.18, 1.45);
     stage.scale.setScalar(1.12);
 
-    const palette = [0x7de3ef, 0xf3d98a, 0x74f0a7, 0xaec7ff, 0xffcc8a];
+    const palette = [0x7de3ef, 0xf3d98a, 0x74f0a7, 0xaec7ff, 0xffb37a];
+    const moduleThemes = [
+      { body: 0x5f9eac, panel: 0x173e52, accent: 0x7de3ef, warm: 0xf3d98a },
+      { body: 0x78a86d, panel: 0x223f35, accent: 0x74f0a7, warm: 0xf3d98a },
+      { body: 0x7c83bd, panel: 0x283357, accent: 0xaec7ff, warm: 0xf3d98a },
+      { body: 0xbe8756, panel: 0x493522, accent: 0xffb37a, warm: 0x7de3ef },
+      { body: 0x4a9b85, panel: 0x173f38, accent: 0x74f0a7, warm: 0x7de3ef }
+    ];
     const moduleObjects = [];
     const radialLinks = [];
     const orbitRadius = 5.05;
@@ -103,7 +110,8 @@ const sceneModules = societyModules.map(({ number, icon, shortTitle, title, text
         0.58 + Math.sin(index * 1.7) * 0.18,
         Math.sin(angle) * orbitRadius * 0.72
       );
-      const moduleObject = createModulePod(THREE, module, index, palette[index % palette.length]);
+      const theme = moduleThemes[index % moduleThemes.length];
+      const moduleObject = createModulePod(THREE, module, index, palette[index % palette.length], theme);
       moduleObject.group.position.copy(position);
       moduleObject.group.lookAt(hub.position);
       moduleLayer.add(moduleObject.group);
@@ -131,8 +139,8 @@ const sceneModules = societyModules.map(({ number, icon, shortTitle, title, text
     createTerrain(THREE, terrainLayer);
 
     const detailCard = createDetailCard(THREE, modules[0], palette[0], 0, modules.length, presenter, portraitImage);
-    detailCard.group.position.set(5.15, 2.08, 5.95);
-    detailCard.group.rotation.set(-0.02, -0.2, 0.006);
+    detailCard.group.position.set(5.22, 2.08, 5.95);
+    detailCard.group.rotation.set(-0.018, -0.14, 0.005);
     scene.add(detailCard.group);
 
     const signalField = createSignalField(THREE);
@@ -201,14 +209,14 @@ const sceneModules = societyModules.map(({ number, icon, shortTitle, title, text
       moduleObjects.forEach((moduleObject, index) => {
         const isActive = index === activeIndex;
         const pulse = 1 + Math.sin(elapsed * 2.2 + index) * 0.04;
-        const baseScale = isActive ? 1.18 : 0.76;
+        const baseScale = isActive ? 1.14 : 0.82;
         moduleObject.group.scale.setScalar(baseScale * pulse);
-        moduleObject.glow.material.opacity = isActive ? 0.5 : 0.08;
-        moduleObject.beacon.material.opacity = isActive ? 0.68 : 0.1;
-        moduleObject.label.material.opacity = isActive ? 0.88 : 0.12;
-        moduleObject.panel.material.opacity = isActive ? 0.42 : 0.06;
-        moduleObject.light.intensity = isActive ? 0.88 : 0.18;
-        moduleObject.visual.rotation.y += isActive ? 0.006 : 0.0018;
+        moduleObject.glow.material.opacity = isActive ? 0.28 : 0.035;
+        moduleObject.beacon.material.opacity = isActive ? 0.46 : 0.055;
+        moduleObject.label.material.opacity = isActive ? 0.96 : 0.24;
+        moduleObject.panel.material.opacity = isActive ? 0.58 : 0.14;
+        moduleObject.light.intensity = isActive ? 1.12 : 0.24;
+        moduleObject.visual.rotation.y += isActive ? 0.0042 : 0.0014;
         moduleObject.materials.forEach((entry) => {
           entry.material.opacity = isActive ? entry.activeOpacity : entry.idleOpacity;
         });
@@ -225,7 +233,7 @@ const sceneModules = societyModules.map(({ number, icon, shortTitle, title, text
         ? 1
         : Math.min(1, Math.max(0, (elapsed - activeStartedAt) / moduleDuration));
       detailCard.group.position.y = 2.05 + Math.sin(elapsed * 0.7) * 0.055;
-      detailCard.group.rotation.y = -0.2 + Math.sin(elapsed * 0.24) * 0.012;
+      detailCard.group.rotation.y = -0.14 + Math.sin(elapsed * 0.24) * 0.008;
       detailCard.group.rotation.x = -0.02 + Math.sin(elapsed * 0.18) * 0.008;
       detailCard.updateProgress(progress);
 
@@ -275,14 +283,37 @@ const sceneModules = societyModules.map(({ number, icon, shortTitle, title, text
 
   function createHub(THREE) {
     const group = new THREE.Group();
+    const addBox = (width, height, depth, material, x, y, z, rotationY = 0) => {
+      const mesh = new THREE.Mesh(new THREE.BoxGeometry(width, height, depth), material);
+      mesh.position.set(x, y, z);
+      mesh.rotation.y = rotationY;
+      group.add(mesh);
+      return mesh;
+    };
+
+    const glassMaterial = new THREE.MeshBasicMaterial({
+      color: 0xc5fbff,
+      transparent: true,
+      opacity: 0.62,
+      depthWrite: false,
+      blending: THREE.AdditiveBlending
+    });
+    const goldMaterial = new THREE.MeshBasicMaterial({
+      color: 0xf3d98a,
+      transparent: true,
+      opacity: 0.48,
+      depthWrite: false,
+      blending: THREE.AdditiveBlending
+    });
+
     const platform = new THREE.Mesh(
       new THREE.BoxGeometry(5.2, 0.18, 3.55),
       new THREE.MeshPhysicalMaterial({
-        color: 0x2e5f73,
+        color: 0x3d7180,
         emissive: 0x12384a,
-        emissiveIntensity: 0.2,
-        metalness: 0.28,
-        roughness: 0.34,
+        emissiveIntensity: 0.18,
+        metalness: 0.34,
+        roughness: 0.29,
         clearcoat: 0.8,
         clearcoatRoughness: 0.18,
         transparent: true,
@@ -305,41 +336,108 @@ const sceneModules = societyModules.map(({ number, icon, shortTitle, title, text
     platformEdge.position.y = -0.53;
     group.add(platformEdge);
 
-    const buildingMaterial = new THREE.MeshPhysicalMaterial({
-      color: 0x4e8295,
-      emissive: 0x17485a,
-      emissiveIntensity: 0.32,
-      metalness: 0.34,
-      roughness: 0.26,
-      clearcoat: 1,
-      clearcoatRoughness: 0.14,
-      transparent: true,
-      opacity: 0.96
+    const upperDeck = addBox(
+      4.66,
+      0.045,
+      2.86,
+      new THREE.MeshPhysicalMaterial({
+        color: 0x8fb4bb,
+        emissive: 0x153b4a,
+        emissiveIntensity: 0.12,
+        metalness: 0.22,
+        roughness: 0.2,
+        clearcoat: 1,
+        clearcoatRoughness: 0.12,
+        transparent: true,
+        opacity: 0.28
+      }),
+      0,
+      -0.505,
+      0
+    );
+    upperDeck.renderOrder = 2;
+
+    [
+      { width: 4.04, depth: 0.035, x: -0.15, z: 1.16, material: goldMaterial, rotation: 0.04 },
+      { width: 3.25, depth: 0.028, x: 0.42, z: -1.18, material: glassMaterial, rotation: -0.04 },
+      { width: 0.035, depth: 2.38, x: -2.05, z: 0, material: glassMaterial, rotation: 0 },
+      { width: 0.035, depth: 1.98, x: 2.16, z: 0.16, material: goldMaterial, rotation: 0 }
+    ].forEach((channel) => {
+      addBox(channel.width, 0.018, channel.depth, channel.material.clone(), channel.x, -0.465, channel.z, channel.rotation);
     });
 
-    const glassMaterial = new THREE.MeshBasicMaterial({
-      color: 0xc5fbff,
+    const buildingMaterials = [
+      new THREE.MeshPhysicalMaterial({
+        color: 0x5d91a1,
+        emissive: 0x17485a,
+        emissiveIntensity: 0.3,
+        metalness: 0.36,
+        roughness: 0.22,
+        clearcoat: 1,
+        clearcoatRoughness: 0.12,
+        transparent: true,
+        opacity: 0.96
+      }),
+      new THREE.MeshPhysicalMaterial({
+        color: 0x7c8d94,
+        emissive: 0x273d43,
+        emissiveIntensity: 0.22,
+        metalness: 0.42,
+        roughness: 0.26,
+        clearcoat: 0.9,
+        clearcoatRoughness: 0.14,
+        transparent: true,
+        opacity: 0.94
+      }),
+      new THREE.MeshPhysicalMaterial({
+        color: 0x8d826d,
+        emissive: 0x42351f,
+        emissiveIntensity: 0.18,
+        metalness: 0.38,
+        roughness: 0.28,
+        clearcoat: 0.78,
+        clearcoatRoughness: 0.16,
+        transparent: true,
+        opacity: 0.94
+      })
+    ];
+
+    const coreMaterial = new THREE.MeshPhysicalMaterial({
+      color: 0x9eb7bd,
+      emissive: 0x1b4854,
+      emissiveIntensity: 0.32,
+      metalness: 0.34,
+      roughness: 0.18,
+      clearcoat: 1,
+      clearcoatRoughness: 0.1,
       transparent: true,
-      opacity: 0.72,
-      depthWrite: false,
-      blending: THREE.AdditiveBlending
+      opacity: 0.92
     });
 
     const buildings = [
-      { x: -1.48, z: -0.68, w: 0.62, h: 1.08, d: 1.18 },
-      { x: -0.62, z: -0.64, w: 0.56, h: 0.86, d: 1.05 },
-      { x: 0.34, z: -0.62, w: 0.72, h: 1.22, d: 1.22 },
-      { x: 1.36, z: -0.58, w: 0.58, h: 0.98, d: 1.08 }
+      { x: -1.48, z: -0.68, w: 0.62, h: 1.08, d: 1.18, material: 0 },
+      { x: -0.62, z: -0.64, w: 0.56, h: 0.86, d: 1.05, material: 1 },
+      { x: 0.34, z: -0.62, w: 0.72, h: 1.22, d: 1.22, material: 0 },
+      { x: 1.36, z: -0.58, w: 0.58, h: 0.98, d: 1.08, material: 2 }
     ];
 
     buildings.forEach((item, buildingIndex) => {
       const building = new THREE.Mesh(
         new THREE.BoxGeometry(item.w, item.h, item.d),
-        buildingMaterial.clone()
+        buildingMaterials[item.material].clone()
       );
       building.position.set(item.x, -0.44 + item.h / 2, item.z);
       building.rotation.y = 0.08;
       group.add(building);
+
+      const roof = new THREE.Mesh(
+        new THREE.BoxGeometry(item.w * 0.72, 0.024, item.d * 0.18),
+        buildingIndex % 2 === 0 ? glassMaterial.clone() : goldMaterial.clone()
+      );
+      roof.position.set(item.x, -0.42 + item.h + 0.02, item.z + item.d * 0.16);
+      roof.rotation.y = 0.08;
+      roof.material.opacity = buildingIndex % 2 === 0 ? 0.48 : 0.34;
+      group.add(roof);
 
       for (let floor = 0; floor < 4; floor += 1) {
         const strip = new THREE.Mesh(
@@ -353,10 +451,34 @@ const sceneModules = societyModules.map(({ number, icon, shortTitle, title, text
       }
     });
 
+    const commandCore = new THREE.Mesh(
+      new THREE.CylinderGeometry(0.2, 0.34, 1.24, 8),
+      coreMaterial
+    );
+    commandCore.position.set(1.72, 0.11, 0.72);
+    commandCore.rotation.y = Math.PI / 8;
+    group.add(commandCore);
+
+    for (let strip = 0; strip < 4; strip += 1) {
+      const angle = strip * Math.PI * 0.5 + Math.PI * 0.25;
+      const lightStrip = new THREE.Mesh(
+        new THREE.BoxGeometry(0.028, 0.92, 0.016),
+        strip % 2 === 0 ? glassMaterial.clone() : goldMaterial.clone()
+      );
+      lightStrip.position.set(
+        commandCore.position.x + Math.cos(angle) * 0.23,
+        0.2,
+        commandCore.position.z + Math.sin(angle) * 0.23
+      );
+      lightStrip.rotation.y = -angle;
+      lightStrip.material.opacity = strip % 2 === 0 ? 0.58 : 0.38;
+      group.add(lightStrip);
+    }
+
     const rackMaterial = new THREE.MeshPhysicalMaterial({
-      color: 0x254e64,
-      emissive: 0x0c3145,
-      emissiveIntensity: 0.3,
+      color: 0x315c66,
+      emissive: 0x0e3440,
+      emissiveIntensity: 0.26,
       metalness: 0.38,
       roughness: 0.3,
       clearcoat: 0.8,
@@ -385,34 +507,17 @@ const sceneModules = societyModules.map(({ number, icon, shortTitle, title, text
       }
     }
 
-    const dispatchTower = new THREE.Mesh(
-      new THREE.CylinderGeometry(0.23, 0.3, 1.42, 6),
-      new THREE.MeshPhysicalMaterial({
-        color: 0x5c8d98,
-        emissive: 0x184b55,
-        emissiveIntensity: 0.24,
-        metalness: 0.34,
-        roughness: 0.28,
-        clearcoat: 1,
-        transparent: true,
-        opacity: 0.92
-      })
-    );
-    dispatchTower.position.set(1.74, 0.12, 0.72);
-    dispatchTower.rotation.y = Math.PI / 6;
-    group.add(dispatchTower);
-
     const towerBeacon = new THREE.Mesh(
-      new THREE.CylinderGeometry(0.018, 0.018, 1.88, 24),
+      new THREE.CylinderGeometry(0.012, 0.012, 1.88, 24),
       new THREE.MeshBasicMaterial({
         color: 0xf3d98a,
         transparent: true,
-        opacity: 0.64,
+        opacity: 0.5,
         depthWrite: false,
         blending: THREE.AdditiveBlending
       })
     );
-    towerBeacon.position.set(1.74, 1.02, 0.72);
+    towerBeacon.position.set(1.72, 1.02, 0.72);
     group.add(towerBeacon);
 
     const cornerBeams = [
@@ -455,6 +560,14 @@ const sceneModules = societyModules.map(({ number, icon, shortTitle, title, text
       );
       unit.position.set(x, -0.41, z);
       group.add(unit);
+
+      const cap = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.09, 0.09, 0.01, 32),
+        glassMaterial.clone()
+      );
+      cap.position.set(x, -0.29, z);
+      cap.material.opacity = 0.22;
+      group.add(cap);
     });
 
     const label = new THREE.Sprite(
@@ -489,9 +602,13 @@ const sceneModules = societyModules.map(({ number, icon, shortTitle, title, text
     return group;
   }
 
-  function createModulePod(THREE, module, index, color) {
+  function createModulePod(THREE, module, index, color, theme = {}) {
     const group = new THREE.Group();
     const materials = [];
+    const bodyColor = theme.body ?? 0x5d8795;
+    const panelColor = theme.panel ?? 0x123348;
+    const accentColor = theme.accent ?? color;
+    const warmColor = theme.warm ?? 0xf3d98a;
     const track = (material, activeOpacity, idleOpacity) => {
       material.transparent = true;
       material.opacity = idleOpacity;
@@ -499,102 +616,159 @@ const sceneModules = societyModules.map(({ number, icon, shortTitle, title, text
       return material;
     };
 
-    const accentMaterial = track(
-      new THREE.MeshBasicMaterial({
-        color,
+    const physical = (options, activeOpacity = 0.96, idleOpacity = 0.68) => track(
+      new THREE.MeshPhysicalMaterial(options),
+      activeOpacity,
+      idleOpacity
+    );
+    const basic = (options, activeOpacity = 0.9, idleOpacity = 0.34) => track(
+      new THREE.MeshBasicMaterial(options),
+      activeOpacity,
+      idleOpacity
+    );
+    const accentMaterial = (activeOpacity = 0.92, idleOpacity = 0.36) => basic(
+      {
+        color: accentColor,
         depthWrite: false,
         blending: THREE.AdditiveBlending
-      }),
-      0.88,
-      0.36
+      },
+      activeOpacity,
+      idleOpacity
     );
-
-    const structureMaterial = track(
-      new THREE.MeshPhysicalMaterial({
-        color: 0x5d8795,
-        emissive: 0x173f4d,
-        emissiveIntensity: 0.28,
-        metalness: 0.34,
-        roughness: 0.28,
-        clearcoat: 0.9,
-        clearcoatRoughness: 0.16
-      }),
-      0.96,
-      0.68
+    const warmMaterial = (activeOpacity = 0.82, idleOpacity = 0.26) => basic(
+      {
+        color: warmColor,
+        depthWrite: false,
+        blending: THREE.AdditiveBlending
+      },
+      activeOpacity,
+      idleOpacity
+    );
+    const structureMaterial = (activeOpacity = 0.98, idleOpacity = 0.72) => physical(
+      {
+        color: bodyColor,
+        emissive: panelColor,
+        emissiveIntensity: 0.22,
+        metalness: 0.42,
+        roughness: 0.24,
+        clearcoat: 1,
+        clearcoatRoughness: 0.14
+      },
+      activeOpacity,
+      idleOpacity
+    );
+    const glassMaterial = (activeOpacity = 0.7, idleOpacity = 0.22) => basic(
+      {
+        color: 0xd8fbff,
+        depthWrite: false,
+        blending: THREE.AdditiveBlending
+      },
+      activeOpacity,
+      idleOpacity
     );
 
     const platform = new THREE.Mesh(
-      new THREE.CylinderGeometry(0.58, 0.7, 0.12, 6),
-      track(
-        new THREE.MeshPhysicalMaterial({
-          color: 0x365f73,
-          emissive: 0x123448,
-          emissiveIntensity: 0.22,
-          metalness: 0.32,
-          roughness: 0.32,
-          clearcoat: 0.8
-        }),
+      new THREE.CylinderGeometry(0.62, 0.76, 0.12, 12),
+      physical(
+        {
+          color: panelColor,
+          emissive: panelColor,
+          emissiveIntensity: 0.2,
+          metalness: 0.36,
+          roughness: 0.28,
+          clearcoat: 0.86,
+          clearcoatRoughness: 0.16
+        },
         0.96,
-        0.7
+        0.72
       )
     );
     platform.position.y = -0.58;
-    platform.rotation.y = Math.PI / 6;
+    platform.rotation.y = Math.PI / 12;
     group.add(platform);
+
+    const topPlate = new THREE.Mesh(
+      new THREE.CylinderGeometry(0.55, 0.59, 0.035, 12),
+      physical(
+        {
+          color: bodyColor,
+          emissive: panelColor,
+          emissiveIntensity: 0.12,
+          metalness: 0.3,
+          roughness: 0.2,
+          clearcoat: 1,
+          clearcoatRoughness: 0.1
+        },
+        0.9,
+        0.46
+      )
+    );
+    topPlate.position.y = -0.49;
+    topPlate.rotation.y = Math.PI / 12;
+    group.add(topPlate);
 
     const visual = new THREE.Group();
     visual.position.y = 0.16;
     group.add(visual);
 
+    const addBox = (parent, width, height, depth, x, y, z, material, rotationY = 0, rotationZ = 0) => {
+      const mesh = new THREE.Mesh(new THREE.BoxGeometry(width, height, depth), material);
+      mesh.position.set(x, y, z);
+      mesh.rotation.y = rotationY;
+      mesh.rotation.z = rotationZ;
+      parent.add(mesh);
+      return mesh;
+    };
+    const addCylinder = (parent, radiusTop, radiusBottom, height, segments, x, y, z, material, rotation = {}) => {
+      const mesh = new THREE.Mesh(new THREE.CylinderGeometry(radiusTop, radiusBottom, height, segments), material);
+      mesh.position.set(x, y, z);
+      mesh.rotation.x = rotation.x ?? 0;
+      mesh.rotation.y = rotation.y ?? 0;
+      mesh.rotation.z = rotation.z ?? 0;
+      parent.add(mesh);
+      return mesh;
+    };
+
     if (index === 0) {
-      const left = new THREE.Mesh(new THREE.BoxGeometry(0.12, 0.7, 0.16), structureMaterial.clone());
-      const right = left.clone();
-      const top = new THREE.Mesh(new THREE.BoxGeometry(0.7, 0.12, 0.16), structureMaterial.clone());
-      left.position.set(-0.28, 0.08, 0);
-      right.position.set(0.28, 0.08, 0);
-      top.position.set(0, 0.48, 0);
-      visual.add(left, right, top);
-      materials.push(
-        { material: left.material, activeOpacity: 0.96, idleOpacity: 0.68 },
-        { material: right.material, activeOpacity: 0.96, idleOpacity: 0.68 },
-        { material: top.material, activeOpacity: 0.96, idleOpacity: 0.68 }
-      );
+      addBox(visual, 0.78, 0.055, 0.42, 0, -0.16, 0, structureMaterial(0.95, 0.56), 0.04);
+      addBox(visual, 0.1, 0.72, 0.14, -0.3, 0.08, 0, structureMaterial(), 0.04);
+      addBox(visual, 0.1, 0.72, 0.14, 0.3, 0.08, 0, structureMaterial(), 0.04);
+      addBox(visual, 0.72, 0.1, 0.16, 0, 0.48, 0, structureMaterial(), 0.04);
+      addBox(visual, 0.44, 0.31, 0.028, 0, 0.14, 0.24, glassMaterial(0.78, 0.24), 0.04);
+      addBox(visual, 0.34, 0.024, 0.035, -0.02, 0.32, 0.265, accentMaterial(0.95, 0.34), 0.04);
+      addBox(visual, 0.58, 0.026, 0.026, 0, 0.56, 0.09, warmMaterial(0.76, 0.24), 0.04);
     } else if (index === 1) {
+      addBox(visual, 0.88, 0.06, 0.34, 0, -0.17, 0, structureMaterial(0.94, 0.52), -0.02);
       for (let item = 0; item < 3; item += 1) {
-        const pod = new THREE.Mesh(new THREE.CylinderGeometry(0.13, 0.13, 0.62, 28), structureMaterial.clone());
-        pod.position.set(-0.24 + item * 0.24, 0.12, 0);
-        pod.rotation.z = Math.PI / 2;
-        visual.add(pod);
-        materials.push({ material: pod.material, activeOpacity: 0.96, idleOpacity: 0.68 });
+        const x = -0.28 + item * 0.28;
+        addCylinder(visual, 0.12, 0.14, 0.56, 28, x, 0.06, 0, structureMaterial(), { z: Math.PI / 2 });
+        addBox(visual, 0.035, 0.23, 0.035, x, 0.07, 0.2, accentMaterial(0.9, 0.3));
+        addBox(visual, 0.14, 0.018, 0.032, x, 0.24, 0.02, warmMaterial(0.7, 0.22));
       }
+      addBox(visual, 0.66, 0.026, 0.026, 0, 0.42, 0.08, glassMaterial(0.72, 0.2));
     } else if (index === 2) {
-      const tower = new THREE.Mesh(new THREE.BoxGeometry(0.36, 0.92, 0.36), structureMaterial.clone());
-      const roof = new THREE.Mesh(new THREE.CylinderGeometry(0.24, 0.3, 0.14, 4), accentMaterial.clone());
-      tower.position.y = 0.2;
-      roof.position.y = 0.73;
-      roof.rotation.y = Math.PI / 4;
-      visual.add(tower, roof);
-      materials.push(
-        { material: tower.material, activeOpacity: 0.96, idleOpacity: 0.68 },
-        { material: roof.material, activeOpacity: 0.9, idleOpacity: 0.5 }
-      );
+      addBox(visual, 0.4, 0.82, 0.36, -0.08, 0.18, 0, structureMaterial(), 0.06);
+      addBox(visual, 0.28, 0.44, 0.28, 0.28, -0.02, 0.02, structureMaterial(0.94, 0.58), 0.06);
+      addCylinder(visual, 0.24, 0.32, 0.13, 4, -0.08, 0.66, 0, accentMaterial(0.9, 0.34), { y: Math.PI / 4 });
+      addBox(visual, 0.018, 0.72, 0.018, 0.18, 0.38, 0.22, warmMaterial(0.72, 0.18));
+      addBox(visual, 0.46, 0.026, 0.026, -0.08, 0.06, 0.21, glassMaterial(0.78, 0.22), 0.06);
+      addBox(visual, 0.46, 0.026, 0.026, -0.08, 0.28, 0.21, glassMaterial(0.78, 0.22), 0.06);
     } else if (index === 3) {
+      addBox(visual, 0.82, 0.06, 0.48, 0, -0.18, 0, structureMaterial(0.94, 0.52));
       for (let rack = 0; rack < 4; rack += 1) {
-        const unit = new THREE.Mesh(new THREE.BoxGeometry(0.46, 0.1, 0.34), structureMaterial.clone());
-        unit.position.y = -0.02 + rack * 0.16;
-        visual.add(unit);
-        materials.push({ material: unit.material, activeOpacity: 0.96, idleOpacity: 0.68 });
+        addBox(visual, 0.52, 0.1, 0.34, -0.08, -0.02 + rack * 0.15, 0, structureMaterial(), -0.04);
+        addBox(visual, 0.33, 0.015, 0.018, -0.08, 0.018 + rack * 0.15, 0.18, rack % 2 === 0 ? accentMaterial(0.96, 0.34) : warmMaterial(0.76, 0.22), -0.04);
       }
+      addBox(visual, 0.18, 0.42, 0.1, 0.34, 0.14, -0.1, glassMaterial(0.72, 0.2), -0.08);
+      addBox(visual, 0.22, 0.03, 0.42, 0.28, -0.06, 0.1, warmMaterial(0.72, 0.18), -0.08);
     } else {
-      const tower = new THREE.Mesh(new THREE.CylinderGeometry(0.18, 0.28, 0.92, 5), structureMaterial.clone());
-      const crown = new THREE.Mesh(new THREE.CylinderGeometry(0.1, 0.16, 0.18, 5), accentMaterial.clone());
-      tower.position.y = 0.2;
-      crown.position.y = 0.76;
-      visual.add(tower, crown);
-      materials.push(
-        { material: tower.material, activeOpacity: 0.96, idleOpacity: 0.68 },
-        { material: crown.material, activeOpacity: 0.9, idleOpacity: 0.5 }
-      );
+      addBox(visual, 0.86, 0.06, 0.36, 0, -0.17, 0, structureMaterial(0.94, 0.52), 0.02);
+      addCylinder(visual, 0.16, 0.26, 0.72, 8, 0, 0.18, 0, structureMaterial(), { y: Math.PI / 8 });
+      addCylinder(visual, 0.08, 0.13, 0.18, 8, 0, 0.62, 0, accentMaterial(0.92, 0.3), { y: Math.PI / 8 });
+      [-0.28, 0, 0.28].forEach((x, bladeIndex) => {
+        addBox(visual, 0.07, 0.48 + bladeIndex * 0.08, 0.05, x, 0.08 + bladeIndex * 0.04, 0.22, bladeIndex === 1 ? warmMaterial(0.76, 0.22) : glassMaterial(0.68, 0.18), 0.08);
+      });
+      addBox(visual, 0.64, 0.024, 0.026, 0, 0.44, 0.14, accentMaterial(0.9, 0.28), 0.08);
     }
 
     const glow = new THREE.Sprite(
@@ -606,14 +780,14 @@ const sceneModules = societyModules.map(({ number, icon, shortTitle, title, text
         blending: THREE.AdditiveBlending
       })
     );
-    glow.scale.set(1.95, 1.95, 1);
-    glow.position.y = -0.28;
+    glow.scale.set(1.65, 0.96, 1);
+    glow.position.y = -0.42;
     group.add(glow);
 
     const beacon = new THREE.Mesh(
-      new THREE.CylinderGeometry(0.03, 0.05, 1.65, 28),
+      new THREE.CylinderGeometry(0.014, 0.018, 1.38, 24),
       new THREE.MeshBasicMaterial({
-        color,
+        color: accentColor,
         transparent: true,
         opacity: 0.1,
         depthWrite: false,
@@ -626,7 +800,7 @@ const sceneModules = societyModules.map(({ number, icon, shortTitle, title, text
     const panel = new THREE.Mesh(
       new THREE.PlaneGeometry(2.68, 0.84),
       new THREE.MeshBasicMaterial({
-        color: 0x123348,
+        color: panelColor,
         transparent: true,
         opacity: 0.28,
         side: THREE.DoubleSide,
@@ -652,7 +826,7 @@ const sceneModules = societyModules.map(({ number, icon, shortTitle, title, text
     label.renderOrder = 18;
     group.add(label);
 
-    const light = new THREE.PointLight(color, 0.18, 3.2);
+    const light = new THREE.PointLight(accentColor, 0.18, 3.2);
     light.position.set(0, 0.2, 0);
     group.add(light);
 
@@ -666,7 +840,7 @@ const sceneModules = societyModules.map(({ number, icon, shortTitle, title, text
       new THREE.MeshBasicMaterial({
         color: 0x26566a,
         transparent: true,
-        opacity: 0.16,
+        opacity: 0.2,
         depthTest: false,
         depthWrite: false
       })
@@ -678,7 +852,7 @@ const sceneModules = societyModules.map(({ number, icon, shortTitle, title, text
       new THREE.MeshBasicMaterial({
         map: createDetailCardTexture(THREE, module, color, index, total, presenter, portraitImage),
         transparent: true,
-        opacity: 0.94,
+        opacity: 0.98,
         depthTest: false,
         depthWrite: false
       })
@@ -948,23 +1122,44 @@ const sceneModules = societyModules.map(({ number, icon, shortTitle, title, text
 
   function createLabelTexture(THREE, number, title, color) {
     const canvas = document.createElement('canvas');
-    canvas.width = 512;
-    canvas.height = 184;
+    canvas.width = 768;
+    canvas.height = 240;
     const ctx = canvas.getContext('2d');
     const accent = `#${color.toString(16).padStart(6, '0')}`;
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.fillStyle = 'rgba(23, 59, 78, 0.86)';
-    ctx.strokeStyle = 'rgba(199, 247, 255, 0.78)';
+
+    const panelGradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+    panelGradient.addColorStop(0, 'rgba(38, 88, 104, 0.92)');
+    panelGradient.addColorStop(0.52, 'rgba(20, 58, 77, 0.88)');
+    panelGradient.addColorStop(1, 'rgba(10, 30, 46, 0.9)');
+    ctx.fillStyle = panelGradient;
+    ctx.strokeStyle = 'rgba(213, 250, 255, 0.72)';
     ctx.lineWidth = 3;
-    roundRect(ctx, 10, 10, 492, 164, 18);
+    roundRect(ctx, 14, 14, 740, 212, 24);
     ctx.fill();
     ctx.stroke();
+
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.08)';
+    roundRect(ctx, 32, 34, 704, 172, 18);
+    ctx.fill();
+
     ctx.fillStyle = accent;
-    ctx.font = '850 32px "PingFang SC", "Microsoft YaHei", sans-serif';
-    ctx.fillText(number, 38, 66);
+    roundRect(ctx, 46, 168, 676, 8, 4);
+    ctx.fill();
+
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.13)';
+    roundRect(ctx, 48, 58, 154, 74, 16);
+    ctx.fill();
+    ctx.fillStyle = accent;
+    ctx.font = '900 38px "PingFang SC", "Microsoft YaHei", sans-serif';
+    ctx.fillText(number, 74, 106);
     ctx.fillStyle = '#ffffff';
-    ctx.font = '950 50px "PingFang SC", "Microsoft YaHei", sans-serif';
-    ctx.fillText(title, 38, 128);
+    ctx.font = '950 58px "PingFang SC", "Microsoft YaHei", sans-serif';
+    ctx.fillText(title, 226, 112);
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.48)';
+    ctx.font = '800 22px "PingFang SC", "Microsoft YaHei", sans-serif';
+    ctx.fillText('QYVC AI Society', 226, 148);
+
     const texture = new THREE.CanvasTexture(canvas);
     texture.colorSpace = THREE.SRGBColorSpace;
     return texture;
