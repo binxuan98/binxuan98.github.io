@@ -25,7 +25,7 @@ import { societyMetrics } from '../data/society';
           <strong>庆阳枢纽</strong>
         </h1>
         <p class="compute-hero-lead">{qingyangStory.subtitle}</p>
-        <p class="compute-hero-proof">{qingyangStory.proof}</p>
+        {qingyangStory.proof && <p class="compute-hero-proof">{qingyangStory.proof}</p>}
         <MetricGrid items={qingyangMetrics} className="compute-hero-metrics" />
       </div>
 
@@ -33,6 +33,8 @@ import { societyMetrics } from '../data/society';
         <span>向下进入</span>
         <strong>智研社人才培养沙盘</strong>
       </a>
+
+      <p class="compute-hero-bottomline">{qingyangStory.bottomline}</p>
     </div>
   </section>
 
@@ -60,7 +62,7 @@ import { societyMetrics } from '../data/society';
       <SocietyCarousel />
 
       <p class="society-mission">
-        为建设繁荣富庶、产业崛起、活力迸发、绿色转型、幸福美好新庆阳贡献职教力量。
+        为建设繁荣富庶、产业崛起、活力迸发、绿色转型、幸福美好新庆阳贡献职教力量
       </p>
     </div>
   </section>

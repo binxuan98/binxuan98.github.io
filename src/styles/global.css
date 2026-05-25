@@ -727,12 +727,14 @@ button {
   z-index: 2;
   display: grid;
   grid-template-columns: repeat(12, minmax(0, 1fr));
+  grid-template-rows: 1fr auto;
   min-height: 100svh;
   padding: clamp(28px, 3vw, 46px);
 }
 
 .compute-hero-copy {
   grid-column: 1 / 6;
+  grid-row: 1;
   align-self: center;
   max-width: 760px;
 }
@@ -827,6 +829,7 @@ button {
 
 .screen-scroll-cue {
   grid-column: 7 / 13;
+  grid-row: 1;
   align-self: end;
   justify-self: end;
   display: inline-grid;
@@ -851,6 +854,30 @@ button {
 .screen-scroll-cue strong {
   font-size: clamp(18px, 1.35vw, 26px);
   letter-spacing: 0;
+}
+
+.compute-hero-bottomline {
+  position: relative;
+  z-index: 3;
+  grid-column: 1 / -1;
+  grid-row: 2;
+  align-self: end;
+  justify-self: center;
+  width: min(1600px, 100%);
+  margin: 0;
+  padding: 12px 22px;
+  color: #ffe49a;
+  text-align: center;
+  background:
+    linear-gradient(90deg, rgba(6, 16, 30, 0), rgba(6, 16, 30, 0.72) 18%, rgba(6, 16, 30, 0.72) 82%, rgba(6, 16, 30, 0)),
+    linear-gradient(90deg, rgba(243, 217, 138, 0), rgba(243, 217, 138, 0.18) 18%, rgba(243, 217, 138, 0.18) 82%, rgba(243, 217, 138, 0));
+  border-top: 1px solid rgba(243, 217, 138, 0.36);
+  border-bottom: 1px solid rgba(243, 217, 138, 0.2);
+  box-shadow: 0 18px 60px rgba(243, 217, 138, 0.08);
+  font-size: clamp(15px, 0.95vw, 18px);
+  font-weight: 850;
+  line-height: 1.45;
+  text-shadow: 0 10px 30px rgba(243, 217, 138, 0.12);
 }
 
 .society-main {
@@ -1357,8 +1384,10 @@ button {
   }
 
   .compute-hero-copy,
-  .screen-scroll-cue {
+  .screen-scroll-cue,
+  .compute-hero-bottomline {
     grid-column: 1 / -1;
+    grid-row: auto;
     justify-self: stretch;
     max-width: none;
   }
@@ -1497,6 +1526,7 @@ button {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
+  .compute-hero-bottomline,
   .society-mission {
     padding: 10px 12px;
     font-size: clamp(14px, 4vw, 17px);
