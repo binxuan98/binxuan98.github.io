@@ -534,6 +534,20 @@ button {
   background: #fff;
 }
 
+.society-preview-actions {
+  display: flex;
+  flex: 0 0 auto;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+.society-preview-actions .button-secondary {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.28);
+}
+
 .contact-panel {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
@@ -1514,6 +1528,11 @@ button {
   .society-preview {
     align-items: flex-start;
     flex-direction: column;
+  }
+
+  .society-preview-actions {
+    justify-content: flex-start;
+    width: 100%;
   }
 
   .site-footer {
