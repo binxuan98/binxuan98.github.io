@@ -4,6 +4,36 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>数字信息系服务庆阳算力产业</title>
+    <link rel="preload" as="image" href="assets/qingyang-top-banner-gpt2.webp" fetchpriority="high" />
+    <link rel="preload" as="image" href="assets/qingyang-title-art.webp" fetchpriority="high" />
+    <link rel="preload" as="image" href="assets/section-industry-gpt2.webp" />
+    <link rel="preload" as="image" href="assets/section-learning-gpt2.webp" />
+    <link rel="preload" as="image" href="assets/section-research-gpt2.webp" />
+    <script>
+      window.addEventListener("DOMContentLoaded", () => {
+        const sources = new Set([
+          "assets/qingyang-top-banner-gpt2.webp",
+          "assets/qingyang-title-art.webp",
+          "assets/section-industry-gpt2.webp",
+          "assets/section-learning-gpt2.webp",
+          "assets/section-research-gpt2.webp"
+        ]);
+
+        document.querySelectorAll("img").forEach((image, index) => {
+          image.loading = "eager";
+          image.decoding = "async";
+          if (index < 16) image.fetchPriority = "high";
+          const source = image.getAttribute("src");
+          if (source) sources.add(source);
+        });
+
+        sources.forEach((source) => {
+          const preload = new Image();
+          preload.decoding = "async";
+          preload.src = source;
+        });
+      });
+    </script>
     <style>
       :root {
         --bg: #faf9f5;
@@ -69,7 +99,7 @@
         content: "";
         background:
           linear-gradient(180deg, rgba(250, 249, 245, 0), rgba(250, 249, 245, 0.1) 58%, rgba(250, 249, 245, 0.82) 100%),
-          url("assets/qingyang-top-banner-gpt2.png") center center / 100% 100% no-repeat;
+          url("assets/qingyang-top-banner-gpt2.webp") center center / 100% 100% no-repeat;
         pointer-events: none;
       }
 
@@ -179,15 +209,15 @@
       }
 
       .section-industry {
-        --section-art: url("assets/section-industry-gpt2.png");
+        --section-art: url("assets/section-industry-gpt2.webp");
       }
 
       .section-learning {
-        --section-art: url("assets/section-learning-gpt2.png");
+        --section-art: url("assets/section-learning-gpt2.webp");
       }
 
       .section-research {
-        --section-art: url("assets/section-research-gpt2.png");
+        --section-art: url("assets/section-research-gpt2.webp");
       }
 
       .section h2 {
@@ -553,7 +583,7 @@
         <header class="headline">
           <div class="headline-banner">
             <h1 class="sr-only">高天厚土 福地庆阳</h1>
-            <img class="title-art" src="assets/qingyang-title-art.png" alt="高天厚土 福地庆阳" />
+            <img loading="eager" decoding="async" class="title-art" src="assets/qingyang-title-art.webp" alt="高天厚土 福地庆阳" />
             <p>
               数字信息系围绕“东数西算”枢纽，把本地产业的<mark>算力运维</mark>、<mark>数据治理</mark>、
               <mark>人工智能应用</mark>、<mark>网络安全</mark>等需求，转化为学生能训练、教师能参与、企业能使用的能力供给。
@@ -625,280 +655,280 @@
               <div class="image-column">
                 <div class="image-rail up">
                   <figure>
-                    <img src="assets/news-community-founded.jpg" alt="全国数字信息安全行业产教融合共同体成立大会现场" />
+                    <img loading="eager" decoding="async" src="assets/news-community-founded.webp" alt="全国数字信息安全行业产教融合共同体成立大会现场" />
                     <figcaption>
                       共同体成立
                       <span class="caption-note">2025年5月，平台化推进产教融合</span>
                     </figcaption>
                   </figure>
                   <figure>
-                    <img src="assets/news-site-engineer.jpg" alt="数字信息系现场工程师学院项目学生企业实践" />
+                    <img loading="eager" decoding="async" src="assets/news-site-engineer.webp" alt="数字信息系现场工程师学院项目学生企业实践" />
                     <figcaption>
                       现场工程师学院
                       <span class="caption-note">首批学生进入算力企业实践</span>
                     </figcaption>
                   </figure>
                   <figure>
-                    <img src="assets/news-site-engineer-students.jpg" alt="现场工程师学院首批学生赴企业实践合影" />
+                    <img loading="eager" decoding="async" src="assets/news-site-engineer-students.webp" alt="现场工程师学院首批学生赴企业实践合影" />
                     <figcaption>
                       学生入企实践
                       <span class="caption-note">20名学生进入园区企业任务现场</span>
                     </figcaption>
                   </figure>
                   <figure>
-                    <img src="assets/news-aigc-base.jpg" alt="AIGC短剧产学研实训基地共建活动现场" />
+                    <img loading="eager" decoding="async" src="assets/news-aigc-base.webp" alt="AIGC短剧产学研实训基地共建活动现场" />
                     <figcaption>
                       AIGC 短剧实训基地
                       <span class="caption-note">文创短剧、短视频生成、项目实训</span>
                     </figcaption>
                   </figure>
                   <figure>
-                    <img src="assets/base-training-doc-01.jpg" alt="东数西算人才培养基地实训室" />
+                    <img loading="eager" decoding="async" src="assets/base-training-doc-01.webp" alt="东数西算人才培养基地实训室" />
                     <figcaption>
                       东数西算基地一期
                       <span class="caption-note">2024年建成，服务日常教学实训</span>
                     </figcaption>
                   </figure>
                   <figure>
-                    <img src="assets/screen-ai-training.jpg" alt="人工智能实训中心大屏展示" />
+                    <img loading="eager" decoding="async" src="assets/screen-ai-training.webp" alt="人工智能实训中心大屏展示" />
                     <figcaption>
                       人工智能实训中心
                       <span class="caption-note">目标检测、模型训练进入课堂</span>
                     </figcaption>
                   </figure>
                   <figure>
-                    <img src="assets/zhiyanshe-cover.jpg" alt="AIGC智研社招新封面" />
+                    <img loading="eager" decoding="async" src="assets/zhiyanshe-cover.webp" alt="AIGC智研社招新封面" />
                     <figcaption>
                       AIGC 智研社
                       <span class="caption-note">工具训练、项目实践、作品展示</span>
                     </figcaption>
                   </figure>
                   <figure>
-                    <img src="assets/news-project-teaching.jpg" alt="项目化教学改革课堂场景" />
+                    <img loading="eager" decoding="async" src="assets/news-project-teaching.webp" alt="项目化教学改革课堂场景" />
                     <figcaption>
                       项目化教学改革
                       <span class="caption-note">企业任务、竞赛任务进入课堂</span>
                     </figcaption>
                   </figure>
                   <figure>
-                    <img src="assets/news-double-high-class.jpg" alt="大数据技术专业群课堂教学场景" />
+                    <img loading="eager" decoding="async" src="assets/news-double-high-class.webp" alt="大数据技术专业群课堂教学场景" />
                     <figcaption>
                       专业群课堂
                       <span class="caption-note">课程资源、岗位能力同步建设</span>
                     </figcaption>
                   </figure>
                   <figure>
-                    <img src="assets/screen-bigdata-training.jpg" alt="大数据技术实训中心大屏展示" />
+                    <img loading="eager" decoding="async" src="assets/screen-bigdata-training.webp" alt="大数据技术实训中心大屏展示" />
                     <figcaption>
                       大数据实训中心
                       <span class="caption-note">豆包标注、数据治理、质检回流</span>
                     </figcaption>
                   </figure>
                   <figure>
-                    <img src="assets/base-training-doc-04.jpg" alt="东数西算创新成果展厅" />
+                    <img loading="eager" decoding="async" src="assets/base-training-doc-04.webp" alt="东数西算创新成果展厅" />
                     <figcaption>
                       创新成果展厅
                       <span class="caption-note">集中展示师生成果与合作案例</span>
                     </figcaption>
                   </figure>
                   <figure>
-                    <img src="assets/screen-software-training.jpg" alt="软件技术实训中心大屏展示" />
+                    <img loading="eager" decoding="async" src="assets/screen-software-training.webp" alt="软件技术实训中心大屏展示" />
                     <figcaption>
                       软件技术实训中心
                       <span class="caption-note">AI辅助开发、工单项目交付</span>
                     </figcaption>
                   </figure>
                   <figure>
-                    <img src="assets/base-training-doc-05.jpg" alt="学生在实训室开展课堂实训" />
+                    <img loading="eager" decoding="async" src="assets/base-training-doc-05.webp" alt="学生在实训室开展课堂实训" />
                     <figcaption>
                       实训课堂
                       <span class="caption-note">学生在基地完成项目训练</span>
                     </figcaption>
                   </figure>
                   <figure>
-                    <img src="assets/screen-ops-training.jpg" alt="系统运维实训中心大屏展示" />
+                    <img loading="eager" decoding="async" src="assets/screen-ops-training.webp" alt="系统运维实训中心大屏展示" />
                     <figcaption>
                       系统运维实训中心
                       <span class="caption-note">巡检、告警、工单闭环演练</span>
                     </figcaption>
                   </figure>
                   <figure>
-                    <img src="assets/news-lanzhou-university.jpg" alt="庆阳职业技术学院与兰州大学交流合作" />
+                    <img loading="eager" decoding="async" src="assets/news-lanzhou-university.webp" alt="庆阳职业技术学院与兰州大学交流合作" />
                     <figcaption>
                       兰州大学交流合作
                       <span class="caption-note">共建培训中心，联动科研项目</span>
                     </figcaption>
                   </figure>
                   <figure>
-                    <img src="assets/ai4s-platform.jpg" alt="国产化异构智算资源AI4S平台项目海报" />
+                    <img loading="eager" decoding="async" src="assets/ai4s-platform.webp" alt="国产化异构智算资源AI4S平台项目海报" />
                     <figcaption>
                       AI4S 平台项目
                       <span class="caption-note">西部算力重点项目，异构算力调度</span>
                     </figcaption>
                   </figure>
                   <figure>
-                    <img src="assets/ai-cultural-tourism.jpg" alt="AI基础大模型智慧文旅应用项目海报" />
+                    <img loading="eager" decoding="async" src="assets/ai-cultural-tourism.webp" alt="AI基础大模型智慧文旅应用项目海报" />
                     <figcaption>
                       科技厅重大专项
                       <span class="caption-note">垂直领域生成式人工智能研究示范</span>
                     </figcaption>
                   </figure>
                   <figure>
-                    <img src="assets/zhiyanshe-video-ai.jpg" alt="智研社视频展示画面" />
+                    <img loading="eager" decoding="async" src="assets/zhiyanshe-video-ai.webp" alt="智研社视频展示画面" />
                     <figcaption>
                       智研社项目展示
                       <span class="caption-note">把项目训练转成可展示成果</span>
                     </figcaption>
                   </figure>
                   <figure>
-                    <img src="assets/base-training-doc-02.jpg" alt="智能网联实训车辆与设备" />
+                    <img loading="eager" decoding="async" src="assets/base-training-doc-02.webp" alt="智能网联实训车辆与设备" />
                     <figcaption>
                       智能网联实训
                       <span class="caption-note">5G、车路协同、边缘计算</span>
                     </figcaption>
                   </figure>
                   <figure>
-                    <img src="assets/news-double-high-group.jpg" alt="大数据技术专业群双高建设展示" />
+                    <img loading="eager" decoding="async" src="assets/news-double-high-group.webp" alt="大数据技术专业群双高建设展示" />
                     <figcaption>
                       双高专业群
                       <span class="caption-note">专业课程教材教师基地协同推进</span>
                     </figcaption>
                   </figure>
                   <figure aria-hidden="true">
-                    <img src="assets/news-community-founded.jpg" alt="" />
+                    <img loading="eager" decoding="async" src="assets/news-community-founded.webp" alt="" />
                     <figcaption>
                       共同体成立
                       <span class="caption-note">2025年5月，平台化推进产教融合</span>
                     </figcaption>
                   </figure>
                   <figure aria-hidden="true">
-                    <img src="assets/news-site-engineer.jpg" alt="" />
+                    <img loading="eager" decoding="async" src="assets/news-site-engineer.webp" alt="" />
                     <figcaption>
                       现场工程师学院
                       <span class="caption-note">首批学生进入算力企业实践</span>
                     </figcaption>
                   </figure>
                   <figure aria-hidden="true">
-                    <img src="assets/news-site-engineer-students.jpg" alt="" />
+                    <img loading="eager" decoding="async" src="assets/news-site-engineer-students.webp" alt="" />
                     <figcaption>
                       学生入企实践
                       <span class="caption-note">20名学生进入园区企业任务现场</span>
                     </figcaption>
                   </figure>
                   <figure aria-hidden="true">
-                    <img src="assets/news-aigc-base.jpg" alt="" />
+                    <img loading="eager" decoding="async" src="assets/news-aigc-base.webp" alt="" />
                     <figcaption>
                       AIGC 短剧实训基地
                       <span class="caption-note">文创短剧、短视频生成、项目实训</span>
                     </figcaption>
                   </figure>
                   <figure aria-hidden="true">
-                    <img src="assets/base-training-doc-01.jpg" alt="" />
+                    <img loading="eager" decoding="async" src="assets/base-training-doc-01.webp" alt="" />
                     <figcaption>
                       东数西算基地一期
                       <span class="caption-note">2024年建成，服务日常教学实训</span>
                     </figcaption>
                   </figure>
                   <figure aria-hidden="true">
-                    <img src="assets/screen-ai-training.jpg" alt="" />
+                    <img loading="eager" decoding="async" src="assets/screen-ai-training.webp" alt="" />
                     <figcaption>
                       人工智能实训中心
                       <span class="caption-note">目标检测、模型训练进入课堂</span>
                     </figcaption>
                   </figure>
                   <figure aria-hidden="true">
-                    <img src="assets/zhiyanshe-cover.jpg" alt="" />
+                    <img loading="eager" decoding="async" src="assets/zhiyanshe-cover.webp" alt="" />
                     <figcaption>
                       AIGC 智研社
                       <span class="caption-note">工具训练、项目实践、作品展示</span>
                     </figcaption>
                   </figure>
                   <figure aria-hidden="true">
-                    <img src="assets/news-project-teaching.jpg" alt="" />
+                    <img loading="eager" decoding="async" src="assets/news-project-teaching.webp" alt="" />
                     <figcaption>
                       项目化教学改革
                       <span class="caption-note">企业任务、竞赛任务进入课堂</span>
                     </figcaption>
                   </figure>
                   <figure aria-hidden="true">
-                    <img src="assets/news-double-high-class.jpg" alt="" />
+                    <img loading="eager" decoding="async" src="assets/news-double-high-class.webp" alt="" />
                     <figcaption>
                       专业群课堂
                       <span class="caption-note">课程资源、岗位能力同步建设</span>
                     </figcaption>
                   </figure>
                   <figure aria-hidden="true">
-                    <img src="assets/screen-bigdata-training.jpg" alt="" />
+                    <img loading="eager" decoding="async" src="assets/screen-bigdata-training.webp" alt="" />
                     <figcaption>
                       大数据实训中心
                       <span class="caption-note">豆包标注、数据治理、质检回流</span>
                     </figcaption>
                   </figure>
                   <figure aria-hidden="true">
-                    <img src="assets/base-training-doc-04.jpg" alt="" />
+                    <img loading="eager" decoding="async" src="assets/base-training-doc-04.webp" alt="" />
                     <figcaption>
                       创新成果展厅
                       <span class="caption-note">集中展示师生成果与合作案例</span>
                     </figcaption>
                   </figure>
                   <figure aria-hidden="true">
-                    <img src="assets/screen-software-training.jpg" alt="" />
+                    <img loading="eager" decoding="async" src="assets/screen-software-training.webp" alt="" />
                     <figcaption>
                       软件技术实训中心
                       <span class="caption-note">AI辅助开发、工单项目交付</span>
                     </figcaption>
                   </figure>
                   <figure aria-hidden="true">
-                    <img src="assets/base-training-doc-05.jpg" alt="" />
+                    <img loading="eager" decoding="async" src="assets/base-training-doc-05.webp" alt="" />
                     <figcaption>
                       实训课堂
                       <span class="caption-note">学生在基地完成项目训练</span>
                     </figcaption>
                   </figure>
                   <figure aria-hidden="true">
-                    <img src="assets/screen-ops-training.jpg" alt="" />
+                    <img loading="eager" decoding="async" src="assets/screen-ops-training.webp" alt="" />
                     <figcaption>
                       系统运维实训中心
                       <span class="caption-note">巡检、告警、工单闭环演练</span>
                     </figcaption>
                   </figure>
                   <figure aria-hidden="true">
-                    <img src="assets/news-lanzhou-university.jpg" alt="" />
+                    <img loading="eager" decoding="async" src="assets/news-lanzhou-university.webp" alt="" />
                     <figcaption>
                       兰州大学交流合作
                       <span class="caption-note">共建培训中心，联动科研项目</span>
                     </figcaption>
                   </figure>
                   <figure aria-hidden="true">
-                    <img src="assets/ai4s-platform.jpg" alt="" />
+                    <img loading="eager" decoding="async" src="assets/ai4s-platform.webp" alt="" />
                     <figcaption>
                       AI4S 平台项目
                       <span class="caption-note">西部算力重点项目，异构算力调度</span>
                     </figcaption>
                   </figure>
                   <figure aria-hidden="true">
-                    <img src="assets/ai-cultural-tourism.jpg" alt="" />
+                    <img loading="eager" decoding="async" src="assets/ai-cultural-tourism.webp" alt="" />
                     <figcaption>
                       科技厅重大专项
                       <span class="caption-note">垂直领域生成式人工智能研究示范</span>
                     </figcaption>
                   </figure>
                   <figure aria-hidden="true">
-                    <img src="assets/zhiyanshe-video-ai.jpg" alt="" />
+                    <img loading="eager" decoding="async" src="assets/zhiyanshe-video-ai.webp" alt="" />
                     <figcaption>
                       智研社项目展示
                       <span class="caption-note">把项目训练转成可展示成果</span>
                     </figcaption>
                   </figure>
                   <figure aria-hidden="true">
-                    <img src="assets/base-training-doc-02.jpg" alt="" />
+                    <img loading="eager" decoding="async" src="assets/base-training-doc-02.webp" alt="" />
                     <figcaption>
                       智能网联实训
                       <span class="caption-note">5G、车路协同、边缘计算</span>
                     </figcaption>
                   </figure>
                   <figure aria-hidden="true">
-                    <img src="assets/news-double-high-group.jpg" alt="" />
+                    <img loading="eager" decoding="async" src="assets/news-double-high-group.webp" alt="" />
                     <figcaption>
                       双高专业群
                       <span class="caption-note">专业课程教材教师基地协同推进</span>
@@ -910,266 +940,266 @@
               <div class="image-column">
                 <div class="image-rail down">
                   <figure>
-                    <img src="assets/news-community-annual.jpg" alt="全国数字信息安全行业产教融合共同体年会现场" />
+                    <img loading="eager" decoding="async" src="assets/news-community-annual.webp" alt="全国数字信息安全行业产教融合共同体年会现场" />
                     <figcaption>
                       共同体年会
                       <span class="caption-note">2026年6月，津庆职业教育协同交流</span>
                     </figcaption>
                   </figure>
                   <figure>
-                    <img src="assets/news-idc-skill-test.jpg" alt="东数西算项目IDC运维工程师基础技能测试" />
+                    <img loading="eager" decoding="async" src="assets/news-idc-skill-test.webp" alt="东数西算项目IDC运维工程师基础技能测试" />
                     <figcaption>
                       IDC 运维技能训练
                       <span class="caption-note">数据中心岗位任务前置训练</span>
                     </figcaption>
                   </figure>
                   <figure>
-                    <img src="assets/news-mobile-practice.jpg" alt="中国移动庆阳分公司研学实践活动" />
+                    <img loading="eager" decoding="async" src="assets/news-mobile-practice.webp" alt="中国移动庆阳分公司研学实践活动" />
                     <figcaption>
                       中国移动研学实践
                       <span class="caption-note">走进企业，看见真实岗位标准</span>
                     </figcaption>
                   </figure>
                   <figure>
-                    <img src="assets/screen-connected-training.jpg" alt="智能网联实训中心大屏展示" />
+                    <img loading="eager" decoding="async" src="assets/screen-connected-training.webp" alt="智能网联实训中心大屏展示" />
                     <figcaption>
                       智能网联实训中心
                       <span class="caption-note">车路协同、边缘计算综合实验</span>
                     </figcaption>
                   </figure>
                   <figure>
-                    <img src="assets/base-training-doc-06.jpg" alt="智能网联沙盘实训场景" />
+                    <img loading="eager" decoding="async" src="assets/base-training-doc-06.webp" alt="智能网联沙盘实训场景" />
                     <figcaption>
                       车路协同沙盘
                       <span class="caption-note">智能交通、物流、文旅场景训练</span>
                     </figcaption>
                   </figure>
                   <figure>
-                    <img src="assets/news-eastwest-calc.jpg" alt="东数西算与数字信息专业建设新闻配图" />
+                    <img loading="eager" decoding="async" src="assets/news-eastwest-calc.webp" alt="东数西算与数字信息专业建设新闻配图" />
                     <figcaption>
                       东数西算岗位场景
                       <span class="caption-note">围绕算力、数据、安全、应用组织教学</span>
                     </figcaption>
                   </figure>
                   <figure>
-                    <img src="assets/news-telecom-coop.jpg" alt="中国电信庆阳分公司校企合作签约" />
+                    <img loading="eager" decoding="async" src="assets/news-telecom-coop.webp" alt="中国电信庆阳分公司校企合作签约" />
                     <figcaption>
                       中国电信校企合作
                       <span class="caption-note">现场工程师学院合作基础</span>
                     </figcaption>
                   </figure>
                   <figure>
-                    <img src="assets/news-high-platforms.jpg" alt="广东轻工、天津职业技术师范大学、深圳信息职业技术学院合作交流" />
+                    <img loading="eager" decoding="async" src="assets/news-high-platforms.webp" alt="广东轻工、天津职业技术师范大学、深圳信息职业技术学院合作交流" />
                     <figcaption>
                       高水平院校合作
                       <span class="caption-note">广东轻工、天津、深圳信息等专家指导</span>
                     </figcaption>
                   </figure>
                   <figure>
-                    <img src="assets/zhiyanshe-what.jpg" alt="AIGC智研社能做什么展示图" />
+                    <img loading="eager" decoding="async" src="assets/zhiyanshe-what.webp" alt="AIGC智研社能做什么展示图" />
                     <figcaption>
                       智研社训练任务
                       <span class="caption-note">写作、绘图、视频、智能体、数据标注</span>
                     </figcaption>
                   </figure>
                   <figure>
-                    <img src="assets/base-training-doc-10.jpg" alt="教师指导学生实训操作" />
+                    <img loading="eager" decoding="async" src="assets/base-training-doc-10.webp" alt="教师指导学生实训操作" />
                     <figcaption>
                       现场指导实训
                       <span class="caption-note">教师带学生完成设备与数据任务</span>
                     </figcaption>
                   </figure>
                   <figure>
-                    <img src="assets/news-innovation-team.jpg" alt="教师创新团队专题研讨会" />
+                    <img loading="eager" decoding="async" src="assets/news-innovation-team.webp" alt="教师创新团队专题研讨会" />
                     <figcaption>
                       教师创新团队
                       <span class="caption-note">赋能新双高，提升师资建设质量</span>
                     </figcaption>
                   </figure>
                   <figure>
-                    <img src="assets/news-teaching-workshop.jpg" alt="项目化教学能力提升工坊" />
+                    <img loading="eager" decoding="async" src="assets/news-teaching-workshop.webp" alt="项目化教学能力提升工坊" />
                     <figcaption>
                       教学能力工坊
                       <span class="caption-note">项目化教学改革持续推进</span>
                     </figcaption>
                   </figure>
                   <figure>
-                    <img src="assets/news-aigc-short-video.jpg" alt="AIGC短剧产学研实训基地共建现场" />
+                    <img loading="eager" decoding="async" src="assets/news-aigc-short-video.webp" alt="AIGC短剧产学研实训基地共建现场" />
                     <figcaption>
                       数绘庆阳
                       <span class="caption-note">AIGC内容生产连接文旅场景</span>
                     </figcaption>
                   </figure>
                   <figure>
-                    <img src="assets/zhiyanshe-activity-ops.jpg" alt="AIGC智研社活动回顾与运维工程师训练" />
+                    <img loading="eager" decoding="async" src="assets/zhiyanshe-activity-ops.webp" alt="AIGC智研社活动回顾与运维工程师训练" />
                     <figcaption>
                       智研社活动回顾
                       <span class="caption-note">数据中心运维与AI项目训练</span>
                     </figcaption>
                   </figure>
                   <figure>
-                    <img src="assets/base-training-doc-03.jpg" alt="软件实训中心教室" />
+                    <img loading="eager" decoding="async" src="assets/base-training-doc-03.webp" alt="软件实训中心教室" />
                     <figcaption>
                       软件实训教室
                       <span class="caption-note">需求、编码、测试、交付全流程</span>
                     </figcaption>
                   </figure>
                   <figure>
-                    <img src="assets/news-jinshan-cloud.jpg" alt="信息工程专业群师生赴庆阳金山云西北总部观摩学习" />
+                    <img loading="eager" decoding="async" src="assets/news-jinshan-cloud.webp" alt="信息工程专业群师生赴庆阳金山云西北总部观摩学习" />
                     <figcaption>
                       企业观摩学习
                       <span class="caption-note">走进东数西算产业链企业</span>
                     </figcaption>
                   </figure>
                   <figure>
-                    <img src="assets/base-training-doc-08.jpg" alt="学生在系统运维实训室学习" />
+                    <img loading="eager" decoding="async" src="assets/base-training-doc-08.webp" alt="学生在系统运维实训室学习" />
                     <figcaption>
                       运维设备训练
                       <span class="caption-note">部署、监控、容灾、应急处置</span>
                     </figcaption>
                   </figure>
                   <figure>
-                    <img src="assets/base-training-doc-09.jpg" alt="学生进行实训设备操作" />
+                    <img loading="eager" decoding="async" src="assets/base-training-doc-09.webp" alt="学生进行实训设备操作" />
                     <figcaption>
                       实训操作现场
                       <span class="caption-note">设备联调、故障排查、课堂复盘</span>
                     </figcaption>
                   </figure>
                   <figure>
-                    <img src="assets/zhiyanshe-video-contact.jpg" alt="智研社展示视频画面合集" />
+                    <img loading="eager" decoding="async" src="assets/zhiyanshe-video-contact.webp" alt="智研社展示视频画面合集" />
                     <figcaption>
                       智研社视频素材
                       <span class="caption-note">项目成果、实训画面、展厅素材</span>
                     </figcaption>
                   </figure>
                   <figure aria-hidden="true">
-                    <img src="assets/news-community-annual.jpg" alt="" />
+                    <img loading="eager" decoding="async" src="assets/news-community-annual.webp" alt="" />
                     <figcaption>
                       共同体年会
                       <span class="caption-note">2026年6月，津庆职业教育协同交流</span>
                     </figcaption>
                   </figure>
                   <figure aria-hidden="true">
-                    <img src="assets/news-idc-skill-test.jpg" alt="" />
+                    <img loading="eager" decoding="async" src="assets/news-idc-skill-test.webp" alt="" />
                     <figcaption>
                       IDC 运维技能训练
                       <span class="caption-note">数据中心岗位任务前置训练</span>
                     </figcaption>
                   </figure>
                   <figure aria-hidden="true">
-                    <img src="assets/news-mobile-practice.jpg" alt="" />
+                    <img loading="eager" decoding="async" src="assets/news-mobile-practice.webp" alt="" />
                     <figcaption>
                       中国移动研学实践
                       <span class="caption-note">走进企业，看见真实岗位标准</span>
                     </figcaption>
                   </figure>
                   <figure aria-hidden="true">
-                    <img src="assets/screen-connected-training.jpg" alt="" />
+                    <img loading="eager" decoding="async" src="assets/screen-connected-training.webp" alt="" />
                     <figcaption>
                       智能网联实训中心
                       <span class="caption-note">车路协同、边缘计算综合实验</span>
                     </figcaption>
                   </figure>
                   <figure aria-hidden="true">
-                    <img src="assets/base-training-doc-06.jpg" alt="" />
+                    <img loading="eager" decoding="async" src="assets/base-training-doc-06.webp" alt="" />
                     <figcaption>
                       车路协同沙盘
                       <span class="caption-note">智能交通、物流、文旅场景训练</span>
                     </figcaption>
                   </figure>
                   <figure aria-hidden="true">
-                    <img src="assets/news-eastwest-calc.jpg" alt="" />
+                    <img loading="eager" decoding="async" src="assets/news-eastwest-calc.webp" alt="" />
                     <figcaption>
                       东数西算岗位场景
                       <span class="caption-note">围绕算力、数据、安全、应用组织教学</span>
                     </figcaption>
                   </figure>
                   <figure aria-hidden="true">
-                    <img src="assets/news-telecom-coop.jpg" alt="" />
+                    <img loading="eager" decoding="async" src="assets/news-telecom-coop.webp" alt="" />
                     <figcaption>
                       中国电信校企合作
                       <span class="caption-note">现场工程师学院合作基础</span>
                     </figcaption>
                   </figure>
                   <figure aria-hidden="true">
-                    <img src="assets/news-high-platforms.jpg" alt="" />
+                    <img loading="eager" decoding="async" src="assets/news-high-platforms.webp" alt="" />
                     <figcaption>
                       高水平院校合作
                       <span class="caption-note">广东轻工、天津、深圳信息等专家指导</span>
                     </figcaption>
                   </figure>
                   <figure aria-hidden="true">
-                    <img src="assets/zhiyanshe-what.jpg" alt="" />
+                    <img loading="eager" decoding="async" src="assets/zhiyanshe-what.webp" alt="" />
                     <figcaption>
                       智研社训练任务
                       <span class="caption-note">写作、绘图、视频、智能体、数据标注</span>
                     </figcaption>
                   </figure>
                   <figure aria-hidden="true">
-                    <img src="assets/base-training-doc-10.jpg" alt="" />
+                    <img loading="eager" decoding="async" src="assets/base-training-doc-10.webp" alt="" />
                     <figcaption>
                       现场指导实训
                       <span class="caption-note">教师带学生完成设备与数据任务</span>
                     </figcaption>
                   </figure>
                   <figure aria-hidden="true">
-                    <img src="assets/news-innovation-team.jpg" alt="" />
+                    <img loading="eager" decoding="async" src="assets/news-innovation-team.webp" alt="" />
                     <figcaption>
                       教师创新团队
                       <span class="caption-note">赋能新双高，提升师资建设质量</span>
                     </figcaption>
                   </figure>
                   <figure aria-hidden="true">
-                    <img src="assets/news-teaching-workshop.jpg" alt="" />
+                    <img loading="eager" decoding="async" src="assets/news-teaching-workshop.webp" alt="" />
                     <figcaption>
                       教学能力工坊
                       <span class="caption-note">项目化教学改革持续推进</span>
                     </figcaption>
                   </figure>
                   <figure aria-hidden="true">
-                    <img src="assets/news-aigc-short-video.jpg" alt="" />
+                    <img loading="eager" decoding="async" src="assets/news-aigc-short-video.webp" alt="" />
                     <figcaption>
                       数绘庆阳
                       <span class="caption-note">AIGC内容生产连接文旅场景</span>
                     </figcaption>
                   </figure>
                   <figure aria-hidden="true">
-                    <img src="assets/zhiyanshe-activity-ops.jpg" alt="" />
+                    <img loading="eager" decoding="async" src="assets/zhiyanshe-activity-ops.webp" alt="" />
                     <figcaption>
                       智研社活动回顾
                       <span class="caption-note">数据中心运维与AI项目训练</span>
                     </figcaption>
                   </figure>
                   <figure aria-hidden="true">
-                    <img src="assets/base-training-doc-03.jpg" alt="" />
+                    <img loading="eager" decoding="async" src="assets/base-training-doc-03.webp" alt="" />
                     <figcaption>
                       软件实训教室
                       <span class="caption-note">需求、编码、测试、交付全流程</span>
                     </figcaption>
                   </figure>
                   <figure aria-hidden="true">
-                    <img src="assets/news-jinshan-cloud.jpg" alt="" />
+                    <img loading="eager" decoding="async" src="assets/news-jinshan-cloud.webp" alt="" />
                     <figcaption>
                       企业观摩学习
                       <span class="caption-note">走进东数西算产业链企业</span>
                     </figcaption>
                   </figure>
                   <figure aria-hidden="true">
-                    <img src="assets/base-training-doc-08.jpg" alt="" />
+                    <img loading="eager" decoding="async" src="assets/base-training-doc-08.webp" alt="" />
                     <figcaption>
                       运维设备训练
                       <span class="caption-note">部署、监控、容灾、应急处置</span>
                     </figcaption>
                   </figure>
                   <figure aria-hidden="true">
-                    <img src="assets/base-training-doc-09.jpg" alt="" />
+                    <img loading="eager" decoding="async" src="assets/base-training-doc-09.webp" alt="" />
                     <figcaption>
                       实训操作现场
                       <span class="caption-note">设备联调、故障排查、课堂复盘</span>
                     </figcaption>
                   </figure>
                   <figure aria-hidden="true">
-                    <img src="assets/zhiyanshe-video-contact.jpg" alt="" />
+                    <img loading="eager" decoding="async" src="assets/zhiyanshe-video-contact.webp" alt="" />
                     <figcaption>
                       智研社视频素材
                       <span class="caption-note">项目成果、实训画面、展厅素材</span>
