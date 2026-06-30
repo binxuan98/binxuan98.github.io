@@ -3,16 +3,41 @@ const { projects = [] } = Astro.props;
 ---
 
 <div class="project-list">
-  {projects.map((project: { title: string; text: string; meta: string; href: string }) => (
-    <a
-      class="project-row"
-      href={project.href}
-      target={project.href.startsWith('http') ? '_blank' : undefined}
-      rel={project.href.startsWith('http') ? 'noreferrer' : undefined}
-    >
-      <small>{project.meta}</small>
-      <strong>{project.title}</strong>
-      <p>{project.text}</p>
-    </a>
-  ))}
+  {projects.map((project: {
+    title: string;
+    text: string;
+    meta: string;
+    href: string;
+    actionLabel?: string;
+    qrImage?: string;
+    qrTitle?: string;
+    qrText?: string;
+  }) => {
+    const opensNew = project.href.startsWith('http') || project.href.startsWith('/images/');
+
+    return (
+      <a
+        class={`project-row${project.qrImage ? ' project-row--with-qr' : ''}`}
+        href={project.href}
+        target={opensNew ? '_blank' : undefined}
+        rel={project.href.startsWith('http') ? 'noreferrer' : undefined}
+      >
+        <span class="project-row__body">
+          <small>{project.meta}</small>
+          <strong>{project.title}</strong>
+          <p>{project.text}</p>
+          {project.actionLabel && <em>{project.actionLabel}</em>}
+        </span>
+        {project.qrImage && (
+          <span class="project-row__qr">
+            <img src={project.qrImage} alt={project.qrTitle || `${project.title}二维码`} loading="lazy" />
+            <span>
+              <strong>{project.qrTitle}</strong>
+              <small>{project.qrText}</small>
+            </span>
+          </span>
+        )}
+      </a>
+    );
+  })}
 </div>

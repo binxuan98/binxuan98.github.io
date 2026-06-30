@@ -1,10 +1,8 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import MetricGrid from '../components/MetricGrid.astro';
-import QingyangComputeScene from '../components/QingyangComputeScene.astro';
 import SocietyCarousel from '../components/SocietyCarousel.astro';
 import ThreeComputeScene from '../components/ThreeComputeScene.astro';
-import { qingyangMetrics, qingyangStory } from '../data/qingyang';
 import { societyMetrics } from '../data/society';
 ---
 
@@ -15,29 +13,6 @@ import { societyMetrics } from '../data/society';
   presentation={true}
   enableCarousel={true}
 >
-  <section class="qingyang-compute-screen qingyang-grid-bg">
-    <QingyangComputeScene />
-    <div class="compute-hero-shell">
-      <div class="compute-hero-copy">
-        <div class="qingyang-logo">{qingyangStory.badge}</div>
-        <h1>
-          <span>东数西算</span>
-          <strong>庆阳枢纽</strong>
-        </h1>
-        <p class="compute-hero-lead">{qingyangStory.subtitle}</p>
-        {qingyangStory.proof && <p class="compute-hero-proof">{qingyangStory.proof}</p>}
-        <MetricGrid items={qingyangMetrics} className="compute-hero-metrics" />
-      </div>
-
-      <a class="screen-scroll-cue" href="#society-cultivation" aria-label="向下进入智研社人才培养沙盘">
-        <span>向下进入</span>
-        <strong>智研社人才培养沙盘</strong>
-      </a>
-
-      <p class="compute-hero-bottomline">{qingyangStory.bottomline}</p>
-    </div>
-  </section>
-
   <section class="society-screen terrain-grid-bg" id="society-cultivation">
     <ThreeComputeScene />
     <div class="society-shell">
@@ -52,6 +27,14 @@ import { societyMetrics } from '../data/society';
           <span>前沿项目实践</span>
           <span>东数西算人才培养</span>
         </p>
+        <div id="zhiyanshe-qr" class="society-qr-card">
+          <img src="/images/zhiyanshe-wechat-qr.png" alt="AIGC智研社微信公众号二维码" loading="eager" />
+          <div>
+            <span>微信公众号</span>
+            <strong>AIGC智研社</strong>
+            <p>扫码关注社团动态、AI 热点、学生作品与项目训练记录。</p>
+          </div>
+        </div>
         <p class="society-lead">
           以全校人工智能通识课程为入口，发现并吸纳对 AI 感兴趣的学生；以重点实验室真实项目为牵引，把大模型、AI4S、异构算力调度等前沿工作转化为学生可参与、可理解、可成长的实践任务。
         </p>
@@ -65,15 +48,5 @@ import { societyMetrics } from '../data/society';
         为建设繁荣富庶、产业崛起、活力迸发、绿色转型、幸福美好新庆阳贡献职教力量
       </p>
     </div>
-  </section>
-
-  <section class="qingyang-screen3-embed-screen" id="qingyang-industry-education">
-    <iframe
-      class="qingyang-screen3-embed"
-      src="/exhibition/qingyang-screen3/index.html"
-      title="庆阳职业技术学院数字信息系产教融合第三屏"
-      loading="eager"
-      fetchpriority="high"
-    ></iframe>
   </section>
 </BaseLayout>

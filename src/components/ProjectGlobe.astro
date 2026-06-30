@@ -1,0 +1,726 @@
+---
+const { projects = [] } = Astro.props;
+---
+
+<section
+  id="project-globe"
+  class="project-globe-section"
+  data-project-globe
+  data-projects={JSON.stringify(projects)}
+  data-earth-texture-src="/images/project-globe-soft-relief.jpg"
+  data-earth-bump-src="/images/project-globe-soft-relief-height.jpg"
+  style="--project-globe-progress: 0;"
+>
+  <div class="project-globe-copy">
+    <span class="section-kicker">科研版图</span>
+    <h2>项目沿着真实场景展开。</h2>
+    <p>
+      从文化视觉生成、算力技术实践到职业教育人才培养，项目星球把研究方向、教学平台和地方产业服务组织成一个可以继续打开的版图。
+    </p>
+  </div>
+
+  <div class="project-globe-panel" aria-live="polite">
+    {projects.map((project, index) => (
+      <article
+        class={`project-globe-card${index === 0 ? ' is-active' : ''}`}
+        data-project-panel={index}
+      >
+        <div class="project-globe-card__meta">
+          <span>{project.number} / {String(projects.length).padStart(2, '0')}</span>
+          <span>{project.years}</span>
+        </div>
+        <h3>{project.title}</h3>
+        <p>{project.summary}</p>
+        <dl>
+          <div>
+            <dt>位置</dt>
+            <dd>{project.region}</dd>
+          </div>
+          <div>
+            <dt>线索</dt>
+            <dd>{project.meta}</dd>
+          </div>
+        </dl>
+        <div class="project-globe-tags">
+          {project.tags.map((tag) => <span>{tag}</span>)}
+        </div>
+        {project.qrImage && (
+          <div class="project-globe-qr">
+            <img src={project.qrImage} alt={project.qrTitle || `${project.title}二维码`} loading="lazy" />
+            <div>
+              <strong>{project.qrTitle}</strong>
+              <span>{project.qrText}</span>
+            </div>
+          </div>
+        )}
+        <a
+          href={project.href}
+          target={project.href.startsWith('http') ? '_blank' : undefined}
+          rel={project.href.startsWith('http') ? 'noreferrer' : undefined}
+        >
+          {project.actionLabel || '查看项目'}
+        </a>
+      </article>
+    ))}
+  </div>
+
+  <div class="project-globe-controls" aria-label="选择项目">
+    {projects.map((project, index) => (
+      <button
+        class={index === 0 ? 'is-active' : ''}
+        type="button"
+        data-project-trigger={index}
+        aria-label={`切换到 ${project.title}`}
+      >
+        {project.number}
+      </button>
+    ))}
+  </div>
+
+  <div class="project-globe-stage" data-project-globe-stage aria-hidden="true">
+    <canvas data-project-globe-canvas></canvas>
+    <div class="project-globe-vignette"></div>
+  </div>
+</section>
+
+<script>
+  const projectGlobeRoots = document.querySelectorAll('[data-project-globe]');
+
+  if (projectGlobeRoots.length > 0) {
+    Promise.all([import('three'), loadWorldTopology()]).then(([THREE, worldTopology]) => {
+      projectGlobeRoots.forEach((root) => initProjectGlobe(THREE, root, worldTopology));
+    });
+  }
+
+  async function loadWorldTopology() {
+    try {
+      const response = await fetch('/data/world-110m.json');
+      if (!response.ok) return null;
+      return response.json();
+    } catch {
+      return null;
+    }
+  }
+
+  async function initProjectGlobe(THREE, root, worldTopology) {
+    const canvas = root.querySelector('[data-project-globe-canvas]');
+    if (!(canvas instanceof HTMLCanvasElement)) return;
+    const stageElement = root.querySelector('[data-project-globe-stage]');
+
+    const projects = JSON.parse(root.dataset.projects || '[]');
+    if (!projects.length) return;
+
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const panels = Array.from(root.querySelectorAll('[data-project-panel]'));
+    const triggers = Array.from(root.querySelectorAll('[data-project-trigger]'));
+    const renderer = new THREE.WebGLRenderer({
+      canvas,
+      alpha: true,
+      antialias: true,
+      preserveDrawingBuffer: true,
+      powerPreference: 'high-performance'
+    });
+
+    renderer.setClearColor(0x000000, 0);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2.5));
+    renderer.outputColorSpace = THREE.SRGBColorSpace;
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 1.12;
+
+    const scene = new THREE.Scene();
+    scene.fog = new THREE.FogExp2(0xefe4d2, 0.006);
+
+    const camera = new THREE.PerspectiveCamera(34, 1, 0.1, 80);
+    camera.position.set(0, 0.35, 12.2);
+
+    scene.add(new THREE.AmbientLight(0xf1eadf, 0.42));
+    scene.add(new THREE.HemisphereLight(0xf6fbff, 0x5d6458, 1.32));
+
+    const sun = new THREE.DirectionalLight(0xfff2dc, 2.25);
+    sun.position.set(-7.8, 5.2, 9.4);
+    scene.add(sun);
+
+    const fill = new THREE.DirectionalLight(0xbfe7ef, 0.72);
+    fill.position.set(4.6, 1.2, 6.2);
+    scene.add(fill);
+
+    const rim = new THREE.DirectionalLight(0x9fe0ec, 1.0);
+    rim.position.set(5.8, 2.1, -5.6);
+    scene.add(rim);
+
+    const globeGroup = new THREE.Group();
+    const cloudGroup = new THREE.Group();
+    const markerGroup = new THREE.Group();
+    const orbitGroup = new THREE.Group();
+    scene.add(globeGroup, orbitGroup);
+    globeGroup.add(cloudGroup, markerGroup);
+    globeGroup.rotation.set(-0.18, -1.55, 0.04);
+
+    const radius = 3.22;
+    const textureLoader = new THREE.TextureLoader();
+    const earthTexture = await loadTexture(THREE, textureLoader, root.dataset.earthTextureSrc, renderer)
+      .catch(() => createEarthTexture(THREE, worldTopology));
+    const earthBumpTexture = await loadTexture(THREE, textureLoader, root.dataset.earthBumpSrc, renderer)
+      .catch(() => earthTexture);
+    if ('NoColorSpace' in THREE) earthBumpTexture.colorSpace = THREE.NoColorSpace;
+    const earth = new THREE.Mesh(
+      new THREE.SphereGeometry(radius, 256, 128),
+      new THREE.MeshStandardMaterial({
+        map: earthTexture,
+        bumpMap: earthBumpTexture,
+        bumpScale: 0.16,
+        displacementMap: earthBumpTexture,
+        displacementScale: 0.028,
+        displacementBias: -0.012,
+        roughness: 0.62,
+        metalness: 0.01,
+        emissive: 0x2a3b39,
+        emissiveIntensity: 0.08,
+        color: 0xffffff
+      })
+    );
+    globeGroup.add(earth);
+
+    const clouds = new THREE.Mesh(
+      new THREE.SphereGeometry(radius * 1.012, 128, 64),
+      new THREE.MeshBasicMaterial({
+        map: createCloudTexture(THREE),
+        transparent: true,
+        opacity: 0.045,
+        depthWrite: false
+      })
+    );
+    cloudGroup.add(clouds);
+
+    const atmosphere = new THREE.Mesh(
+      new THREE.SphereGeometry(radius * 1.062, 128, 64),
+      new THREE.MeshBasicMaterial({
+        color: 0xbfeeff,
+        transparent: true,
+        opacity: 0.075,
+        side: THREE.BackSide,
+        depthWrite: false,
+        blending: THREE.AdditiveBlending
+      })
+    );
+    globeGroup.add(atmosphere);
+
+    const markers = projects.map((project, index) => {
+      const marker = createProjectMarker(THREE, project, index, radius);
+      markerGroup.add(marker.group);
+      return marker;
+    });
+
+    createOrbitLines(THREE, orbitGroup, radius);
+
+    let activeIndex = 0;
+    let targetRotationY = globeGroup.rotation.y;
+    let targetRotationX = globeGroup.rotation.x;
+    let lastSwitchAt = 0;
+    let startedAt = performance.now();
+    let hasEnteredViewport = false;
+    let frameId = 0;
+    const activeDuration = 6400;
+
+    function setActive(index, manual = false) {
+      activeIndex = (index + projects.length) % projects.length;
+      const project = projects[activeIndex];
+      targetRotationY = -THREE.MathUtils.degToRad(project.lon) - Math.PI * 0.5;
+      targetRotationX = THREE.MathUtils.clamp(THREE.MathUtils.degToRad(project.lat) * 0.2 - 0.08, -0.32, 0.22);
+      lastSwitchAt = getElapsedMs();
+
+      root.dataset.activeProject = String(activeIndex);
+      panels.forEach((panel, panelIndex) => panel.classList.toggle('is-active', panelIndex === activeIndex));
+      triggers.forEach((trigger, triggerIndex) => {
+        trigger.classList.toggle('is-active', triggerIndex === activeIndex);
+        trigger.setAttribute('aria-pressed', String(triggerIndex === activeIndex));
+      });
+
+      if (manual) {
+        startedAt = performance.now() - getElapsedMs();
+      }
+    }
+
+    triggers.forEach((trigger, index) => {
+      trigger.addEventListener('click', () => setActive(index, true));
+    });
+
+    function resize() {
+      const rect = (stageElement || root).getBoundingClientRect();
+      const width = Math.max(1, Math.floor(rect.width));
+      const height = Math.max(1, Math.floor(rect.height));
+      renderer.setSize(width, height, false);
+      camera.aspect = width / height;
+      camera.updateProjectionMatrix();
+
+      if (width < 760) {
+        camera.position.set(0, 0.28, 14.7);
+        globeGroup.position.set(0, -0.68, 0);
+      } else if (width < 1180) {
+        camera.position.set(0.6, 0.25, 14.3);
+        globeGroup.position.set(1.22, -0.16, 0);
+      } else {
+        camera.position.set(0.25, 0.3, 13.2);
+        globeGroup.position.set(2.56, -0.16, 0);
+      }
+    }
+
+    function updateScrollProgress() {
+      const rect = root.getBoundingClientRect();
+      const viewport = window.innerHeight || 1;
+      const sectionCenter = rect.top + rect.height * 0.5;
+      const viewportCenter = viewport * 0.82;
+      const distance = Math.abs(sectionCenter - viewportCenter);
+      const progress = 1 - THREE.MathUtils.clamp(distance / (viewport * 0.9), 0, 1);
+      root.style.setProperty('--project-globe-progress', progress.toFixed(3));
+      if (!hasEnteredViewport && progress > 0.38) {
+        hasEnteredViewport = true;
+        setActive(0, true);
+      }
+    }
+
+    function render() {
+      const elapsed = getElapsedMs();
+      const elapsedSeconds = elapsed / 1000;
+      updateScrollProgress();
+
+      if (!prefersReducedMotion.matches && elapsed - lastSwitchAt > activeDuration) {
+        setActive(activeIndex + 1);
+      }
+
+      const floatY = Math.sin(elapsedSeconds * 0.42) * 0.035;
+      globeGroup.rotation.y += (targetRotationY - globeGroup.rotation.y) * 0.028;
+      globeGroup.rotation.x += (targetRotationX + floatY - globeGroup.rotation.x) * 0.035;
+      globeGroup.rotation.z = Math.sin(elapsedSeconds * 0.18) * 0.025;
+      cloudGroup.rotation.y += prefersReducedMotion.matches ? 0 : 0.0016;
+      orbitGroup.rotation.y -= prefersReducedMotion.matches ? 0 : 0.0008;
+
+      markers.forEach((marker, index) => {
+        const isActive = index === activeIndex;
+        const pulse = 1 + Math.sin(elapsedSeconds * 3.1 + index) * 0.06;
+        marker.core.scale.setScalar((isActive ? 1.08 : 0.58) * pulse);
+        marker.ring.scale.setScalar(isActive ? 1.08 + Math.sin(elapsedSeconds * 2.4) * 0.05 : 0.58);
+        marker.ring.material.opacity = isActive ? 0.62 : 0.12;
+        marker.glow.material.opacity = isActive ? 0.34 : 0.07;
+        marker.light.intensity = isActive ? 0.78 : 0.08;
+        marker.label.material.opacity = isActive ? 0.88 : 0.12;
+      });
+
+      camera.lookAt(0.95, -0.02, 0);
+      renderer.render(scene, camera);
+      if (!prefersReducedMotion.matches) frameId = window.requestAnimationFrame(render);
+    }
+
+    const observer = new ResizeObserver(resize);
+    observer.observe(root);
+    window.addEventListener('scroll', updateScrollProgress, { passive: true });
+    window.addEventListener('resize', updateScrollProgress, { passive: true });
+
+    setActive(0);
+    resize();
+    updateScrollProgress();
+
+    if (prefersReducedMotion.matches) {
+      renderer.render(scene, camera);
+    } else {
+      frameId = window.requestAnimationFrame(render);
+    }
+
+    prefersReducedMotion.addEventListener?.('change', () => {
+      window.cancelAnimationFrame(frameId);
+      startedAt = performance.now();
+      lastSwitchAt = 0;
+      resize();
+      render();
+    });
+
+    window.addEventListener('pagehide', () => {
+      observer.disconnect();
+      window.removeEventListener('scroll', updateScrollProgress);
+      window.removeEventListener('resize', updateScrollProgress);
+      window.cancelAnimationFrame(frameId);
+      renderer.dispose();
+      scene.traverse((object) => {
+        if (object.geometry) object.geometry.dispose();
+        if (object.material) {
+          const materials = Array.isArray(object.material) ? object.material : [object.material];
+          materials.forEach((material) => {
+            if (material.map) material.map.dispose();
+            if (material.bumpMap && material.bumpMap !== material.map) material.bumpMap.dispose();
+            if (material.displacementMap && material.displacementMap !== material.map && material.displacementMap !== material.bumpMap) {
+              material.displacementMap.dispose();
+            }
+            material.dispose();
+          });
+        }
+      });
+    }, { once: true });
+
+    function getElapsedMs() {
+      return performance.now() - startedAt;
+    }
+  }
+
+  function loadTexture(THREE, textureLoader, src, renderer) {
+    return new Promise((resolve, reject) => {
+      if (!src) {
+        reject(new Error('Missing texture source'));
+        return;
+      }
+      textureLoader.load(
+        src,
+        (texture) => {
+          texture.colorSpace = THREE.SRGBColorSpace;
+          texture.anisotropy = Math.min(16, renderer.capabilities.getMaxAnisotropy?.() || 16);
+          texture.minFilter = THREE.LinearMipmapLinearFilter;
+          texture.magFilter = THREE.LinearFilter;
+          texture.generateMipmaps = true;
+          texture.wrapS = THREE.ClampToEdgeWrapping;
+          texture.wrapT = THREE.ClampToEdgeWrapping;
+          texture.needsUpdate = true;
+          resolve(texture);
+        },
+        undefined,
+        reject
+      );
+    });
+  }
+
+  function createEarthTexture(THREE, worldTopology) {
+    const canvas = document.createElement('canvas');
+    canvas.width = 2048;
+    canvas.height = 1024;
+    const ctx = canvas.getContext('2d');
+
+    ctx.fillStyle = '#0d2630';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    const oceanGradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+    oceanGradient.addColorStop(0, '#164659');
+    oceanGradient.addColorStop(0.45, '#0f2d3a');
+    oceanGradient.addColorStop(1, '#06131c');
+    ctx.fillStyle = oceanGradient;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    ctx.strokeStyle = 'rgba(195, 233, 240, 0.09)';
+    ctx.lineWidth = 1;
+    for (let lon = -180; lon <= 180; lon += 20) {
+      const [x1] = project(lon, -88, canvas);
+      ctx.beginPath();
+      ctx.moveTo(x1, 0);
+      ctx.lineTo(x1, canvas.height);
+      ctx.stroke();
+    }
+    for (let lat = -80; lat <= 80; lat += 20) {
+      const [, y] = project(0, lat, canvas);
+      ctx.beginPath();
+      ctx.moveTo(0, y);
+      ctx.lineTo(canvas.width, y);
+      ctx.stroke();
+    }
+
+    if (worldTopology?.objects?.countries?.geometries?.length) {
+      drawWorldLand(ctx, canvas, worldTopology);
+    } else {
+      const landFill = ctx.createLinearGradient(0, 120, canvas.width, canvas.height - 120);
+      landFill.addColorStop(0, '#7d9d62');
+      landFill.addColorStop(0.55, '#b59b65');
+      landFill.addColorStop(1, '#6c755f');
+      ctx.fillStyle = landFill;
+      ctx.strokeStyle = 'rgba(219, 232, 221, 0.32)';
+      ctx.lineWidth = 2.2;
+
+      [
+        [[-10, 72], [28, 70], [58, 64], [92, 57], [126, 50], [154, 42], [150, 24], [116, 18], [98, 5], [76, 8], [56, 24], [32, 28], [18, 42], [-8, 38], [-24, 52]],
+        [[-18, 36], [18, 34], [36, 20], [47, 4], [42, -18], [28, -34], [16, -35], [4, -17], [-8, 6], [-16, 18]],
+        [[72, 24], [88, 24], [100, 15], [94, 7], [78, 6], [68, 14]],
+        [[112, 8], [132, 2], [145, -12], [135, -28], [116, -31], [106, -16]],
+        [[-168, 68], [-132, 70], [-96, 56], [-76, 44], [-66, 22], [-88, 12], [-112, 24], [-138, 34], [-162, 48]],
+        [[-82, 13], [-68, 7], [-54, -8], [-48, -26], [-60, -48], [-72, -54], [-82, -34], [-78, -10]],
+        [[-56, 72], [-26, 75], [-18, 64], [-42, 58]],
+        [[-178, -60], [-110, -68], [-36, -64], [38, -70], [116, -62], [180, -68], [180, -90], [-180, -90]]
+      ].forEach((shape) => drawLand(ctx, canvas, shape));
+    }
+
+    ctx.globalAlpha = 0.18;
+    ctx.strokeStyle = '#cdeef5';
+    ctx.lineWidth = 1;
+    for (let i = 0; i < 90; i += 1) {
+      const y = 100 + i * 9;
+      ctx.beginPath();
+      for (let x = 0; x <= canvas.width; x += 26) {
+        const wave = Math.sin(x * 0.012 + i * 0.7) * 8;
+        if (x === 0) ctx.moveTo(x, y + wave);
+        else ctx.lineTo(x, y + wave);
+      }
+      ctx.stroke();
+    }
+    ctx.globalAlpha = 1;
+
+    const texture = new THREE.CanvasTexture(canvas);
+    texture.colorSpace = THREE.SRGBColorSpace;
+    texture.anisotropy = 8;
+    return texture;
+  }
+
+  function createCloudTexture(THREE) {
+    const canvas = document.createElement('canvas');
+    canvas.width = 1024;
+    canvas.height = 512;
+    const ctx = canvas.getContext('2d');
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = 'rgba(234, 248, 255, 0.28)';
+
+    for (let i = 0; i < 130; i += 1) {
+      const x = Math.random() * canvas.width;
+      const y = Math.random() * canvas.height;
+      const w = 34 + Math.random() * 130;
+      const h = 6 + Math.random() * 24;
+      ctx.save();
+      ctx.translate(x, y);
+      ctx.rotate((Math.random() - 0.5) * 0.3);
+      ctx.beginPath();
+      ctx.ellipse(0, 0, w, h, 0, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+    }
+
+    const texture = new THREE.CanvasTexture(canvas);
+    texture.colorSpace = THREE.SRGBColorSpace;
+    return texture;
+  }
+
+  function createProjectMarker(THREE, project, index, radius) {
+    const color = new THREE.Color(project.color || '#d08a51');
+    const group = new THREE.Group();
+    const position = latLonToVector(THREE, project.lat, project.lon, radius + 0.052);
+    group.position.copy(position);
+    group.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), position.clone().normalize());
+
+    const core = new THREE.Mesh(
+      new THREE.SphereGeometry(0.024, 18, 10),
+      new THREE.MeshBasicMaterial({ color, depthTest: true })
+    );
+    group.add(core);
+
+    const ring = new THREE.Mesh(
+      new THREE.TorusGeometry(0.07, 0.0038, 8, 38),
+      new THREE.MeshBasicMaterial({ color, transparent: true, opacity: 0.6, depthTest: true })
+    );
+    ring.rotation.x = Math.PI * 0.5;
+    group.add(ring);
+
+    const glow = new THREE.Sprite(
+      new THREE.SpriteMaterial({
+        map: createGlowTexture(THREE, project.color || '#d08a51'),
+        transparent: true,
+        opacity: 0.24,
+        depthWrite: false,
+        blending: THREE.AdditiveBlending
+      })
+    );
+    glow.scale.set(0.24, 0.24, 1);
+    group.add(glow);
+
+    const label = new THREE.Sprite(
+      new THREE.SpriteMaterial({
+        map: createLabelTexture(THREE, project.shortTitle || project.number || String(index + 1)),
+        transparent: true,
+        opacity: 0.42,
+        depthWrite: false
+      })
+    );
+    label.position.set(0, 0.24, 0);
+    label.scale.set(0.62, 0.19, 1);
+    group.add(label);
+
+    const light = new THREE.PointLight(color, 0.18, 1.7);
+    light.position.set(0, 0.08, 0);
+    group.add(light);
+
+    return { group, core, ring, glow, label, light };
+  }
+
+  function createOrbitLines(THREE, group, radius) {
+    const materials = [
+      new THREE.LineBasicMaterial({ color: 0x65d1df, transparent: true, opacity: 0.24, depthWrite: false }),
+      new THREE.LineBasicMaterial({ color: 0xf1d08a, transparent: true, opacity: 0.18, depthWrite: false }),
+      new THREE.LineBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.12, depthWrite: false })
+    ];
+
+    for (let i = 0; i < 5; i += 1) {
+      const points = [];
+      const ringRadius = radius * (1.08 + i * 0.05);
+      for (let step = 0; step <= 180; step += 1) {
+        const angle = (step / 180) * Math.PI * 2;
+        points.push(new THREE.Vector3(Math.cos(angle) * ringRadius, Math.sin(angle) * 0.26, Math.sin(angle) * ringRadius));
+      }
+      const line = new THREE.Line(new THREE.BufferGeometry().setFromPoints(points), materials[i % materials.length]);
+      line.rotation.set((i - 2) * 0.18, i * 0.52, (i % 2 === 0 ? 1 : -1) * 0.26);
+      group.add(line);
+    }
+  }
+
+  function createGlowTexture(THREE, color) {
+    const canvas = document.createElement('canvas');
+    canvas.width = 128;
+    canvas.height = 128;
+    const ctx = canvas.getContext('2d');
+    const gradient = ctx.createRadialGradient(64, 64, 0, 64, 64, 64);
+    gradient.addColorStop(0, color);
+    gradient.addColorStop(0.26, color);
+    gradient.addColorStop(1, 'rgba(255,255,255,0)');
+    ctx.fillStyle = gradient;
+    ctx.fillRect(0, 0, 128, 128);
+    const texture = new THREE.CanvasTexture(canvas);
+    texture.colorSpace = THREE.SRGBColorSpace;
+    return texture;
+  }
+
+  function createLabelTexture(THREE, label) {
+    const canvas = document.createElement('canvas');
+    canvas.width = 512;
+    canvas.height = 160;
+    const ctx = canvas.getContext('2d');
+    ctx.fillStyle = 'rgba(7, 18, 27, 0.72)';
+    ctx.strokeStyle = 'rgba(195, 233, 240, 0.74)';
+    ctx.lineWidth = 2;
+    roundRect(ctx, 54, 38, 404, 72, 10);
+    ctx.fill();
+    ctx.stroke();
+    ctx.fillStyle = '#eefcff';
+    ctx.font = '700 34px -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(label, 256, 74);
+    const texture = new THREE.CanvasTexture(canvas);
+    texture.colorSpace = THREE.SRGBColorSpace;
+    return texture;
+  }
+
+  function drawLand(ctx, canvas, points) {
+    ctx.beginPath();
+    points.forEach(([lon, lat], index) => {
+      const [x, y] = project(lon, lat, canvas);
+      if (index === 0) ctx.moveTo(x, y);
+      else ctx.lineTo(x, y);
+    });
+    ctx.closePath();
+    ctx.fill();
+    ctx.stroke();
+  }
+
+  function drawWorldLand(ctx, canvas, topology) {
+    const arcs = decodeTopologyArcs(topology);
+    const landFill = ctx.createLinearGradient(0, 80, canvas.width, canvas.height - 80);
+    landFill.addColorStop(0, '#8fac6f');
+    landFill.addColorStop(0.5, '#b7a16c');
+    landFill.addColorStop(1, '#687d67');
+
+    ctx.fillStyle = landFill;
+    ctx.strokeStyle = 'rgba(218, 235, 226, 0.28)';
+    ctx.lineWidth = 1.25;
+
+    topology.objects.countries.geometries.forEach((geometry) => {
+      geometryToPolygons(geometry, arcs).forEach((polygon) => {
+        ctx.beginPath();
+        polygon.forEach((ring) => {
+          ring.forEach(([lon, lat], index) => {
+            const [x, y] = project(lon, lat, canvas);
+            if (index === 0) ctx.moveTo(x, y);
+            else ctx.lineTo(x, y);
+          });
+          ctx.closePath();
+        });
+        ctx.fill('evenodd');
+        ctx.stroke();
+      });
+    });
+
+    ctx.save();
+    ctx.globalAlpha = 0.16;
+    ctx.strokeStyle = '#d9f6ff';
+    ctx.lineWidth = 0.8;
+    topology.objects.countries.geometries.forEach((geometry, geometryIndex) => {
+      if (geometryIndex % 3 !== 0) return;
+      geometryToPolygons(geometry, arcs).forEach((polygon) => {
+        polygon.forEach((ring) => {
+          if (ring.length < 8) return;
+          ctx.beginPath();
+          ring.forEach(([lon, lat], index) => {
+            const [x, y] = project(lon + 0.8, lat - 0.6, canvas);
+            if (index === 0) ctx.moveTo(x, y);
+            else ctx.lineTo(x, y);
+          });
+          ctx.stroke();
+        });
+      });
+    });
+    ctx.restore();
+  }
+
+  function decodeTopologyArcs(topology) {
+    const scale = topology.transform?.scale || [1, 1];
+    const translate = topology.transform?.translate || [0, 0];
+
+    return topology.arcs.map((arc) => {
+      let x = 0;
+      let y = 0;
+      return arc.map(([dx, dy]) => {
+        x += dx;
+        y += dy;
+        return [x * scale[0] + translate[0], y * scale[1] + translate[1]];
+      });
+    });
+  }
+
+  function geometryToPolygons(geometry, arcs) {
+    if (geometry.type === 'Polygon') {
+      return [geometry.arcs.map((ring) => stitchRing(ring, arcs))];
+    }
+
+    if (geometry.type === 'MultiPolygon') {
+      return geometry.arcs.map((polygon) => polygon.map((ring) => stitchRing(ring, arcs)));
+    }
+
+    return [];
+  }
+
+  function stitchRing(ring, arcs) {
+    return ring.flatMap((arcIndex, index) => {
+      const arc = arcIndex >= 0 ? arcs[arcIndex] : [...arcs[~arcIndex]].reverse();
+      return index === 0 ? arc : arc.slice(1);
+    });
+  }
+
+  function project(lon, lat, canvas) {
+    return [
+      ((lon + 180) / 360) * canvas.width,
+      ((90 - lat) / 180) * canvas.height
+    ];
+  }
+
+  function latLonToVector(THREE, lat, lon, radius) {
+    const phi = (90 - lat) * Math.PI / 180;
+    const theta = (lon + 180) * Math.PI / 180;
+    return new THREE.Vector3(
+      -radius * Math.sin(phi) * Math.cos(theta),
+      radius * Math.cos(phi),
+      radius * Math.sin(phi) * Math.sin(theta)
+    );
+  }
+
+  function roundRect(ctx, x, y, width, height, radius) {
+    ctx.beginPath();
+    ctx.moveTo(x + radius, y);
+    ctx.lineTo(x + width - radius, y);
+    ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
+    ctx.lineTo(x + width, y + height - radius);
+    ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
+    ctx.lineTo(x + radius, y + height);
+    ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
+    ctx.lineTo(x, y + radius);
+    ctx.quadraticCurveTo(x, y, x + radius, y);
+    ctx.closePath();
+  }
+</script>

@@ -165,7 +165,9 @@
 
         if ("ResizeObserver" in window) {
           const observer = new ResizeObserver(scheduleRemeasure);
-          railState.forEach((state) => observer.observe(state.column));
+          railState.forEach((state) => {
+            if (state.column instanceof Element) observer.observe(state.column);
+          });
         } else {
           window.addEventListener("resize", scheduleRemeasure);
         }

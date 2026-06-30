@@ -2,98 +2,95 @@
 import { Image } from 'astro:assets';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import MetricGrid from '../components/MetricGrid.astro';
-import ProfilePortrait from '../components/ProfilePortrait.astro';
 import ProjectList from '../components/ProjectList.astro';
-import SectionHeading from '../components/SectionHeading.astro';
-import TagRow from '../components/TagRow.astro';
-import shanshui from '../assets/images/shanshui.jpg';
-import { capabilityRows, focusAreas, metrics, profile, projects } from '../data/profile';
+import ProjectGlobe from '../components/ProjectGlobe.astro';
+import portrait from '../assets/images/zhang-binxuan-academic-id.png';
+import { globeProjects, metrics, profile, projectIndex } from '../data/profile';
 ---
 
 <BaseLayout title="张斌轩 | AI 研究与教育实践" bodyClass="home-page">
-  <section class="brand-hero">
-    <div class="hero-copy">
-      <p class="hero-line">AI Research · Education Practice · Computing Power</p>
-      <h1>{profile.name}</h1>
-      <p class="hero-en">{profile.englishName}</p>
-      <p class="hero-title">{profile.title}</p>
-      <p class="hero-lead">{profile.summary}</p>
-      <div class="hero-actions">
-        <a class="button-primary" href="/qingyang-screen3/">高天厚土·福地庆阳</a>
-        <a class="button-secondary" href="/society/">查看智研社展厅</a>
+  <section id="top" class="home-hero">
+    <div class="home-hero__copy">
+      <div class="home-hero__identity">
+        <div>
+          <h1>{profile.name}</h1>
+          <p class="hero-en">{profile.englishName}</p>
+        </div>
+        <Image
+          class="home-hero__portrait"
+          src={portrait}
+          alt="张斌轩学术证件照"
+          widths={[180, 240, 320, 480]}
+          sizes="(max-width: 760px) 108px, 150px"
+          loading="eager"
+        />
+      </div>
+      <p class="home-hero__lead">
+        面向学术交流与区域产业展示，连接甘肃省人工智能与算力技术重点实验室、庆阳职业技术学院数字信息系，以及东数西算庆阳枢纽背景下的 AI 人才培养与产业服务。
+      </p>
+      <div class="home-hero__roles" aria-label="身份与方向">
+        <span>甘肃省人工智能与算力技术重点实验室</span>
+        <span>庆阳职业技术学院数字信息系</span>
+        <span>科研转化、课程建设与地方产业服务</span>
+      </div>
+      <div class="home-hero__actions">
+        <a class="button-primary" href="#project-globe">进入项目星球</a>
         <a class="button-secondary" href={profile.github} target="_blank" rel="noreferrer">GitHub</a>
       </div>
       <MetricGrid items={metrics} className="hero-proof" />
     </div>
 
-    <ProfilePortrait />
-  </section>
-
-  <section id="work" class="content-band">
-    <SectionHeading
-      eyebrow="Research Focus"
-      title="把人工智能研究做成能被看见、能被学习、能被实践的能力。"
-      text={profile.headline}
-    />
-    <div class="focus-grid">
-      {focusAreas.map((area) => (
-        <article class="focus-card">
-          <h3>{area.title}</h3>
-          <p>{area.text}</p>
-          <TagRow tags={area.tags} />
-        </article>
-      ))}
+    <div class="home-hero__art" aria-hidden="true">
+      <img src="/images/home-hero-qingyang-ai-background.png" alt="" loading="eager" decoding="async" />
     </div>
   </section>
 
-  <section class="capability-section" aria-label="能力矩阵">
-    <div class="capability-shell">
-      <span>Capability Matrix</span>
-      <div>
-        {capabilityRows.map(([label, text]) => (
-          <article>
-            <strong>{label}</strong>
-            <p>{text}</p>
-          </article>
-        ))}
-      </div>
-    </div>
-  </section>
+  <ProjectGlobe projects={globeProjects} />
 
-  <section id="projects" class="feature-section">
-    <div class="feature-media" aria-hidden="true">
-      <Image src={shanshui} alt="" widths={[640, 960, 1280]} sizes="(max-width: 1180px) 100vw, 42vw" loading="lazy" />
-    </div>
-    <div class="feature-copy">
-      <span>Selected Work</span>
-      <h2>研究、项目和教学在同一个方向上汇合。</h2>
-      <ProjectList projects={projects} />
-    </div>
-  </section>
-
-  <section class="society-preview" aria-label="庆阳职业技术学院智研社">
-    <div>
-      <span>Qingyang Vocational & Technical College</span>
-      <h2>庆阳职业技术学院智研社</h2>
+  <section id="project-index" class="home-closing">
+    <div class="home-closing__intro">
+      <span class="section-kicker">Selected Work</span>
+      <h2>代表性项目与合作入口</h2>
       <p>
-        面向领导与企业来访展示，首屏汇报人工智能通识课程、学生培养、重点实验室项目牵引、前沿实践方向与东数西算人才培养主线。
+        以下内容记录科研训练、教学平台与产业实践中的部分工作，便于继续查看源码、展示页面和学术资料。
       </p>
     </div>
-    <div class="society-preview-actions">
-      <a class="button-primary" href="/qingyang-screen3/">高天厚土·福地庆阳</a>
-      <a class="button-secondary" href="/society/">进入动态展厅</a>
+    <div class="home-closing__grid">
+      <div>
+        <h3>项目实践</h3>
+        <ProjectList projects={projectIndex} />
+      </div>
+      <div id="contact" class="home-contact">
+        <h3>联系与资料</h3>
+        <p>欢迎交流人工智能研究、文化视觉生成、AI 教育实践与职业教育项目合作。</p>
+        <div class="contact-links">
+          <a href={`mailto:${profile.email}`}>Email</a>
+          <a href={profile.scholar} target="_blank" rel="noreferrer">Google Scholar</a>
+          <a href={profile.orcid} target="_blank" rel="noreferrer">ORCID</a>
+          <a href="/qingyang-compute/">庆阳算力展厅</a>
+          <a href="/society/">智研社</a>
+        </div>
+      </div>
     </div>
-  </section>
-
-  <section id="contact" class="contact-panel">
-    <div>
-      <span>Contact</span>
-      <h2>欢迎交流人工智能研究、项目实践与职业教育合作。</h2>
-    </div>
-    <div class="contact-links">
-      <a href={`mailto:${profile.email}`}>Email</a>
-      <a href={profile.scholar} target="_blank" rel="noreferrer">Google Scholar</a>
-      <a href={profile.orcid} target="_blank" rel="noreferrer">ORCID</a>
+    <div class="site-stats" data-site-stats aria-label="站点访问统计">
+      <div class="site-stats__copy">
+        <span>站点足迹</span>
+        <p>记录当前设备上的浏览、点击与停留，用于观察页面被打开和互动的情况。</p>
+      </div>
+      <dl>
+        <div>
+          <dt>累计浏览</dt>
+          <dd><strong data-stat-views>--</strong><span>次</span></dd>
+        </div>
+        <div>
+          <dt>累计点击</dt>
+          <dd><strong data-stat-clicks>--</strong><span>次</span></dd>
+        </div>
+        <div>
+          <dt>本次停留</dt>
+          <dd><strong data-stat-seconds>0</strong><span>秒</span></dd>
+        </div>
+      </dl>
     </div>
   </section>
 </BaseLayout>

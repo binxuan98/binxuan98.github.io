@@ -29,11 +29,27 @@ const pageTitle = title.includes('张斌轩') || title.includes('Binxuan')
     {!presentation && (
       <header class="site-header" data-site-header>
         <a class="brand-mark" href="/" aria-label="返回首页">
-          <span>BX</span>
-          <strong>{profile.name}</strong>
+          <strong>学术主页</strong>
+          <small>AI · 算力 · 教育</small>
         </a>
         <nav class="site-nav" aria-label="主导航">
-          {navItems.map((item) => <a href={item.href}>{item.label}</a>)}
+          {navItems.map((item) => (
+            item.children?.length ? (
+              <div class="site-nav__item site-nav__item--has-menu">
+                <button type="button" class="site-nav__menu-trigger" aria-haspopup="true" aria-expanded="false" data-subnav-trigger>
+                  {item.label}
+                  <span class="site-nav__caret" aria-hidden="true"></span>
+                </button>
+                <div class="site-subnav" role="menu">
+                  {item.children.map((child) => (
+                    <a href={child.href} role="menuitem">{child.label}</a>
+                  ))}
+                </div>
+              </div>
+            ) : (
+              <a href={item.href}>{item.label}</a>
+            )
+          ))}
         </nav>
       </header>
     )}
@@ -47,5 +63,99 @@ const pageTitle = title.includes('张斌轩') || title.includes('Binxuan')
       </footer>
     )}
     {enableCarousel && <script src="/scripts/site.js" defer></script>}
+    <script>
+      document.querySelectorAll('.site-nav__item--has-menu').forEach((item) => {
+        const trigger = item.querySelector('[data-subnav-trigger]');
+        if (!(trigger instanceof HTMLElement)) return;
+        let closeTimer = 0;
+
+        const setExpanded = (expanded) => {
+          trigger.setAttribute('aria-expanded', String(expanded));
+        };
+        const open = () => {
+          window.clearTimeout(closeTimer);
+          item.classList.add('is-open');
+          setExpanded(true);
+        };
+        const close = () => {
+          window.clearTimeout(closeTimer);
+          closeTimer = window.setTimeout(() => {
+            item.classList.remove('is-open');
+            setExpanded(false);
+          }, 220);
+        };
+        const closeNow = () => {
+          window.clearTimeout(closeTimer);
+          item.classList.remove('is-open');
+          setExpanded(false);
+        };
+
+        item.addEventListener('pointerenter', open);
+        item.addEventListener('pointerleave', close);
+        item.addEventListener('focusin', open);
+        item.addEventListener('focusout', (event) => {
+          const nextTarget = event.relatedTarget;
+          if (!(nextTarget instanceof Node) || !item.contains(nextTarget)) close();
+        });
+
+        trigger.addEventListener('click', (event) => {
+          event.preventDefault();
+          item.classList.toggle('is-open');
+          setExpanded(item.classList.contains('is-open'));
+        });
+
+        document.addEventListener('keydown', (event) => {
+          if (event.key === 'Escape') closeNow();
+        });
+      });
+
+      (() => {
+        const key = 'binxuan-site-stats-v1';
+        const readStats = () => {
+          try {
+            return JSON.parse(window.localStorage.getItem(key) || '{}');
+          } catch {
+            return {};
+          }
+        };
+        const writeStats = (stats) => {
+          window.localStorage.setItem(key, JSON.stringify(stats));
+        };
+        const stats = {
+          views: 0,
+          clicks: 0,
+          ...readStats()
+        };
+        stats.views = Number(stats.views || 0) + 1;
+        stats.clicks = Number(stats.clicks || 0);
+        writeStats(stats);
+
+        const root = document.querySelector('[data-site-stats]');
+        if (!root) return;
+
+        const viewNode = root.querySelector('[data-stat-views]');
+        const clickNode = root.querySelector('[data-stat-clicks]');
+        const secondsNode = root.querySelector('[data-stat-seconds]');
+        const formatNumber = (value) => new Intl.NumberFormat('zh-CN').format(value);
+        const render = () => {
+          if (viewNode) viewNode.textContent = formatNumber(stats.views);
+          if (clickNode) clickNode.textContent = formatNumber(stats.clicks);
+        };
+
+        render();
+        document.addEventListener('click', (event) => {
+          const target = event.target;
+          if (!(target instanceof Element) || !target.closest('a, button')) return;
+          stats.clicks += 1;
+          writeStats(stats);
+          render();
+        }, { capture: true });
+
+        const startedAt = Date.now();
+        window.setInterval(() => {
+          if (secondsNode) secondsNode.textContent = String(Math.floor((Date.now() - startedAt) / 1000));
+        }, 1000);
+      })();
+    </script>
   </body>
 </html>

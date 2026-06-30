@@ -1,0 +1,31 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import MetricGrid from '../components/MetricGrid.astro';
+import QingyangComputeScene from '../components/QingyangComputeScene.astro';
+import { qingyangMetrics, qingyangStory } from '../data/qingyang';
+---
+
+<BaseLayout
+  title="中国算谷·智慧庆阳"
+  description="中国算谷·智慧庆阳独立展示页面，呈现东数西算庆阳枢纽、绿色算力与区域产业服务。"
+  bodyClass="society-page"
+  presentation={true}
+>
+  <section class="qingyang-compute-screen qingyang-grid-bg">
+    <QingyangComputeScene />
+    <div class="compute-hero-shell">
+      <div class="compute-hero-copy">
+        <div class="qingyang-logo">{qingyangStory.badge}</div>
+        <h1>
+          <span>东数西算</span>
+          <strong>庆阳枢纽</strong>
+        </h1>
+        <p class="compute-hero-lead">{qingyangStory.subtitle}</p>
+        {qingyangStory.proof && <p class="compute-hero-proof">{qingyangStory.proof}</p>}
+        <MetricGrid items={qingyangMetrics} className="compute-hero-metrics" />
+      </div>
+
+      <p class="compute-hero-bottomline">{qingyangStory.bottomline}</p>
+    </div>
+  </section>
+</BaseLayout>
