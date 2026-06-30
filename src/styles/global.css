@@ -600,6 +600,26 @@ button {
   scroll-snap-align: start;
 }
 
+.qingyang-screen3-embed-screen {
+  position: relative;
+  width: 100%;
+  min-height: 100svh;
+  height: 100svh;
+  overflow: hidden;
+  background: #050810;
+  scroll-snap-align: start;
+}
+
+.qingyang-screen3-embed {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  background: #050810;
+}
+
 .compute-scene {
   position: absolute;
   inset: 0;
