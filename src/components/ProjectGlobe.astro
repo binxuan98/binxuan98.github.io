@@ -219,13 +219,16 @@ const { projects = [] } = Astro.props;
     let lastSwitchAt = 0;
     let startedAt = performance.now();
     let hasEnteredViewport = false;
+    let spinOffsetY = 0;
+    let lastFrameAt = performance.now();
     let frameId = 0;
     const activeDuration = 6400;
+    const spinSpeed = 0.075;
 
     function setActive(index, manual = false) {
       activeIndex = (index + projects.length) % projects.length;
       const project = projects[activeIndex];
-      targetRotationY = -THREE.MathUtils.degToRad(project.lon) - Math.PI * 0.5;
+      targetRotationY = -THREE.MathUtils.degToRad(project.lon) - Math.PI * 0.5 - spinOffsetY;
       targetRotationX = THREE.MathUtils.clamp(THREE.MathUtils.degToRad(project.lat) * 0.2 - 0.08, -0.32, 0.22);
       lastSwitchAt = getElapsedMs();
 
@@ -280,6 +283,9 @@ const { projects = [] } = Astro.props;
     }
 
     function render() {
+      const now = performance.now();
+      const deltaSeconds = Math.min(0.05, Math.max(0, (now - lastFrameAt) / 1000));
+      lastFrameAt = now;
       const elapsed = getElapsedMs();
       const elapsedSeconds = elapsed / 1000;
       updateScrollProgress();
@@ -289,7 +295,11 @@ const { projects = [] } = Astro.props;
       }
 
       const floatY = Math.sin(elapsedSeconds * 0.42) * 0.035;
-      globeGroup.rotation.y += (targetRotationY - globeGroup.rotation.y) * 0.028;
+      if (!prefersReducedMotion.matches) {
+        spinOffsetY -= deltaSeconds * spinSpeed;
+      }
+      const desiredRotationY = targetRotationY + spinOffsetY;
+      globeGroup.rotation.y += (desiredRotationY - globeGroup.rotation.y) * 0.032;
       globeGroup.rotation.x += (targetRotationX + floatY - globeGroup.rotation.x) * 0.035;
       globeGroup.rotation.z = Math.sin(elapsedSeconds * 0.18) * 0.025;
       cloudGroup.rotation.y += prefersReducedMotion.matches ? 0 : 0.0016;
@@ -330,6 +340,7 @@ const { projects = [] } = Astro.props;
       window.cancelAnimationFrame(frameId);
       startedAt = performance.now();
       lastSwitchAt = 0;
+      lastFrameAt = performance.now();
       resize();
       render();
     });
