@@ -154,7 +154,8 @@ const { projects = [] } = Astro.props;
     const orbitGroup = new THREE.Group();
     scene.add(globeGroup, orbitGroup);
     globeGroup.add(cloudGroup, markerGroup);
-    globeGroup.rotation.set(-0.18, -1.55, 0.04);
+    const rotationYForProject = (project) => -THREE.MathUtils.degToRad(project.lon) - Math.PI * 0.5;
+    globeGroup.rotation.set(-0.18, rotationYForProject(projects[0]), 0.04);
 
     const radius = 3.22;
     const textureLoader = new THREE.TextureLoader();
@@ -214,23 +215,28 @@ const { projects = [] } = Astro.props;
     createOrbitLines(THREE, orbitGroup, radius);
 
     let activeIndex = 0;
-    let targetRotationY = globeGroup.rotation.y;
     let targetRotationX = globeGroup.rotation.x;
-    let lastSwitchAt = 0;
     let startedAt = performance.now();
-    let hasEnteredViewport = false;
-    let spinOffsetY = 0;
     let lastFrameAt = performance.now();
+    let manualSelectionUntil = 0;
     let frameId = 0;
-    const activeDuration = 6400;
-    const spinSpeed = 0.075;
+    const spinSpeed = 0.052;
+    const globeCenter = new THREE.Vector3();
+    const markerWorld = new THREE.Vector3();
+    const markerNormal = new THREE.Vector3();
+    const toCamera = new THREE.Vector3();
+    const projectedMarker = new THREE.Vector3();
+    const projectedCenter = new THREE.Vector3();
 
     function setActive(index, manual = false) {
-      activeIndex = (index + projects.length) % projects.length;
-      const project = projects[activeIndex];
-      targetRotationY = -THREE.MathUtils.degToRad(project.lon) - Math.PI * 0.5 - spinOffsetY;
-      targetRotationX = THREE.MathUtils.clamp(THREE.MathUtils.degToRad(project.lat) * 0.2 - 0.08, -0.32, 0.22);
-      lastSwitchAt = getElapsedMs();
+      const nextIndex = (index + projects.length) % projects.length;
+      if (nextIndex === activeIndex && root.dataset.activeProject === String(nextIndex)) {
+        if (manual) manualSelectionUntil = performance.now() + 4200;
+        return;
+      }
+
+      activeIndex = nextIndex;
+      if (manual) manualSelectionUntil = performance.now() + 4200;
 
       root.dataset.activeProject = String(activeIndex);
       panels.forEach((panel, panelIndex) => panel.classList.toggle('is-active', panelIndex === activeIndex));
@@ -276,9 +282,44 @@ const { projects = [] } = Astro.props;
       const distance = Math.abs(sectionCenter - viewportCenter);
       const progress = 1 - THREE.MathUtils.clamp(distance / (viewport * 0.9), 0, 1);
       root.style.setProperty('--project-globe-progress', progress.toFixed(3));
-      if (!hasEnteredViewport && progress > 0.38) {
-        hasEnteredViewport = true;
-        setActive(0, true);
+    }
+
+    function syncActiveToFrontMarker(now) {
+      if (now < manualSelectionUntil) return;
+
+      globeGroup.updateMatrixWorld(true);
+      globeGroup.getWorldPosition(globeCenter);
+      projectedCenter.copy(globeCenter).project(camera);
+
+      let bestIndex = activeIndex;
+      let bestScore = -Infinity;
+      let bestFacing = 0;
+
+      markers.forEach((marker, index) => {
+        marker.group.getWorldPosition(markerWorld);
+        markerNormal.copy(markerWorld).sub(globeCenter).normalize();
+        toCamera.copy(camera.position).sub(markerWorld).normalize();
+        const facing = markerNormal.dot(toCamera);
+        if (facing < 0.2) return;
+
+        projectedMarker.copy(markerWorld).project(camera);
+        if (projectedMarker.z < -1 || projectedMarker.z > 1) return;
+
+        const screenDistance = Math.hypot(
+          projectedMarker.x - projectedCenter.x,
+          (projectedMarker.y - projectedCenter.y) * 1.25
+        );
+        const score = facing * 1.25 - screenDistance * 0.45;
+
+        if (score > bestScore) {
+          bestScore = score;
+          bestFacing = facing;
+          bestIndex = index;
+        }
+      });
+
+      if (bestIndex !== activeIndex && bestFacing > 0.42 && bestScore > 0.38) {
+        setActive(bestIndex);
       }
     }
 
@@ -290,30 +331,25 @@ const { projects = [] } = Astro.props;
       const elapsedSeconds = elapsed / 1000;
       updateScrollProgress();
 
-      if (!prefersReducedMotion.matches && elapsed - lastSwitchAt > activeDuration) {
-        setActive(activeIndex + 1);
-      }
-
       const floatY = Math.sin(elapsedSeconds * 0.42) * 0.035;
       if (!prefersReducedMotion.matches) {
-        spinOffsetY -= deltaSeconds * spinSpeed;
+        globeGroup.rotation.y -= deltaSeconds * spinSpeed;
       }
-      const desiredRotationY = targetRotationY + spinOffsetY;
-      globeGroup.rotation.y += (desiredRotationY - globeGroup.rotation.y) * 0.032;
       globeGroup.rotation.x += (targetRotationX + floatY - globeGroup.rotation.x) * 0.035;
       globeGroup.rotation.z = Math.sin(elapsedSeconds * 0.18) * 0.025;
       cloudGroup.rotation.y += prefersReducedMotion.matches ? 0 : 0.0016;
       orbitGroup.rotation.y -= prefersReducedMotion.matches ? 0 : 0.0008;
+      if (!prefersReducedMotion.matches) syncActiveToFrontMarker(now);
 
       markers.forEach((marker, index) => {
         const isActive = index === activeIndex;
         const pulse = 1 + Math.sin(elapsedSeconds * 3.1 + index) * 0.06;
-        marker.core.scale.setScalar((isActive ? 1.08 : 0.58) * pulse);
-        marker.ring.scale.setScalar(isActive ? 1.08 + Math.sin(elapsedSeconds * 2.4) * 0.05 : 0.58);
-        marker.ring.material.opacity = isActive ? 0.62 : 0.12;
-        marker.glow.material.opacity = isActive ? 0.34 : 0.07;
-        marker.light.intensity = isActive ? 0.78 : 0.08;
-        marker.label.material.opacity = isActive ? 0.88 : 0.12;
+        marker.core.scale.setScalar((isActive ? 0.96 : 0.5) * pulse);
+        marker.ring.scale.setScalar(isActive ? 0.88 + Math.sin(elapsedSeconds * 2.4) * 0.035 : 0.5);
+        marker.ring.material.opacity = isActive ? 0.36 : 0.08;
+        marker.glow.material.opacity = isActive ? 0.16 : 0.025;
+        marker.light.intensity = isActive ? 0.24 : 0.025;
+        marker.label.material.opacity = isActive ? 0.74 : 0.08;
       });
 
       camera.lookAt(0.95, -0.02, 0);
@@ -339,7 +375,6 @@ const { projects = [] } = Astro.props;
     prefersReducedMotion.addEventListener?.('change', () => {
       window.cancelAnimationFrame(frameId);
       startedAt = performance.now();
-      lastSwitchAt = 0;
       lastFrameAt = performance.now();
       resize();
       render();
@@ -509,14 +544,14 @@ const { projects = [] } = Astro.props;
     group.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), position.clone().normalize());
 
     const core = new THREE.Mesh(
-      new THREE.SphereGeometry(0.024, 18, 10),
+      new THREE.SphereGeometry(0.021, 18, 10),
       new THREE.MeshBasicMaterial({ color, depthTest: true })
     );
     group.add(core);
 
     const ring = new THREE.Mesh(
-      new THREE.TorusGeometry(0.07, 0.0038, 8, 38),
-      new THREE.MeshBasicMaterial({ color, transparent: true, opacity: 0.6, depthTest: true })
+      new THREE.TorusGeometry(0.058, 0.0032, 8, 38),
+      new THREE.MeshBasicMaterial({ color, transparent: true, opacity: 0.36, depthTest: true })
     );
     ring.rotation.x = Math.PI * 0.5;
     group.add(ring);
@@ -525,12 +560,12 @@ const { projects = [] } = Astro.props;
       new THREE.SpriteMaterial({
         map: createGlowTexture(THREE, project.color || '#d08a51'),
         transparent: true,
-        opacity: 0.24,
+        opacity: 0.12,
         depthWrite: false,
         blending: THREE.AdditiveBlending
       })
     );
-    glow.scale.set(0.24, 0.24, 1);
+    glow.scale.set(0.18, 0.18, 1);
     group.add(glow);
 
     const label = new THREE.Sprite(
@@ -545,7 +580,7 @@ const { projects = [] } = Astro.props;
     label.scale.set(0.62, 0.19, 1);
     group.add(label);
 
-    const light = new THREE.PointLight(color, 0.18, 1.7);
+    const light = new THREE.PointLight(color, 0.08, 1.25);
     light.position.set(0, 0.08, 0);
     group.add(light);
 
