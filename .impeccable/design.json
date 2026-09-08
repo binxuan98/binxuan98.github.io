@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-09-08T16:23:44.657649+00:00",
-  "title": "Design System: 智研社数字孪生园区",
+  "generatedAt": "2026-09-08T17:10:31.020450+00:00",
+  "title": "Design System: 东数西算人才培养基地一期",
   "extensions": {
     "colorMeta": {
       "twin-accent": {
@@ -102,62 +102,6 @@
           "oklch(95% 0.09064 177.64)"
         ]
       },
-      "metric-highlight": {
-        "role": "primary",
-        "displayName": "metric-highlight",
-        "tonalRamp": [
-          "oklch(15% 0.10037 179.83)",
-          "oklch(26% 0.10037 179.83)",
-          "oklch(38% 0.10037 179.83)",
-          "oklch(49% 0.10037 179.83)",
-          "oklch(61% 0.10037 179.83)",
-          "oklch(72% 0.10037 179.83)",
-          "oklch(84% 0.10037 179.83)",
-          "oklch(95% 0.10037 179.83)"
-        ]
-      },
-      "connection-gold": {
-        "role": "secondary",
-        "displayName": "connection-gold",
-        "tonalRamp": [
-          "oklch(15% 0.08675 84.13)",
-          "oklch(26% 0.08675 84.13)",
-          "oklch(38% 0.08675 84.13)",
-          "oklch(49% 0.08675 84.13)",
-          "oklch(61% 0.08675 84.13)",
-          "oklch(72% 0.08675 84.13)",
-          "oklch(84% 0.08675 84.13)",
-          "oklch(95% 0.08675 84.13)"
-        ]
-      },
-      "tag-background": {
-        "role": "neutral",
-        "displayName": "tag-background",
-        "tonalRamp": [
-          "oklch(15% 0.04052 231.23)",
-          "oklch(26% 0.04052 231.23)",
-          "oklch(38% 0.04052 231.23)",
-          "oklch(49% 0.04052 231.23)",
-          "oklch(61% 0.04052 231.23)",
-          "oklch(72% 0.04052 231.23)",
-          "oklch(84% 0.04052 231.23)",
-          "oklch(95% 0.04052 231.23)"
-        ]
-      },
-      "tag-text": {
-        "role": "neutral",
-        "displayName": "tag-text",
-        "tonalRamp": [
-          "oklch(15% 0.05218 203.85)",
-          "oklch(26% 0.05218 203.85)",
-          "oklch(38% 0.05218 203.85)",
-          "oklch(49% 0.05218 203.85)",
-          "oklch(61% 0.05218 203.85)",
-          "oklch(72% 0.05218 203.85)",
-          "oklch(84% 0.05218 203.85)",
-          "oklch(95% 0.05218 203.85)"
-        ]
-      },
       "control-active": {
         "role": "neutral",
         "displayName": "control-active",
@@ -185,12 +129,180 @@
           "oklch(84% 0.04086 233.94)",
           "oklch(95% 0.04086 233.94)"
         ]
+      },
+      "source-highlight": {
+        "role": "secondary",
+        "displayName": "source-highlight",
+        "tonalRamp": [
+          "oklch(15% 0.10037 179.83)",
+          "oklch(26% 0.10037 179.83)",
+          "oklch(38% 0.10037 179.83)",
+          "oklch(49% 0.10037 179.83)",
+          "oklch(61% 0.10037 179.83)",
+          "oklch(72% 0.10037 179.83)",
+          "oklch(84% 0.10037 179.83)",
+          "oklch(95% 0.10037 179.83)"
+        ]
+      },
+      "enter-background": {
+        "role": "secondary",
+        "displayName": "enter-background",
+        "tonalRamp": [
+          "oklch(15% 0.04234 209.83)",
+          "oklch(26% 0.04234 209.83)",
+          "oklch(38% 0.04234 209.83)",
+          "oklch(49% 0.04234 209.83)",
+          "oklch(61% 0.04234 209.83)",
+          "oklch(72% 0.04234 209.83)",
+          "oklch(84% 0.04234 209.83)",
+          "oklch(95% 0.04234 209.83)"
+        ]
+      },
+      "enter-text": {
+        "role": "secondary",
+        "displayName": "enter-text",
+        "tonalRamp": [
+          "oklch(15% 0.07742 179.64)",
+          "oklch(26% 0.07742 179.64)",
+          "oklch(38% 0.07742 179.64)",
+          "oklch(49% 0.07742 179.64)",
+          "oklch(61% 0.07742 179.64)",
+          "oklch(72% 0.07742 179.64)",
+          "oklch(84% 0.07742 179.64)",
+          "oklch(95% 0.07742 179.64)"
+        ]
+      },
+      "room-wall": {
+        "role": "neutral",
+        "displayName": "room-wall",
+        "tonalRamp": [
+          "oklch(15% 0.00667 160.07)",
+          "oklch(26% 0.00667 160.07)",
+          "oklch(38% 0.00667 160.07)",
+          "oklch(49% 0.00667 160.07)",
+          "oklch(61% 0.00667 160.07)",
+          "oklch(72% 0.00667 160.07)",
+          "oklch(84% 0.00667 160.07)",
+          "oklch(95% 0.00667 160.07)"
+        ]
+      },
+      "room-white": {
+        "role": "neutral",
+        "displayName": "room-white",
+        "tonalRamp": [
+          "oklch(15% 0.01061 106.60)",
+          "oklch(26% 0.01061 106.60)",
+          "oklch(38% 0.01061 106.60)",
+          "oklch(49% 0.01061 106.60)",
+          "oklch(61% 0.01061 106.60)",
+          "oklch(72% 0.01061 106.60)",
+          "oklch(84% 0.01061 106.60)",
+          "oklch(95% 0.01061 106.60)"
+        ]
+      },
+      "room-wood": {
+        "role": "secondary",
+        "displayName": "room-wood",
+        "tonalRamp": [
+          "oklch(15% 0.09188 73.12)",
+          "oklch(26% 0.09188 73.12)",
+          "oklch(38% 0.09188 73.12)",
+          "oklch(49% 0.09188 73.12)",
+          "oklch(61% 0.09188 73.12)",
+          "oklch(72% 0.09188 73.12)",
+          "oklch(84% 0.09188 73.12)",
+          "oklch(95% 0.09188 73.12)"
+        ]
+      },
+      "equipment-blue": {
+        "role": "secondary",
+        "displayName": "equipment-blue",
+        "tonalRamp": [
+          "oklch(15% 0.13343 248.79)",
+          "oklch(26% 0.13343 248.79)",
+          "oklch(38% 0.13343 248.79)",
+          "oklch(49% 0.13343 248.79)",
+          "oklch(61% 0.13343 248.79)",
+          "oklch(72% 0.13343 248.79)",
+          "oklch(84% 0.13343 248.79)",
+          "oklch(95% 0.13343 248.79)"
+        ]
+      },
+      "curtain-blue": {
+        "role": "secondary",
+        "displayName": "curtain-blue",
+        "tonalRamp": [
+          "oklch(15% 0.09492 251.43)",
+          "oklch(26% 0.09492 251.43)",
+          "oklch(38% 0.09492 251.43)",
+          "oklch(49% 0.09492 251.43)",
+          "oklch(61% 0.09492 251.43)",
+          "oklch(72% 0.09492 251.43)",
+          "oklch(84% 0.09492 251.43)",
+          "oklch(95% 0.09492 251.43)"
+        ]
+      },
+      "glass-floor": {
+        "role": "secondary",
+        "displayName": "glass-floor",
+        "tonalRamp": [
+          "oklch(15% 0.07097 207.42)",
+          "oklch(26% 0.07097 207.42)",
+          "oklch(38% 0.07097 207.42)",
+          "oklch(49% 0.07097 207.42)",
+          "oklch(61% 0.07097 207.42)",
+          "oklch(72% 0.07097 207.42)",
+          "oklch(84% 0.07097 207.42)",
+          "oklch(95% 0.07097 207.42)"
+        ]
+      },
+      "wire-blue": {
+        "role": "secondary",
+        "displayName": "wire-blue",
+        "tonalRamp": [
+          "oklch(15% 0.16846 255.53)",
+          "oklch(26% 0.16846 255.53)",
+          "oklch(38% 0.16846 255.53)",
+          "oklch(49% 0.16846 255.53)",
+          "oklch(61% 0.16846 255.53)",
+          "oklch(72% 0.16846 255.53)",
+          "oklch(84% 0.16846 255.53)",
+          "oklch(95% 0.16846 255.53)"
+        ]
+      },
+      "wire-green": {
+        "role": "secondary",
+        "displayName": "wire-green",
+        "tonalRamp": [
+          "oklch(15% 0.12571 141.89)",
+          "oklch(26% 0.12571 141.89)",
+          "oklch(38% 0.12571 141.89)",
+          "oklch(49% 0.12571 141.89)",
+          "oklch(61% 0.12571 141.89)",
+          "oklch(72% 0.12571 141.89)",
+          "oklch(84% 0.12571 141.89)",
+          "oklch(95% 0.12571 141.89)"
+        ]
+      },
+      "route-warm": {
+        "role": "secondary",
+        "displayName": "route-warm",
+        "tonalRamp": [
+          "oklch(15% 0.08520 83.86)",
+          "oklch(26% 0.08520 83.86)",
+          "oklch(38% 0.08520 83.86)",
+          "oklch(49% 0.08520 83.86)",
+          "oklch(61% 0.08520 83.86)",
+          "oklch(72% 0.08520 83.86)",
+          "oklch(84% 0.08520 83.86)",
+          "oklch(95% 0.08520 83.86)"
+        ]
       }
     },
     "typographyMeta": {
       "body": {
-        "displayName": "档案正文",
-        "purpose": "桌面空间档案正文；响应式尺寸见 DESIGN.md。"
+        "displayName": "一期空间正文",
+        "purpose": "照片档案正文；默认 11px，手机 12px，宽屏 13px。"
       }
     },
     "shadows": [
@@ -209,7 +321,7 @@
       {
         "name": "tour",
         "value": "6500ms",
-        "purpose": "用户启动巡游后的空间切换间隔。"
+        "purpose": "用户启动后每 6500ms 切换七节点；场景不自动旋转。"
       },
       {
         "name": "landmark",
@@ -250,8 +362,8 @@
       "name": "场景工具按钮",
       "kind": "button",
       "refersTo": "toolbar-button",
-      "description": "地图视角入口。",
-      "html": "<button class=\"ds-tool\">三维</button>",
+      "description": "剖视视角入口。overview 选中剖视、top 选中俯视、interior 两者均不选中；twin-mode 同步状态，返回全场时标题同步一期空间总览或一期空间总览 · 俯视。",
+      "html": "<button class=\"ds-tool\">剖视</button>",
       "css": ".ds-tool{font-family:\"PingFang SC\",\"Microsoft YaHei\",sans-serif;color:#deedf3;background:#0b1c27;border:0;border-radius:3px;padding:6px 12px;min-height:35px;font-size:11px}.ds-tool:hover{background:#17313f}.ds-tool:focus-visible{outline:2px solid #a6ffea;outline-offset:5px;}"
     },
     {
@@ -259,68 +371,76 @@
       "kind": "button",
       "refersTo": "toolbar-button-active",
       "description": "已启用的视角或巡游。",
-      "html": "<button class=\"ds-active\" aria-pressed=\"true\">三维</button>",
+      "html": "<button class=\"ds-active\" aria-pressed=\"true\">剖视</button>",
       "css": ".ds-active{font-family:\"PingFang SC\",\"Microsoft YaHei\",sans-serif;color:#8df3df;background:#183b42;border:0;border-radius:3px;padding:6px 12px;min-height:35px;font-size:11px}.ds-active:hover{background:#17313f}.ds-active:focus-visible{outline:2px solid #a6ffea;outline-offset:5px;}"
-    },
-    {
-      "name": "内容标签",
-      "kind": "chip",
-      "refersTo": "tag",
-      "description": "档案内的静态主题标签。",
-      "html": "<span class=\"ds-tag\">人工智能通识</span>",
-      "css": ".ds-tag{font-family:\"PingFang SC\",\"Microsoft YaHei\",sans-serif;display:inline-block;font-size:9px;background:#15303d;color:#a4d6db;padding:5px 7px;border-radius:2px}"
     },
     {
       "name": "空间档案面板",
       "kind": "card",
       "description": "内容层次与面板材质。",
-      "html": "<section class=\"ds-panel\"><h2>空间档案</h2><h3>人工智能通识课程</h3><p>从课堂启蒙走向人工智能实践。</p></section>",
-      "css": ".ds-panel{font-family:\"PingFang SC\",\"Microsoft YaHei\",sans-serif;background:linear-gradient(115deg,#0e202dec,#0b1924d9);border-top:1px solid #335361;padding:14px 18px;color:#deedf3;width:244px}.ds-panel h2{font-size:14px;font-weight:500;margin:0 0 17px}.ds-panel h3{font-size:20px;font-weight:500;line-height:1.5;margin:18px 0 11px}.ds-panel p{font-size:12px;color:#afc5d1;line-height:1.95;margin:0}"
+      "html": "<section class=\"ds-panel\"><h2>空间档案</h2><h3>软件技术实训中心</h3><p>双侧计算机工位、透明布线通道与蓝色窗帘。</p></section>",
+      "css": ".ds-panel{font-family:\"PingFang SC\",\"Microsoft YaHei\",sans-serif;background:linear-gradient(115deg,#0e202dec,#0b1924d9);border-top:1px solid #335361;padding:14px 18px;color:#deedf3;width:244px}.ds-panel h2{font-size:14px;font-weight:500;margin:0 0 17px}.ds-panel h3{font-size:20px;font-weight:500;line-height:1.5;margin:18px 0 11px}.ds-panel p{font-size:11px;color:#afc5d1;line-height:1.9;margin:0}"
     },
     {
       "name": "地图地标",
       "kind": "button",
       "description": "地标标题和空间类别。",
-      "html": "<button class=\"ds-landmark\"><i></i><span>通识教学中心<small>通识课程</small></span></button>",
+      "html": "<button class=\"ds-landmark\"><i></i><span>软件技术<small>入口右侧及前方两侧</small></span></button>",
       "css": ".ds-landmark{font-family:\"PingFang SC\",\"Microsoft YaHei\",sans-serif;display:flex;align-items:center;gap:6px;padding:7px 9px;background:#0a202bea;color:#deedf3;border:1px solid #335864;border-radius:3px;text-align:left;white-space:nowrap;font-size:11px;transition:background .2s,border-color .2s}.ds-landmark small{display:block;color:#9ebbc7;font-size:8px;margin-top:3px}.ds-landmark i{width:5px;height:5px;background:#7db7c7;border-radius:50%}.ds-landmark:hover{border-color:#b4f8ee}.ds-landmark:focus-visible{outline:2px solid #a6ffea;outline-offset:5px;}@media(prefers-reduced-motion:reduce){.ds-landmark{transition:none}}"
     },
     {
       "name": "图层开关",
       "kind": "input",
-      "description": "原生复选框带可见焦点。",
-      "html": "<label class=\"ds-layer\"><span>空间标注</span><input type=\"checkbox\" checked/><i></i></label>",
+      "description": "空间名称、透明通道与布线、剖视显示顶棚使用原生复选框。室内自动显示所属顶棚，剖视顶棚开关保留非室内偏好。",
+      "html": "<label class=\"ds-layer\"><span>空间名称</span><input type=\"checkbox\" checked/><i></i></label>",
       "css": ".ds-layer{font-family:\"PingFang SC\",\"Microsoft YaHei\",sans-serif;color:#deedf3;display:flex;align-items:center;justify-content:space-between;gap:32px;font-size:11px;padding:7px 0;position:relative;cursor:pointer}.ds-layer input{position:absolute;right:0;opacity:0;width:32px;height:20px;cursor:pointer}.ds-layer i{width:27px;height:15px;background:#29404d;border-radius:12px;position:relative;pointer-events:none}.ds-layer i:after{content:\"\";height:9px;width:9px;background:#95aebc;position:absolute;top:3px;left:3px;border-radius:50%;transition:transform .15s}.ds-layer input:checked+i{background:#235d58}.ds-layer input:checked+i:after{background:#89f2d9;transform:translateX(12px)}.ds-layer input:focus-visible+i{outline:2px solid #a6ffea;outline-offset:4px}@media(prefers-reduced-motion:reduce){.ds-layer i:after{transition:none}}"
     },
     {
-      "name": "培养空间导航入口",
+      "name": "一期导览导航入口",
       "kind": "nav",
       "refersTo": "dock-item",
-      "description": "五项导航中的单个入口。",
-      "html": "<nav aria-label=\"培养空间示例\"><button class=\"ds-dock\"><svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"M6 6h12v12H6V6Zm3 3h6v6H9V9ZM9 2v4m6-4v4M9 18v4m6-4v4M2 9h4m-4 6h4m12-6h4m-4 6h4\"/></svg><span><strong>前沿实践</strong><small>走进人工智能前沿</small></span></button></nav>",
-      "css": ".ds-dock{font-family:\"PingFang SC\",\"Microsoft YaHei\",sans-serif;padding:16px 20px;display:flex;align-items:center;gap:14px;background:#0b1924;color:#deedf3;border:0;min-height:74px;text-align:left}.ds-dock svg{width:25px;height:25px;fill:none;stroke:#8faab9;stroke-width:1.3;stroke-linecap:round;stroke-linejoin:round}.ds-dock strong{display:block;font-size:13px;font-weight:500}.ds-dock small{display:block;font-size:9px;margin-top:6px;color:#91aeba}.ds-dock:hover{background:#142c38}.ds-dock:focus-visible{outline:2px solid #a6ffea;outline-offset:5px;}"
+      "description": "七节点底部导航中的入口；手机所在导航容器允许横向滚动。",
+      "html": "<nav aria-label=\"一期空间示例\"><button class=\"ds-dock\"><svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"M6 6h12v12H6V6Zm3 3h6v6H9V9ZM9 2v4m6-4v4M9 18v4m6-4v4M2 9h4m-4 6h4m12-6h4m-4 6h4\"/></svg><span><strong>人工智能</strong><small>动线末端 · 左右两侧</small></span></button></nav>",
+      "css": ".ds-dock{font-family:\"PingFang SC\",\"Microsoft YaHei\",sans-serif;padding:14px 12px;display:flex;align-items:center;gap:14px;background:#0b1924;color:#deedf3;border:0;min-height:74px;text-align:left}.ds-dock svg{width:25px;height:25px;fill:none;stroke:#8faab9;stroke-width:1.3;stroke-linecap:round;stroke-linejoin:round}.ds-dock strong{display:block;font-size:12px;font-weight:500}.ds-dock small{display:block;font-size:8px;margin-top:6px;color:#91aeba}.ds-dock:hover{background:#142c38}.ds-dock:focus-visible{outline:2px solid #a6ffea;outline-offset:5px;}"
+    },
+    {
+      "name": "进入空间按钮",
+      "kind": "button",
+      "refersTo": "enter-space",
+      "description": "当前档案进入室内，入口和展厅提供专用近景。",
+      "html": "<button class=\"ds-enter\">进入空间查看</button>",
+      "css": ".ds-enter{font-family:\"PingFang SC\",\"Microsoft YaHei\",sans-serif;display:flex;align-items:center;justify-content:center;border:1px solid #45877f;background:#183c42;color:#a6f1e1;padding:10px 12px;width:100%;font-size:11px;border-radius:3px}.ds-enter:hover{background:#245258}.ds-enter:focus-visible{outline:2px solid #a6ffea;outline-offset:5px;}"
+    },
+    {
+      "name": "照片视角切换",
+      "kind": "button",
+      "description": "切换同一空间的两张来源照片。",
+      "html": "<div class=\"ds-photo-tabs\"><button aria-pressed=\"true\">视角 1</button><button aria-pressed=\"false\">视角 2</button></div>",
+      "css": ".ds-photo-tabs{display:flex;gap:7px}.ds-photo-tabs button{font-family:\"PingFang SC\",\"Microsoft YaHei\",sans-serif;font-size:10px;padding:5px 10px;border:1px solid #2f4c5a;border-radius:3px;background:#0b1924;color:#deedf3}.ds-photo-tabs button[aria-pressed=true]{border-color:#62cdb9;color:#9ceedd;background:#193d43}.ds-photo-tabs button:focus-visible{outline:2px solid #a6ffea;outline-offset:5px;}"
     }
   ],
   "narrative": {
-    "northStar": "智研社数字孪生园区",
-    "overview": "本文件仅记录 `/society/` 已实现的视觉系统，不是个人学术网站的全站重设计规范。用户已确认智慧城市数字孪生方向，并要求突出智研社教学、科研和算力。深海蓝工作台承托程序化三维园区，青绿色承担选中反馈，窄边面板组织教学与培养内容。\n\n园区以模型体量、道路、绿化、建筑窗格和协同连线形成可探索空间；它是概念模型，不是真实地理测绘、BIM 复原或实时监测。图像策略为 Three.js 几何场景与既有公众号二维码，未使用生成式图片。以下名称是对已确认方向与真实实现的描述。",
+    "northStar": "照片参照的一期空间导览",
+    "overview": "本规范仅适用于 `/society/`。深海蓝数字孪生外壳承托一期基地的线性楼层剖视，青绿色反馈帮助参观者在七个导览节点、模型选区和照片档案之间建立对应。用户本期要求以现场照片与已确认走廊顺序建模，原有五节点概念园区已被替换。\n\n空间身份来自真实照片可见的白蓝设备、木色长桌、蓝帘、透明布线通道与大厅发光展柱。十间模型房间为示意排布，尺寸、设备重复数未经实测，系统运维左右关系暂定。界面同时提供十张真实照片对照；原始公众号二维码继续保留，未使用生成式图片。",
     "keyCharacteristics": [
-      "深海蓝背景与低饱和面板，明亮青绿选中反馈。",
-      "桌面以三维园区为主体，两侧信息面板和五项空间导航互相对应。",
-      "小圆角、细边线和描边图标，空间模型承担主要景深。",
-      "降低动态效果与无 WebGL 内容回退均有实现。"
+      "深海蓝界面与青绿色选中反馈。",
+      "线性中轴走廊连接七个导览节点，剖视与近景/室内相互切换。",
+      "白蓝设备、木色桌面、透明蓝绿布线与现场照片形成辨识特征。",
+      "手机七项导航横向滚动，内容与照片仍可完整阅读。"
     ],
     "rules": [],
     "dos": [
-      "Do 将本规范限定于 `/society/`；其他路由沿用其独立视觉系统。",
-      "Do 让地标、底部入口和空间档案保持同一个选中项。",
-      "Do 保留原始二维码和概念示意说明。",
-      "Do 在窄屏保留完整正文与固定导航的底部安全空间。",
-      "Do 保持键盘焦点可见，保留减少动态效果与内容回退。"
+      "Do 将本规范限定于 `/society/`，其他路由继续沿用其独立视觉系统。",
+      "Do 保持七节点选择、地标、动线、档案与模型选区同步。",
+      "Do 保留照片来源、原始二维码及系统运维左右暂定说明。",
+      "Do 区分剖视顶棚偏好与室内自动显示顶棚，保持工具状态随场景模式更新。",
+      "Do 保留键盘焦点、减少动态效果、照片对照和无 WebGL 内容回退。"
     ],
     "donts": [
-      "Don't 将概念建筑、交通与连线表述为真实位置、实时设备或监测数据。",
-      "Don't 用生成式效果图替代当前可操作的几何园区，或重新绘制既有二维码。",
-      "Don't 把地图作为唯一的信息访问入口。"
+      "Don't 将示意尺寸、十间模型房间或设备重复数用作实测数据和资产台账。",
+      "Don't 将本期导览表述为实时监测或精确测绘复原。",
+      "Don't 恢复旧版五节点园区、园区道路、交通流和协同连线作为当前页面主体。",
+      "Don't 重新绘制既有二维码或以生成式图片冒充现场照片。"
     ]
   }
 }

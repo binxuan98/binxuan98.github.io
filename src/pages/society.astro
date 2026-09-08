@@ -1,7 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import SocietyTwinScene from '../components/SocietyTwinScene.astro';
-import { societyMetrics, societyModules } from '../data/society';
+import { baseSpaces, basePhotoPath } from '../data/base-phase-one';
 import '../styles/society-twin.css';
 const icons = {
   city: 'M3 21V7l6-3v17M9 10l7-3v14M16 13l5-2v10M2 21h20M5 9v2m0 3v2m7-3v2m0 3v2m7-5v2',
@@ -17,53 +17,54 @@ const icons = {
   chip: 'M6 6h12v12H6V6Zm3 3h6v6H9V9ZM9 2v4m6-4v4M9 18v4m6-4v4M2 9h4m-4 6h4m12-6h4m-4 6h4',
   network: 'M9 2h6v6H9V2ZM2 16h6v6H2v-6Zm14 0h6v6h-6v-6ZM5 16v-4h14v4m-7-8v4',
 };
-const moduleIcons = ['book','students','lab','chip','network'];
+
 ---
-<BaseLayout title="智研社 · 数字孪生园区" description="探索庆阳职业技术学院智研社数字孪生概念园区，在交互式三维场景中了解人工智能通识课程、科研项目与东数西算人才培养。" bodyClass="twin-page" presentation={true}>
+<BaseLayout title="东数西算人才培养基地 · 一期数字孪生" description="依据庆阳职业技术学院东数西算人才培养基地一期现场照片和实际参观动线构建的交互式三维场景，展示成果展示中心、软件技术、大数据技术、系统运维与人工智能实训中心。" bodyClass="twin-page" presentation={true}>
   <svg class="twin-sprite" aria-hidden="true"><defs>{Object.entries(icons).map(([name,path]) => <symbol id={`twin-${name}`} viewBox="0 0 24 24"><path d={path} /></symbol>)}</defs></svg>
   <div class="twin-app" data-twin-app>
     <header class="twin-header">
       <a href="/" class="twin-brand" aria-label="返回学术主页"><svg><use href="#twin-city" /></svg><span>庆阳职业技术学院<small>人工智能 · 算力 · 教育</small></span></a>
-      <div class="twin-title"><h1>智研社<span>数字孪生园区</span></h1><p>ZHIYAN SOCIETY · DIGITAL TWIN</p></div>
-      <div class="twin-header-tools"><span class="twin-status"><i></i>交互式概念场景</span><button class="twin-icon-button" data-fullscreen aria-label="进入全屏" title="进入全屏"><svg><use href="#twin-expand" /></svg></button></div>
+      <div class="twin-title"><h1>东数西算人才培养基地<span>一期 · 数字孪生</span></h1><p>庆阳职业技术学院 · 现场照片参照建模</p></div>
+      <div class="twin-header-tools"><span class="twin-status"><i></i>一期空间导览</span><button class="twin-icon-button" data-fullscreen aria-label="进入全屏" title="进入全屏"><svg><use href="#twin-expand" /></svg></button></div>
     </header>
 
     <div class="twin-workspace">
-      <aside class="twin-left" aria-label="智研社概览">
-        <section class="twin-panel twin-overview"><h2><svg><use href="#twin-city" /></svg>园区概览<span>OVERVIEW</span></h2>
-          <p class="twin-intro">让兴趣在这里生长<br />让 AI 从课堂走向实践</p>
-          <div class="twin-metrics">{societyMetrics.map((metric) => <div><strong>{metric.value}</strong><span>{metric.label}</span></div>)}</div>
-          <p class="twin-note">依托既有课程与项目资料展示</p>
-        </section>
-        <section class="twin-panel twin-path"><h2><svg><use href="#twin-network" /></svg>人才培养路径</h2><ol><li><span>通识启蒙</span><small>面向全校 44 个专业</small></li><li><span>兴趣汇聚</span><small>发现、吸纳 AI 兴趣学生</small></li><li><span>项目实战</span><small>实验室真实任务牵引</small></li><li><span>产业应用</span><small>服务区域数字产业发展</small></li></ol></section>
-        <section class="twin-panel twin-directions"><h2><svg><use href="#twin-chip" /></svg>前沿实践方向</h2><div><span>大模型</span><small>微调与应用</small></div><div><span>AI4S</span><small>人工智能驱动科学研究</small></div><div><span>异构算力</span><small>调度与协同</small></div></section>
+      <aside class="twin-left" aria-label="一期空间导览">
+        <section class="twin-panel twin-overview"><h2><svg><use href="#twin-city" /></svg>一期项目<span>PHASE I</span></h2><p class="twin-intro">沿着真实动线<br />走进数字人才培养现场</p><div class="base-source-summary"><strong>照片 × 空间</strong><p>保留现场设备与陈设特征<br />按已确认的走廊顺序布局</p></div></section>
+        <section class="twin-panel base-route"><h2><svg><use href="#twin-network" /></svg>参观动线</h2><ol>{baseSpaces.map((space,i)=><li><button data-module={i} aria-pressed={i===0}><span class="base-route-number">{i+1}</span><span><strong>{space.shortTitle}</strong><small>{space.location}</small></span></button></li>)}</ol></section>
+        <section class="twin-panel base-model-note"><h2>场景说明</h2><p>房间位置按参观动线排列，室内陈设参照现场照片。比例与设备重复数量为三维展示示意；系统运维区左右分布暂定。</p></section>
       </aside>
 
-      <section class="twin-map" aria-label="交互式三维园区">
-        <div class="twin-map-heading"><div><span class="twin-map-indicator"></span><strong data-scene-title>园区全景</strong><span class="twin-map-subtitle">CAMPUS VIEW</span></div><span class="twin-map-version">3D 空间导览</span></div>
+      <section class="twin-map" aria-label="一期基地三维剖视场景">
+        <div class="twin-map-heading"><div><span class="twin-map-indicator"></span><strong data-scene-title>一期空间总览</strong><span class="twin-map-subtitle">PHASE I</span></div><span class="twin-map-version">沿中轴走廊向前探索</span></div>
         <SocietyTwinScene />
-        <div class="twin-compass" aria-hidden="true"><span>N</span><svg viewBox="0 0 60 60"><circle cx="30" cy="30" r="25"/><path d="m30 12 6 23-6-3-6 3Z"/><path d="M30 40v8M12 30h7m22 0h7"/></svg></div>
-        <div class="twin-scene-legend"><span><i class="legend-building"></i>教学与科研空间</span><span><i class="legend-flow"></i>培养协同连线</span></div>
+        <div class="twin-compass" aria-hidden="true"><span>动线方向</span><svg viewBox="0 0 60 60"><circle cx="30" cy="30" r="25"/><path d="m30 12 6 23-6-3-6 3Z"/><path d="M30 40v8M12 30h7m22 0h7"/></svg></div>
+        <div class="twin-scene-legend"><span><i class="legend-building"></i>照片参照室内模型</span><span><i class="legend-flow"></i>中央参观动线</span></div>
         <div class="twin-map-toolbar" role="group" aria-label="三维场景控制">
-          <button data-view="perspective" aria-pressed="true"><svg><use href="#twin-city" /></svg>三维</button>
+          <button data-view="perspective" aria-pressed="true"><svg><use href="#twin-city" /></svg>剖视</button>
           <button data-view="top" aria-pressed="false"><svg><use href="#twin-top" /></svg>俯视</button><span class="twin-tool-divider"></span>
           <button data-tour aria-pressed="false"><svg><use href="#twin-play" /></svg><span>自动巡游</span></button>
           <button data-reset aria-label="重置视角" title="重置视角"><svg><use href="#twin-reset" /></svg></button>
         </div>
-        <p class="twin-map-help">拖动旋转 · 滚轮缩放 · 点击地标探索</p>
+        <p class="twin-map-help">拖动旋转 · 滚轮缩放 · 点击空间聚焦</p>
       </section>
 
-      <aside class="twin-right" aria-label="空间详情与图层">
+      <aside class="twin-right" aria-label="现场对照与空间详情">
         <section class="twin-panel twin-detail"><h2><svg><use href="#twin-layers" /></svg>空间档案<span>EXPLORE</span></h2>
-          <div class="twin-detail-content" aria-live="polite" aria-atomic="true">{societyModules.map((module, i) => <article data-detail={i} hidden={i !== 0}><div class="twin-detail-symbol"><svg><use href={`#twin-${moduleIcons[i]}`} /></svg></div><h3>{module.title}</h3><p>{module.text}</p><div class="twin-tags">{module.tags.map(tag => <span>{tag}</span>)}</div><div class="twin-detail-summary"><span>培养价值</span><p>{module.summary}</p></div></article>)}</div>
+          <div class="twin-detail-content" aria-live="polite">{baseSpaces.map((space,i)=><article data-detail={i} hidden={i!==0}>
+            <h3>{space.title}</h3><p class="base-location">{space.location}</p><p>{space.text}</p>
+            <div class="base-photos">{space.photos.map((photo,j)=><figure data-photo-figure={`${i}-${j}`} hidden={j!==0}><a href={basePhotoPath(photo.src)} target="_blank" rel="noopener" aria-label={`打开${photo.caption}`}><img src={basePhotoPath(photo.src)} alt={photo.caption} width="600" height="400" loading={i===0?'eager':'lazy'} /></a><figcaption>{photo.caption}</figcaption></figure>)}{space.photos.length>1&&<div class="base-photo-tabs" aria-label="切换照片">{space.photos.map((photo,j)=><button data-photo={`${i}-${j}`} aria-pressed={j===0}>视角 {j+1}</button>)}</div>}</div>
+            <ul class="base-features">{space.features.map(feature=><li>{feature}</li>)}</ul>
+            <button class="base-enter" data-enter={i}><svg><use href="#twin-arrow" /></svg>进入空间查看</button>
+          </article>)}</div>
         </section>
-        <section class="twin-panel twin-layers"><h2><svg><use href="#twin-layers" /></svg>场景图层</h2><label><span>空间标注</span><input type="checkbox" data-layer="labels" checked /><span class="twin-switch" aria-hidden="true"></span></label><label><span>协同连线</span><input type="checkbox" data-layer="connections" checked /><span class="twin-switch" aria-hidden="true"></span></label><p>空间布局及连线为概念示意</p></section>
-        <a class="twin-qr" href="/images/zhiyanshe-wechat-qr.png" target="_blank" rel="noopener" aria-label="查看 AIGC 智研社公众号二维码"><img src="/images/zhiyanshe-wechat-qr.png" alt="AIGC智研社微信公众号二维码" width="88" height="88" /><div><strong>AIGC 智研社</strong><span>扫码关注公众号</span><small>社团动态 / 学生作品 / AI 热点</small></div></a>
+        <section class="twin-panel twin-layers"><h2><svg><use href="#twin-layers" /></svg>场景图层</h2><label><span>空间名称</span><input type="checkbox" data-layer="labels" checked /><span class="twin-switch" aria-hidden="true"></span></label><label><span>透明通道与布线</span><input type="checkbox" data-layer="cabling" checked /><span class="twin-switch" aria-hidden="true"></span></label><label><span>剖视显示顶棚</span><input type="checkbox" data-layer="ceiling" /><span class="twin-switch" aria-hidden="true"></span></label></section>
+        <a class="twin-qr" href="/images/zhiyanshe-wechat-qr.png" target="_blank" rel="noopener" aria-label="查看 AIGC 智研社公众号二维码"><img src="/images/zhiyanshe-wechat-qr.png" alt="AIGC智研社微信公众号二维码" width="88" height="88" /><div><strong>AIGC 智研社</strong><span>扫码关注公众号</span><small>课程 / 项目 / 学生实践</small></div></a>
       </aside>
     </div>
 
-    <nav class="twin-dock" aria-label="探索五大培养空间">{societyModules.map((module,i) => <button class:list={['twin-dock-item',{'is-active':i===0}]} data-module={i} aria-pressed={i===0}><svg><use href={`#twin-${moduleIcons[i]}`} /></svg><span><strong>{module.shortTitle}</strong><small>{['从 AI 启蒙出发','让兴趣成为能力','连接真实科研任务','走进人工智能前沿','面向东数西算'][i]}</small></span><svg class="twin-dock-arrow"><use href="#twin-arrow" /></svg></button>)}</nav>
-    <footer class="twin-footer"><span>高天厚土 · 福地庆阳<span class="twin-footer-separator">/</span>以职教力量，连接数字未来</span><span>概念园区 · 非真实地理测绘与实时监测</span></footer>
+    <nav class="twin-dock base-dock" aria-label="一期基地七个导览节点">{baseSpaces.map((space,i)=><button class:list={['twin-dock-item',{'is-active':i===0}]} data-module={i} aria-pressed={i===0}><svg><use href={`#twin-${space.icon}`} /></svg><span><strong>{space.shortTitle}</strong><small>{['参观起点','入口左侧','入口右侧及前方两侧','中轴公共空间','大厅前方两侧','新大陆物联网设备','动线末端两侧'][i]}</small></span></button>)}</nav>
+    <footer class="twin-footer"><span>东数西算·数字经济人才培养基地<span class="twin-footer-separator">/</span>一期项目</span><span>照片参照建模 · 动线顺序已确认 · 尺寸与设备数量示意</span></footer>
     <p class="twin-announcement" data-announcement role="status"></p>
   </div>
   <script src="../scripts/society-twin.ts"></script>

@@ -1,6 +1,6 @@
 ---
-name: 智研社数字孪生园区（society 路由）
-description: 仅用于 /society/ 的智慧城市概念园区视觉系统
+name: 东数西算人才培养基地一期（society 路由）
+description: 仅用于 /society/ 的照片参照一期剖视与室内导览视觉系统
 colors:
   twin-accent: "#66e2d2"
   twin-muted: "#90aaba"
@@ -9,18 +9,26 @@ colors:
   stage-background: "#060e17"
   text-primary: "#deedf3"
   focus-ring: "#a6ffea"
-  metric-highlight: "#8df3df"
-  connection-gold: "#e9ca8c"
-  tag-background: "#15303d"
-  tag-text: "#a4d6db"
   control-active: "#183b42"
   control-hover: "#17313f"
+  source-highlight: "#8df3df"
+  enter-background: "#183c42"
+  enter-text: "#a6f1e1"
+  room-wall: "#e4e9e6"
+  room-white: "#f0f0e8"
+  room-wood: "#c69a60"
+  equipment-blue: "#2376bc"
+  curtain-blue: "#225181"
+  glass-floor: "#78bdc7"
+  wire-blue: "#297bdd"
+  wire-green: "#51934a"
+  route-warm: "#f4d598"
 typography:
   display:
     fontFamily: '"PingFang SC", "Microsoft YaHei", sans-serif'
-    fontSize: "27px"
+    fontSize: "23px"
     fontWeight: 600
-    letterSpacing: "0.08em"
+    letterSpacing: "0.025em"
   title:
     fontSize: "20px"
     fontWeight: 500
@@ -28,18 +36,11 @@ typography:
     letterSpacing: "0.015em"
   body:
     fontFamily: '"PingFang SC", "Microsoft YaHei", sans-serif'
-    fontSize: "12px"
-    lineHeight: 1.95
-  metric:
-    fontFamily: '"Avenir Next", "Segoe UI", sans-serif'
-    fontSize: "35px"
-    fontWeight: 400
-    lineHeight: 1
-    letterSpacing: "-0.025em"
+    fontSize: "11px"
+    lineHeight: 1.9
   label:
     fontSize: "9px"
 rounded:
-  tag: "2px"
   landmark: "3px"
   icon-button: "4px"
   toolbar: "5px"
@@ -47,7 +48,7 @@ spacing:
   inline: "6px"
   compact: "12px"
   panel-inline: "18px"
-  workspace: "20px"
+  workspace: "18px"
 components:
   toolbar-button:
     textColor: "{colors.text-primary}"
@@ -55,104 +56,106 @@ components:
     padding: "6px 12px"
   toolbar-button-active:
     backgroundColor: "{colors.control-active}"
-    textColor: "{colors.metric-highlight}"
+    textColor: "{colors.source-highlight}"
   toolbar-button-hover:
     backgroundColor: "{colors.control-hover}"
-  tag:
-    backgroundColor: "{colors.tag-background}"
-    textColor: "{colors.tag-text}"
-    rounded: "{rounded.tag}"
-    padding: "5px 7px"
   dock-item:
     backgroundColor: "{colors.twin-surface}"
     textColor: "{colors.text-primary}"
-    padding: "16px 20px"
+    padding: "14px 12px"
+  enter-space:
+    backgroundColor: "{colors.enter-background}"
+    textColor: "{colors.enter-text}"
+    rounded: "{rounded.landmark}"
+    padding: "10px 12px"
+    width: "100%"
 ---
-# Design System: 智研社数字孪生园区
+
+# Design System: 东数西算人才培养基地一期
 
 ## Overview
 
-**Creative North Star: "智研社数字孪生园区"**
+**Creative North Star: "照片参照的一期空间导览"**
 
-本文件仅记录 `/society/` 已实现的视觉系统，不是个人学术网站的全站重设计规范。用户已确认智慧城市数字孪生方向，并要求突出智研社教学、科研和算力。深海蓝工作台承托程序化三维园区，青绿色承担选中反馈，窄边面板组织教学与培养内容。
+本规范仅适用于 `/society/`。深海蓝数字孪生外壳承托一期基地的线性楼层剖视，青绿色反馈帮助参观者在七个导览节点、模型选区和照片档案之间建立对应。用户本期要求以现场照片与已确认走廊顺序建模，原有五节点概念园区已被替换。
 
-园区以模型体量、道路、绿化、建筑窗格和协同连线形成可探索空间；它是概念模型，不是真实地理测绘、BIM 复原或实时监测。图像策略为 Three.js 几何场景与既有公众号二维码，未使用生成式图片。以下名称是对已确认方向与真实实现的描述。
+空间身份来自真实照片可见的白蓝设备、木色长桌、蓝帘、透明布线通道与大厅发光展柱。十间模型房间为示意排布，尺寸、设备重复数未经实测，系统运维左右关系暂定。界面同时提供十张真实照片对照；原始公众号二维码继续保留，未使用生成式图片。
 
 **Key Characteristics:**
 
-- 深海蓝背景与低饱和面板，明亮青绿选中反馈。
-- 桌面以三维园区为主体，两侧信息面板和五项空间导航互相对应。
-- 小圆角、细边线和描边图标，空间模型承担主要景深。
-- 降低动态效果与无 WebGL 内容回退均有实现。
+- 深海蓝界面与青绿色选中反馈。
+- 线性中轴走廊连接七个导览节点，剖视与近景/室内相互切换。
+- 白蓝设备、木色桌面、透明蓝绿布线与现场照片形成辨识特征。
+- 手机七项导航横向滚动，内容与照片仍可完整阅读。
 
-本次记录依据：`src/styles/society-twin.css`、`src/pages/society.astro`、`src/components/SocietyTwinScene.astro`、`src/scripts/society-twin.ts`、`src/scripts/society-twin-scene.ts`。具体页面策略见 `docs/design/society.md`，事实边界见 `PRODUCT.md`。本文件记录实现，不独立证明浏览器验收或二维码扫码结果。
+依据为 `src/pages/society.astro`、`src/data/base-phase-one.ts`、`src/styles/society-twin.css`、`src/components/SocietyTwinScene.astro` 及两个 `society-twin` 脚本。页面方向见 `docs/design/society.md`，照片映射与事实边界见 `docs/design/base-phase-one-evidence.md`。本文件按代码记录实现，不独立证明测绘、设备清点或硬件验收。
 
 ## Colors
 
 ### Primary
 
-`twin-accent` 为青绿交互色，用于页面顶线、图标、路径节点和状态指示；`metric-highlight` 用于关键数字与已激活工具。`focus-ring` 专用于键盘焦点。
+`twin-accent` 是选中与方向提示的青绿；`source-highlight` 用于照片来源提示与工具激活文字。`focus-ring` 专用于键盘焦点。空间入口按钮使用 `enter-background` 与 `enter-text` 配对。
 
 ### Secondary
 
-`connection-gold` 是三维场景中算力相关连线粒子与部分交通模型的暖金色，辅助区分空间关系。它不代表告警或实时状态。
+照片参照的材料色包括 `equipment-blue`、`curtain-blue`、`room-wood`、`wire-blue` 和 `wire-green`。`glass-floor` 配合材质透明度呈现布线通道；`route-warm` 用于场景中的暖色提示。材质颜色是模型基础色，会受光照与透明度影响，不等同于照片色彩测量结果。
 
 ### Neutral
 
-`stage-background` 承托全屏舞台；`twin-surface` 用于导航等深色面；`twin-line` 划分信息区域。`text-primary` 用于主要文字，`twin-muted` 用于辅助说明。标签和工具状态使用 frontmatter 中对应的背景与文字配对。
+`stage-background` 承托工作台，`twin-surface` 组织导航，`twin-line` 分隔面板。`text-primary` 与 `twin-muted` 区分主要与辅助文字。`room-wall`、`room-white` 为室内浅色墙面、桌架和设备主体，使室内造型与深色外壳分开。
 
 ## Typography
 
-中文以系统黑体栈为主，数值采用 Avenir Next / Segoe UI 回退与等宽数字特性。界面紧凑，标题强于说明，数值强于标签；小号英文仅作为辅助识别。
+中文采用 PingFang SC / Microsoft YaHei 系统黑体栈。主标题默认 23px / 600、字距 .025em；宽屏为 27px，低高度桌面为 20px。手机主标题 17px、副标题 12px 且换行显示，行高 1.5。
 
-- Display 对应桌面主标题；在窄桌面变为 23px，平板 25px，手机主标题 20px、副标题 17px。
-- Title 对应空间档案标题；宽屏增至 23px，手机为 21px。
-- Body 对应桌面档案正文；宽屏 14px，手机 13px、行高 1.9，低高度桌面为 11px。
-- 面板标题一般为 14px / 500；标签为 9px。实现中的部分辅助说明为 7–10px，不应把该尺寸推广为正文规范。
-- Metric 对应概览数字；宽屏 42px、平板 40px、手机 32px，年份单独降低字号以适应长度。
+空间档案标题默认 20px / 500，低高度桌面 18px、手机 21px。档案正文默认 11px / 1.9，宽屏 13px、手机 12px。位置说明为 10px 青绿辅助文字。左侧动线标题默认 12px，手机 13px；照片说明为 9px / 1.6。7–10px 的次级文字仅承担方向与来源提示，正文层次按上述角色保持。
 
 ## Layout
 
-桌面容器上限为 2400px，默认高度 100svh，最小高度 800px，横向内边距 26px。内容区使用 252px / 弹性地图 / 280px 三栏及 20px 栏间距。顶部为三列标题栏，底部为五等分导航。两侧面板可独立纵向滚动；地图保持中心主体。
+桌面容器上限 2400px，默认 100svh、最小高度 800px、横向内边距 26px。当前三栏为 235px / 弹性场景 / 305px，间距 18px；两侧可滚动，中央模型为主体。1700px 以上三栏扩大为 260px / 弹性场景 / 330px。桌面高度不超过 850px 时最小高度 730px，三栏为 220px / 弹性场景 / 275px，顶部高度 80px，照片高度 130px。
 
-1700px 及以上扩大为 290px / 弹性地图 / 310px，间距 28px。1101–1250px 使用 215px / 弹性地图 / 235px，间距 14px。桌面高度不超过 850px 时，最小高度降为 730px，压缩面板间距与内部节奏。
+1100px 及以下采用自然页面高度，720px 高地图先占整行，面板在下方排两列，七项导航固定于底部。600px 及以下为地图、照片档案、图层与二维码、概览动线的单列流；地图高 650px、页边距 14px、顶部高 112px。底部导航使用七项 `minmax(68px, 1fr)` 横向滚动，页尾预留 105px 并支持安全区。
 
-1100px 及以下采用自然页面高度：地图先占整行（620px 高），面板在下方排两列；导航固定于视口底部。600px 及以下改为地图（485px 高）、空间档案、图层与二维码、概览的单列流；页边距 14px，导航五等分且支持安全区，页尾底部留出 100px 空间。
+照片桌面高度 160px，宽屏 190px，平板 230px，采用裁切填充；手机 210px 并使用完整包含显示。照片均可打开原图。
 
 ## Elevation & Depth
 
-主要景深来自真实三维几何、雾效、材质、光照和明暗分层。面板使用深蓝透明渐变与顶部细边线，不采用大幅悬浮阴影。工具栏只有局部轻阴影（`0 8px 24px #02091040`）。地标以投影定位覆盖在场景上，并优先保证选中地标的可辨识性。
+界面主要由深蓝半透明面板、顶部细线和局部工具栏阴影（`0 8px 24px #02091040`）构成。空间景深由 Three.js 几何、浅色墙体、木桌、蓝帘、透明地板、设备、光照与材料表现。
 
-三维镜头切换为 1100ms、四次缓出。巡游由用户启动，每 6500ms 切换空间；手动操作终止巡游。减少动态效果偏好下，镜头直接定位，关闭连续旋转及粒子和交通移动，CSS 过渡与加载转圈关闭。巡游的内容切换仍由用户明确启动。
+剖视保留整条走廊及房间选区；近景/室内只显示当前所属空间。入口为专用外部近景；成果展示中心采用 3.25 模型单位高的机位以越过沙盘；普通室内视点为 1.9 模型单位，以上均是场景参数，不是实测高度。室内自动显示所属顶棚与灯具，大厅呈现格栅顶与蓝色发光展柱。
+
+镜头过渡为 1100ms 四次缓出。巡游由用户启动，每 6500ms 切换节点，保持自动旋转关闭；手动操作中止巡游。减少动态效果时镜头直接定位，CSS 过渡和动画关闭。无旧园区交通流或协同粒子动画。
 
 ## Shapes
 
-面板以直角和顶部细线构成。小型标签、地标、图标按钮、工具栏依次采用 frontmatter 中对应的小圆角。开关与状态点为圆形语言。图标是细描边 SVG，不采用额外图标字体；三维体块、建筑窗格、道路与绿化构成空间特征。
+面板以直角、顶部细线与描边图标组成。地标、照片、入口按钮和照片切换按钮采用 3px 小圆角；工具栏为 5px。路线编号为 23px 圆形，沿竖线连接。透明通道与蓝绿线缆、白蓝设备、穿孔物联网实训架和大厅格栅柱面为当前空间形态特征。
 
 ## Components
 
-- **地图地标**：标题加小号空间类别，深色半透明底与 1px 边框；选中时亮边、青绿底和亮色状态点同步变化。支持 hover 与键盘 focus。
-- **场景工具栏**：三维、俯视、巡游、重置成组出现；选中态使用 `aria-pressed`。工具条在地图下方居中；WebGL 回退时禁用无法工作的工具。
-- **五项空间导航**：固定五等分，图标、标题与桌面副标题组成入口；当前项同时显示背景、顶线和文字颜色变化。手机省略副标题与箭头，图标位于文字上方。
-- **空间档案面板**：由符号、标题、正文、标签与培养价值组成；内容更新使用礼貌播报区域，始终与地标和导航同步。
-- **图层开关**：原生 checkbox 配合视觉滑块，焦点描边落在可见开关上；关闭/开启只控制标注或协同连线。
-- **公众号二维码**：保留原始二维码文件、白底和完整比例；可打开原图，桌面为 76px，低高度桌面 64px，手机 82px。
-- **回退视图**：简洁 SVG 园区线稿与说明代替不可用场景；底部入口仍可阅读全部空间档案。无脚本环境另列全部培养正文。
+- **七项导航与动线列表**：对应入口、成果展示、软件技术、中门大厅、大数据技术、系统运维、人工智能；左侧动线、地标和底部导航同步显示选中项。
+- **场景地标**：标题和方位说明带引导线连接模型；桌面宽度上限 160px，手机 130px。室内模式隐藏地标以让出视野。
+- **空间档案**：标题、方位、正文、现场照片、可见特征及进入按钮；有多张照片时提供视角切换，照片含来源说明并能打开原图。保留运维左右暂定措辞。
+- **进入空间按钮**：全宽青绿深底按钮；入口切换外部近景、展厅切换较高近景、其他节点切换室内视角，窄屏滚回场景位置。
+- **模式工具栏**：剖视、俯视、巡游和重置；`data-mode` 为 overview / top / interior，`twin-mode` 事件同步 `aria-pressed`。overview 选中剖视，top 选中俯视，interior 时两者均不选中。切换剖视/俯视退出室内，并将标题同步为“一期空间总览”或“一期空间总览 · 俯视”；重置回到总览。
+- **图层开关**：空间名称、透明通道与布线、剖视显示顶棚。室内自动显示当前顶棚，不由剖视顶棚偏好关闭；回到非室内后按保存的开关偏好显示。
+- **二维码**：使用既有原文件与白底，保持比例，提供原图入口。
+- **回退**：WebGL 不可用时保留七节点文字与照片导览，禁用三维工具和进入按钮；无脚本时提供所有空间正文。
 
-完整可独立渲染的组件摘录及动效、断点扩展见 `.impeccable/design.json`。摘录用于设计预览，不替代业务交互实现。
+`.impeccable/design.json` 提供独立设计预览片段及断点、动效扩展；预览片段不替代业务交互。
 
 ## Do's and Don'ts
 
 ### Do:
 
-- Do 将本规范限定于 `/society/`；其他路由沿用其独立视觉系统。
-- Do 让地标、底部入口和空间档案保持同一个选中项。
-- Do 保留原始二维码和概念示意说明。
-- Do 在窄屏保留完整正文与固定导航的底部安全空间。
-- Do 保持键盘焦点可见，保留减少动态效果与内容回退。
+- Do 将本规范限定于 `/society/`，其他路由继续沿用其独立视觉系统。
+- Do 保持七节点选择、地标、动线、档案与模型选区同步。
+- Do 保留照片来源、原始二维码及系统运维左右暂定说明。
+- Do 区分剖视顶棚偏好与室内自动显示顶棚，保持工具状态随场景模式更新。
+- Do 保留键盘焦点、减少动态效果、照片对照和无 WebGL 内容回退。
 
 ### Don't:
 
-- Don't 将概念建筑、交通与连线表述为真实位置、实时设备或监测数据。
-- Don't 用生成式效果图替代当前可操作的几何园区，或重新绘制既有二维码。
-- Don't 把地图作为唯一的信息访问入口。
+- Don't 将示意尺寸、十间模型房间或设备重复数用作实测数据和资产台账。
+- Don't 将本期导览表述为实时监测或精确测绘复原。
+- Don't 恢复旧版五节点园区、园区道路、交通流和协同连线作为当前页面主体。
+- Don't 重新绘制既有二维码或以生成式图片冒充现场照片。
