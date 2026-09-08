@@ -1,0 +1,11 @@
+---
+import { societyModules } from '../data/society';
+const places = ['通识教学中心','学生创新工坊','重点实验室','前沿计算中心','算力协同中心'];
+---
+<div class="twin-scene" data-twin-scene>
+  <canvas data-twin-canvas aria-label="智研社三维概念园区。可通过下方五大培养空间按钮查看相同内容。"></canvas>
+  <div class="twin-landmarks" data-landmarks>{societyModules.map((module,i)=><button class:list={['twin-landmark',{'is-active': i===0}]} data-landmark={i} data-module={i} aria-pressed={i===0} aria-label={`探索${module.title}`}><span class="twin-landmark-dot"></span><span>{places[i]}<small>{module.shortTitle}</small></span></button>)}</div>
+  <div class="twin-scene-loading" data-scene-loading><span></span><strong>正在构建三维园区</strong><p>教学、科研与算力空间即将展开</p></div>
+  <div class="twin-scene-fallback" data-scene-fallback hidden><svg viewBox="0 0 600 400" aria-hidden="true"><g fill="none" stroke="currentColor"><path d="M70 80H530V320H70ZM70 200H530M300 80V320M175 80V320M425 80V320"/><path d="M95 105h55v65H95Zm105 0h70v65h-70Zm125 0h70v65h-70Zm125 0h55v65h-55ZM95 225h55v65H95Zm105 0h70v65h-70Zm125 0h70v65h-70Zm125 0h55v65h-55"/></g></svg><strong>园区内容导览</strong><p data-fallback-message>当前环境无法显示三维场景，可通过下方入口探索全部培养内容。</p></div>
+  <noscript><p class="twin-noscript">开启 JavaScript 可体验三维园区。以下为全部培养内容。</p>{societyModules.map(module => <article class="twin-noscript"><h3>{module.title}</h3><p>{module.text}</p></article>)}</noscript>
+</div>
