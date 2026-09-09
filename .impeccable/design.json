@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-09-09T02:46:07.308889+00:00",
+  "generatedAt": "2026-09-09T05:01:48.111145+00:00",
   "title": "Design System: 庆阳职院数字孪生表面（society / school）",
   "extensions": {
     "colorMeta": {
@@ -442,56 +442,126 @@
         "role": "neutral",
         "displayName": "school-wall (/school/)",
         "tonalRamp": [
-          "oklch(15% 0.00684 145.52)",
-          "oklch(26% 0.00684 145.52)",
-          "oklch(38% 0.00684 145.52)",
-          "oklch(49% 0.00684 145.52)",
-          "oklch(61% 0.00684 145.52)",
-          "oklch(72% 0.00684 145.52)",
-          "oklch(84% 0.00684 145.52)",
-          "oklch(95% 0.00684 145.52)"
+          "oklch(15% 0.00545 117.93)",
+          "oklch(26% 0.00545 117.93)",
+          "oklch(38% 0.00545 117.93)",
+          "oklch(49% 0.00545 117.93)",
+          "oklch(61% 0.00545 117.93)",
+          "oklch(72% 0.00545 117.93)",
+          "oklch(84% 0.00545 117.93)",
+          "oklch(95% 0.00545 117.93)"
         ]
       },
       "school-water": {
         "role": "secondary",
         "displayName": "school-water (/school/)",
         "tonalRamp": [
-          "oklch(15% 0.08949 196.02)",
-          "oklch(26% 0.08949 196.02)",
-          "oklch(38% 0.08949 196.02)",
-          "oklch(49% 0.08949 196.02)",
-          "oklch(61% 0.08949 196.02)",
-          "oklch(72% 0.08949 196.02)",
-          "oklch(84% 0.08949 196.02)",
-          "oklch(95% 0.08949 196.02)"
+          "oklch(15% 0.06396 134.27)",
+          "oklch(26% 0.06396 134.27)",
+          "oklch(38% 0.06396 134.27)",
+          "oklch(49% 0.06396 134.27)",
+          "oklch(61% 0.06396 134.27)",
+          "oklch(72% 0.06396 134.27)",
+          "oklch(84% 0.06396 134.27)",
+          "oklch(95% 0.06396 134.27)"
         ]
       },
       "school-grass": {
         "role": "secondary",
         "displayName": "school-grass (/school/)",
         "tonalRamp": [
-          "oklch(15% 0.06222 162.30)",
-          "oklch(26% 0.06222 162.30)",
-          "oklch(38% 0.06222 162.30)",
-          "oklch(49% 0.06222 162.30)",
-          "oklch(61% 0.06222 162.30)",
-          "oklch(72% 0.06222 162.30)",
-          "oklch(84% 0.06222 162.30)",
-          "oklch(95% 0.06222 162.30)"
+          "oklch(15% 0.07999 117.96)",
+          "oklch(26% 0.07999 117.96)",
+          "oklch(38% 0.07999 117.96)",
+          "oklch(49% 0.07999 117.96)",
+          "oklch(61% 0.07999 117.96)",
+          "oklch(72% 0.07999 117.96)",
+          "oklch(84% 0.07999 117.96)",
+          "oklch(95% 0.07999 117.96)"
         ]
       },
       "school-track": {
         "role": "secondary",
         "displayName": "school-track (/school/)",
         "tonalRamp": [
-          "oklch(15% 0.12172 26.50)",
-          "oklch(26% 0.12172 26.50)",
-          "oklch(38% 0.12172 26.50)",
-          "oklch(49% 0.12172 26.50)",
-          "oklch(61% 0.12172 26.50)",
-          "oklch(72% 0.12172 26.50)",
-          "oklch(84% 0.12172 26.50)",
-          "oklch(95% 0.12172 26.50)"
+          "oklch(15% 0.10632 27.50)",
+          "oklch(26% 0.10632 27.50)",
+          "oklch(38% 0.10632 27.50)",
+          "oklch(49% 0.10632 27.50)",
+          "oklch(61% 0.10632 27.50)",
+          "oklch(72% 0.10632 27.50)",
+          "oklch(84% 0.10632 27.50)",
+          "oklch(95% 0.10632 27.50)"
+        ]
+      },
+      "school-tour-gold": {
+        "role": "secondary",
+        "displayName": "school-tour-gold (/school/)",
+        "tonalRamp": [
+          "oklch(15% 0.07100 72.21)",
+          "oklch(26% 0.07100 72.21)",
+          "oklch(38% 0.07100 72.21)",
+          "oklch(49% 0.07100 72.21)",
+          "oklch(61% 0.07100 72.21)",
+          "oklch(72% 0.07100 72.21)",
+          "oklch(84% 0.07100 72.21)",
+          "oklch(95% 0.07100 72.21)"
+        ]
+      },
+      "school-tour-start": {
+        "role": "secondary",
+        "displayName": "school-tour-start (/school/)",
+        "tonalRamp": [
+          "oklch(15% 0.05532 76.87)",
+          "oklch(26% 0.05532 76.87)",
+          "oklch(38% 0.05532 76.87)",
+          "oklch(49% 0.05532 76.87)",
+          "oklch(61% 0.05532 76.87)",
+          "oklch(72% 0.05532 76.87)",
+          "oklch(84% 0.05532 76.87)",
+          "oklch(95% 0.05532 76.87)"
+        ]
+      },
+      "school-tour-start-ink": {
+        "role": "secondary",
+        "displayName": "school-tour-start-ink (/school/)",
+        "tonalRamp": [
+          "oklch(15% 0.03097 216.62)",
+          "oklch(26% 0.03097 216.62)",
+          "oklch(38% 0.03097 216.62)",
+          "oklch(49% 0.03097 216.62)",
+          "oklch(61% 0.03097 216.62)",
+          "oklch(72% 0.03097 216.62)",
+          "oklch(84% 0.03097 216.62)",
+          "oklch(95% 0.03097 216.62)"
+        ]
+      },
+      "school-tour-white": {
+        "role": "neutral",
+        "displayName": "school-tour-white (/school/)",
+        "tonalRamp": [
+          "oklch(15% 0.00000 89.88)",
+          "oklch(26% 0.00000 89.88)",
+          "oklch(38% 0.00000 89.88)",
+          "oklch(49% 0.00000 89.88)",
+          "oklch(61% 0.00000 89.88)",
+          "oklch(72% 0.00000 89.88)",
+          "oklch(84% 0.00000 89.88)",
+          "oklch(95% 0.00000 89.88)"
+        ]
+      },
+      "school-tour-subtitle": {
+        "role": "neutral",
+        "displayName": "school-tour-subtitle (/school/)",
+        "tonalRamp": [
+          "oklch(15% 0.01061 106.60)",
+          "oklch(26% 0.01061 106.60)",
+          "oklch(38% 0.01061 106.60)",
+          "oklch(49% 0.01061 106.60)",
+          "oklch(61% 0.01061 106.60)",
+          "oklch(72% 0.01061 106.60)",
+          "oklch(84% 0.01061 106.60)",
+          "oklch(95% 0.01061 106.60)"
         ]
       }
     },
@@ -503,6 +573,10 @@
       "school-body": {
         "displayName": "智慧校园正文",
         "purpose": "/school/ 本地 Noto Sans SC 子集，100–900 字重；12px / 1.95，宽屏与手机 13px。"
+      },
+      "school-tour-title": {
+        "displayName": "录屏章节标题",
+        "purpose": "Noto Sans SC 500，clamp(26px,3.2vw,110px)，手机24px；字体子集随当前文案生成。"
       }
     },
     "shadows": [
@@ -520,6 +594,11 @@
         "name": "school-loading",
         "value": "0 8px 35px #00101b66",
         "purpose": "/school/ 场景载入提示。"
+      },
+      {
+        "name": "school-tour-dialog",
+        "value": "0 40px 120px #00151c99",
+        "purpose": "录屏准备框局部阴影。"
       }
     ],
     "motion": [
@@ -550,8 +629,18 @@
       },
       {
         "name": "school-tour",
-        "value": "6500ms",
-        "purpose": "/school/ 用户启动后的九处模型路线或过滤后全景目录巡游；后台停止。"
+        "value": "180s / 10 chapters",
+        "purpose": "/school/ 三秒倒计时后播放，默认可选循环/全屏；模型曲线路径接四处实训全景，减少动态效果固定章机位。"
+      },
+      {
+        "name": "school-tour-fade",
+        "value": "1.1s panorama boundaries / 1.2s model transitions",
+        "purpose": "录屏模型与拍摄存档切换。"
+      },
+      {
+        "name": "school-tour-controls",
+        "value": "2200ms auto-hide / opacity .2s",
+        "purpose": "触摸、移动或焦点唤出控制条；点击继续/重播移焦画布使其能自动收起，focus-within保持可见。原生退出巡游自有全屏同步结束巡游。"
       }
     ],
     "breakpoints": [
@@ -700,11 +789,26 @@
       "description": "详情从 h2 开始；来源类别位于图下 figcaption。独立预览保留标题与来源层次，不伪造现场照片。",
       "html": "<section class=\"ds-school-detail\"><h2>图书馆</h2><p>位于毓秀湖南侧，可在航拍中对照建筑。</p><figure><figcaption>校园航拍 · 进入后定位建筑<span>校园楼宇</span></figcaption></figure></section>",
       "css": ".ds-school-detail{font-family:\"Noto Sans SC\",\"PingFang SC\",\"Microsoft YaHei\",sans-serif;padding:25px 22px;background:#0d2030;color:#eaf3f6;width:234px}.ds-school-detail h2{font-size:25px;font-weight:500;line-height:1.4;letter-spacing:1px;margin:0 0 13px}.ds-school-detail p{font-size:12px;line-height:1.95;color:#c0d1da;margin:0 0 21px}.ds-school-detail figure{margin:0}.ds-school-detail figcaption{font-size:10px;line-height:1.6;color:#a3bbc8}.ds-school-detail figcaption span{display:block;margin-top:5px;color:#8be0cd}"
+    },
+    {
+      "name": "/school/ 录屏开始按钮",
+      "kind": "button",
+      "refersTo": "school-tour-start",
+      "description": "材料、GroundedSkybox远景与四个重点实景准备完成后启用；三秒倒计时、移焦画布后播放。",
+      "html": "<button class=\"ds-school-tour-start\">开始大屏巡游</button>",
+      "css": ".ds-school-tour-start{font-family:\"Noto Sans SC\",sans-serif;display:flex;align-items:center;justify-content:center;width:100%;padding:15px;background:#e8cfab;color:#142b31;border:0;font-size:14px;font-weight:600}.ds-school-tour-start:hover{background:#f3e0c4}.ds-school-tour-start:focus-visible{outline:2px solid #8be0cd;outline-offset:4px}.ds-school-tour-start:disabled{opacity:.45;cursor:default}"
+    },
+    {
+      "name": "/school/ 录屏章节字幕",
+      "kind": "custom",
+      "description": "白字与暖金章节号，主体位于5%安全区；预览不模拟或替换场景画面。",
+      "html": "<div class=\"ds-school-tour-caption\"><p>05 / 10 · 教学实训</p><h2>尚能楼 · 从课堂走向实践</h2><div>教学实训楼群 · 走近数字技术与智能装备课堂</div></div>",
+      "css": ".ds-school-tour-caption{font-family:\"Noto Sans SC\",sans-serif;background:#10232b;color:#fff;padding:5%;text-shadow:0 2px 20px #04131d99}.ds-school-tour-caption p{margin:0 0 1em;color:#f0d2a2;font-size:clamp(10px,.85vw,26px);letter-spacing:.2em}.ds-school-tour-caption h2{font-size:clamp(26px,3.2vw,110px);font-weight:500;line-height:1.4;letter-spacing:.09em;margin:0 0 .3em}.ds-school-tour-caption>div{font-size:clamp(12px,1.05vw,34px);font-weight:300;letter-spacing:.1em;line-height:1.7;color:#f0f0e8}"
     }
   ],
   "narrative": {
     "northStar": "照片参照的一期空间导览",
-    "overview": "本规范仅适用于 `/society/`。深海蓝数字孪生外壳承托一期基地的线性楼层剖视，青绿色反馈帮助参观者在七个导览节点、模型选区和照片档案之间建立对应。用户本期要求以现场照片与已确认走廊顺序建模，原有五节点概念园区已被替换。\n\n空间身份来自真实照片可见的白蓝设备、木色长桌、蓝帘、透明布线通道与大厅发光展柱。十间模型房间为示意排布，尺寸、设备重复数未经实测，系统运维左右关系暂定。界面同时提供十张真实照片对照；原始公众号二维码继续保留，未使用生成式图片。\n\n/school/ 独立表面：\n智慧校园沿用用户确认的深海蓝与薄荷青绿界面，在 13 处可辨识地标组成的三维校园与 39 个原始记录全景之间建立可直接操作的对应。白色楼群、毓秀湖、双弧形东门和西侧体育场构成场景主体，目录与档案提供清楚的地名和来源。\n\n实际建筑位置与外观参考原 720yun 全景、导览图和学院官方航拍，体量、树木、家具、灯光和比例仍为展示近似。缺乏室内来源的建筑使用定向航拍，不能因模型可点击便推断其内部功能。全景与夜景均不代表实时状态。",
+    "overview": "本规范仅适用于 `/society/`。深海蓝数字孪生外壳承托一期基地的线性楼层剖视，青绿色反馈帮助参观者在七个导览节点、模型选区和照片档案之间建立对应。用户本期要求以现场照片与已确认走廊顺序建模，原有五节点概念园区已被替换。\n\n空间身份来自真实照片可见的白蓝设备、木色长桌、蓝帘、透明布线通道与大厅发光展柱。十间模型房间为示意排布，尺寸、设备重复数未经实测，系统运维左右关系暂定。界面同时提供十张真实照片对照；原始公众号二维码继续保留，未使用生成式图片。\n\n/school/ 独立表面：\n智慧校园沿用用户确认的深海蓝与薄荷青绿界面，在 13 处可辨识地标组成的三维校园与 39 个原始记录全景之间建立可直接操作的对应。白色楼群、毓秀湖、双弧形东门和西侧体育场构成场景主体，目录与档案提供清楚的地名和来源。\n\n实际建筑位置与外观参考原 720yun 全景、导览图和学院官方航拍，体量、树木、家具、灯光和比例仍为展示近似。缺乏室内来源的建筑使用定向航拍，不能因模型可点击便推断其内部功能。全景与夜景均不代表实时状态。\n\n/school/ 录屏细化：用户确认 180 秒十章节、16:9 部门参观录屏。官方照片立面、CC0 真实叶片和经 GroundedSkybox 投影且遮去近地照片的原航拍远景配合连续镜头与白色字幕；模型与录制全景明确区分，不作实测或实时运行声明。",
     "keyCharacteristics": [
       "深海蓝界面与青绿色选中反馈。",
       "线性中轴走廊连接七个导览节点，剖视与近景/室内相互切换。",
@@ -712,7 +816,11 @@
       "手机七项导航横向滚动，内容与照片仍可完整阅读。",
       "/school/：13 地标与 39 来源全景对应，8 个来源分类。",
       "/school/：本地 Noto Sans SC 字体；照片来源与类别位于图注。",
-      "/school/：窄屏依次重排场景、目录、详情与可滑动全景卡片。"
+      "/school/：窄屏依次重排场景、目录、详情与可滑动全景卡片。",
+      "/school/：180秒十章节巡游，72–96秒建立尚能楼后进入实训全景。",
+      "/school/：官方照片图集与CC0材质来源分开；暖金进度与白色字幕。",
+      "/school/：GroundedSkybox仅保留原航拍远景与天空，外围体块未命名且为近似。",
+      "/school/：臻善楼双翼使用同一七层尺度连续照片网格，去除重复屋檐条；不作实测声明。"
     ],
     "rules": [],
     "dos": [

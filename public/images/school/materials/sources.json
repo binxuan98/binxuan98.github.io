@@ -1,0 +1,201 @@
+[
+  {
+    "file": "white_plaster_02-normal.webp",
+    "source": "https://polyhaven.com/a/white_plaster_02",
+    "download": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/white_plaster_02/white_plaster_02_nor_gl_1k.jpg",
+    "license": "CC0 1.0",
+    "processing": "WebP conversion at 1024 pixels; source color space retained."
+  },
+  {
+    "file": "white_plaster_02-rough.webp",
+    "source": "https://polyhaven.com/a/white_plaster_02",
+    "download": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/white_plaster_02/white_plaster_02_rough_1k.jpg",
+    "license": "CC0 1.0",
+    "processing": "WebP conversion at 1024 pixels; source color space retained."
+  },
+  {
+    "file": "concrete_pavement-color.webp",
+    "source": "https://polyhaven.com/a/concrete_pavement",
+    "download": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/concrete_pavement/concrete_pavement_diff_1k.jpg",
+    "license": "CC0 1.0",
+    "processing": "WebP conversion at 1024 pixels; source color space retained."
+  },
+  {
+    "file": "concrete_pavement-normal.webp",
+    "source": "https://polyhaven.com/a/concrete_pavement",
+    "download": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/concrete_pavement/concrete_pavement_nor_gl_1k.jpg",
+    "license": "CC0 1.0",
+    "processing": "WebP conversion at 1024 pixels; source color space retained."
+  },
+  {
+    "file": "concrete_pavement-rough.webp",
+    "source": "https://polyhaven.com/a/concrete_pavement",
+    "download": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/concrete_pavement/concrete_pavement_rough_1k.jpg",
+    "license": "CC0 1.0",
+    "processing": "WebP conversion at 1024 pixels; source color space retained."
+  },
+  {
+    "file": "aerial_grass_rock-color.webp",
+    "source": "https://polyhaven.com/a/aerial_grass_rock",
+    "download": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/aerial_grass_rock/aerial_grass_rock_diff_1k.jpg",
+    "license": "CC0 1.0",
+    "processing": "WebP conversion at 1024 pixels; source color space retained."
+  },
+  {
+    "file": "aerial_grass_rock-normal.webp",
+    "source": "https://polyhaven.com/a/aerial_grass_rock",
+    "download": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/aerial_grass_rock/aerial_grass_rock_nor_gl_1k.jpg",
+    "license": "CC0 1.0",
+    "processing": "WebP conversion at 1024 pixels; source color space retained."
+  },
+  {
+    "file": "aerial_grass_rock-rough.webp",
+    "source": "https://polyhaven.com/a/aerial_grass_rock",
+    "download": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/aerial_grass_rock/aerial_grass_rock_rough_1k.jpg",
+    "license": "CC0 1.0",
+    "processing": "WebP conversion at 1024 pixels; source color space retained."
+  },
+  {
+    "file": "asphalt_02-color.webp",
+    "source": "https://polyhaven.com/a/asphalt_02",
+    "download": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/asphalt_02/asphalt_02_diff_1k.jpg",
+    "license": "CC0 1.0",
+    "processing": "WebP conversion at 1024 pixels; source color space retained."
+  },
+  {
+    "file": "asphalt_02-normal.webp",
+    "source": "https://polyhaven.com/a/asphalt_02",
+    "download": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/asphalt_02/asphalt_02_nor_gl_1k.jpg",
+    "license": "CC0 1.0",
+    "processing": "WebP conversion at 1024 pixels; source color space retained."
+  },
+  {
+    "file": "asphalt_02-rough.webp",
+    "source": "https://polyhaven.com/a/asphalt_02",
+    "download": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/asphalt_02/asphalt_02_rough_1k.jpg",
+    "license": "CC0 1.0",
+    "processing": "WebP conversion at 1024 pixels; source color space retained."
+  },
+  {
+    "file": "bark_willow-color.webp",
+    "source": "https://polyhaven.com/a/bark_willow",
+    "download": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/bark_willow/bark_willow_diff_1k.jpg",
+    "license": "CC0 1.0",
+    "processing": "WebP conversion at 1024 pixels; source color space retained."
+  },
+  {
+    "file": "bark_willow-normal.webp",
+    "source": "https://polyhaven.com/a/bark_willow",
+    "download": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/bark_willow/bark_willow_nor_gl_1k.jpg",
+    "license": "CC0 1.0",
+    "processing": "WebP conversion at 1024 pixels; source color space retained."
+  },
+  {
+    "file": "bark_willow-rough.webp",
+    "source": "https://polyhaven.com/a/bark_willow",
+    "download": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/bark_willow/bark_willow_rough_1k.jpg",
+    "license": "CC0 1.0",
+    "processing": "WebP conversion at 1024 pixels; source color space retained."
+  },
+  {
+    "file": "daylight.hdr",
+    "source": "https://polyhaven.com/a/kloppenheim_05_puresky",
+    "download": "https://dl.polyhaven.org/file/ph-assets/HDRIs/hdr/1k/kloppenheim_05_puresky_1k.hdr",
+    "license": "CC0 1.0",
+    "processing": "WebP conversion at 1024 pixels; source color space retained."
+  },
+  {
+    "file": "leaves.webp",
+    "source": "https://polyhaven.com/a/tree_small_02",
+    "download": "https://dl.polyhaven.org/file/ph-assets/Models/png/1k/tree_small_02/tree_small_02_leaves_alpha_1k.png",
+    "license": "CC0 1.0",
+    "processing": "Diffuse and source alpha combined; shared atlas, procedural geometry."
+  },
+  {
+    "file": "leaves.webp",
+    "source": "https://polyhaven.com/a/tree_small_02",
+    "download": "https://dl.polyhaven.org/file/ph-assets/Models/png/1k/tree_small_02/tree_small_02_leaves_diff_1k.png",
+    "license": "CC0 1.0",
+    "processing": "Diffuse and source alpha combined; shared atlas, procedural geometry."
+  },
+  {
+    "file": "twigs.webp",
+    "source": "https://polyhaven.com/a/fir_sapling_medium",
+    "download": "https://dl.polyhaven.org/file/ph-assets/Models/png/1k/fir_sapling_medium/fir_sapling_medium_twigs_alpha_1k.png",
+    "license": "CC0 1.0",
+    "processing": "Diffuse and source alpha combined; shared atlas, procedural geometry."
+  },
+  {
+    "file": "twigs.webp",
+    "source": "https://polyhaven.com/a/fir_sapling_medium",
+    "download": "https://dl.polyhaven.org/file/ph-assets/Models/png/1k/fir_sapling_medium/fir_sapling_medium_twigs_diff_1k.png",
+    "license": "CC0 1.0",
+    "processing": "Diffuse and source alpha combined; shared atlas, procedural geometry."
+  },
+  {
+    "file": "campus-window-2.webp",
+    "source": "https://www.qyvtc.cn/info/1108/40972.htm",
+    "download": "https://www.qyvtc.cn/__local/1/B5/50/A79387A6965C628BD894A0AD490_673211A3_12A3A81.jpg",
+    "processing": "Photo detail crop and resampling for approximate campus model; original source retained in per-file provenance."
+  },
+  {
+    "file": "campus-window-4.webp",
+    "source": "https://www.qyvtc.cn/info/1108/40972.htm",
+    "download": "https://www.qyvtc.cn/__local/1/B5/50/A79387A6965C628BD894A0AD490_673211A3_12A3A81.jpg",
+    "processing": "Photo detail crop and resampling for approximate campus model; original source retained in per-file provenance."
+  },
+  {
+    "file": "campus-window-3.webp",
+    "source": "https://www.qyvtc.cn/info/1108/40972.htm",
+    "download": "https://www.qyvtc.cn/__local/1/B5/50/A79387A6965C628BD894A0AD490_673211A3_12A3A81.jpg",
+    "processing": "Photo detail crop and resampling for approximate campus model; original source retained in per-file provenance."
+  },
+  {
+    "file": "campus-window-5.webp",
+    "source": "https://www.qyvtc.cn/info/1108/40972.htm",
+    "download": "https://www.qyvtc.cn/__local/1/B5/50/A79387A6965C628BD894A0AD490_673211A3_12A3A81.jpg",
+    "processing": "Photo detail crop and resampling for approximate campus model; original source retained in per-file provenance."
+  },
+  {
+    "file": "campus-window-0.webp",
+    "source": "https://www.qyvtc.cn/info/1108/40972.htm",
+    "download": "https://www.qyvtc.cn/__local/1/B5/50/A79387A6965C628BD894A0AD490_673211A3_12A3A81.jpg",
+    "processing": "Photo detail crop and resampling for approximate campus model; original source retained in per-file provenance."
+  },
+  {
+    "file": "campus-wall.webp",
+    "source": "https://www.qyvtc.cn/info/1108/40972.htm",
+    "download": "https://www.qyvtc.cn/__local/1/B5/50/A79387A6965C628BD894A0AD490_673211A3_12A3A81.jpg",
+    "processing": "Photo detail crop and resampling for approximate campus model; original source retained in per-file provenance."
+  },
+  {
+    "file": "campus-window-6.webp",
+    "source": "https://www.qyvtc.cn/info/1108/40972.htm",
+    "download": "https://www.qyvtc.cn/__local/1/B5/50/A79387A6965C628BD894A0AD490_673211A3_12A3A81.jpg",
+    "processing": "Photo detail crop and resampling for approximate campus model; original source retained in per-file provenance."
+  },
+  {
+    "file": "campus-curtain-wall.webp",
+    "source": "https://www.qyvtc.cn/info/1108/40972.htm",
+    "download": "https://www.qyvtc.cn/__local/1/B5/50/A79387A6965C628BD894A0AD490_673211A3_12A3A81.jpg",
+    "processing": "Photo detail crop and resampling for approximate campus model; original source retained in per-file provenance."
+  },
+  {
+    "file": "campus-facade-wing.webp",
+    "source": "https://www.qyvtc.cn/info/1108/40972.htm",
+    "download": "https://www.qyvtc.cn/__local/1/B5/50/A79387A6965C628BD894A0AD490_673211A3_12A3A81.jpg",
+    "processing": "Photo detail crop and resampling for approximate campus model; original source retained in per-file provenance."
+  },
+  {
+    "file": "campus-window-1.webp",
+    "source": "https://www.qyvtc.cn/info/1108/40972.htm",
+    "download": "https://www.qyvtc.cn/__local/1/B5/50/A79387A6965C628BD894A0AD490_673211A3_12A3A81.jpg",
+    "processing": "Photo detail crop and resampling for approximate campus model; original source retained in per-file provenance."
+  },
+  {
+    "file": "campus-window-7.webp",
+    "source": "https://www.qyvtc.cn/info/1108/40972.htm",
+    "download": "https://www.qyvtc.cn/__local/1/B5/50/A79387A6965C628BD894A0AD490_673211A3_12A3A81.jpg",
+    "processing": "Photo detail crop and resampling for approximate campus model; original source retained in per-file provenance."
+  }
+]

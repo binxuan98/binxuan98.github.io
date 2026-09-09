@@ -23,10 +23,29 @@ const icons={home:'m3 11 9-8 9 8M5 9v12h14V9M9 21v-7h6v7',cube:'m12 2 10 5v10l-1
       <section class="school-stage" aria-label="校园三维模型与全景漫游">
         <div class="school-stage-top"><div class="school-mode" role="group" aria-label="校园展示方式"><button data-mode-button="campus" aria-pressed="true"><svg><use href="#school-cube"/></svg>三维校园</button><button data-mode-button="panorama" aria-pressed="false"><svg><use href="#school-pano"/></svg>全景漫游</button></div><span class="school-stage-caption" data-stage-caption>东门视角 · 校园全貌</span></div>
         <div class="school-canvas" data-scene-container><img class="school-fallback" src="/images/school/campus-aerial.webp" alt="庆阳职业技术学院航拍：东门、毓秀湖、教学楼及西侧体育场" width="1600" height="1067"/><div class="school-labels" data-labels></div><div class="school-hotspots" data-hotspots></div></div>
+        <section class="school-tour-shell" data-tour-shell hidden aria-label="三分钟校园大屏巡游">
+          <div class="school-tour-fade" data-tour-fade></div>
+          <div class="school-tour-brand"><span>庆阳职业技术学院</span><small>QINGYANG VOCATIONAL & TECHNICAL COLLEGE</small></div>
+          <span class="school-tour-kind" data-tour-kind>数字校园 · 三维巡游</span>
+          <div class="school-tour-caption"><p data-tour-chapter>01 / 10 · 校园序章</p><h2 data-tour-title>由此，走进庆阳职院</h2><div data-tour-subtitle>东校门 · 双弧门廊，开启校园之旅</div></div>
+          <div class="school-tour-progress"><span data-tour-progress></span></div>
+          <div class="school-tour-intro" data-tour-intro role="dialog" aria-modal="true" aria-labelledby="school-tour-heading">
+            <button class="school-tour-close" data-tour-close-intro aria-label="关闭巡游设置"><svg viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18"/></svg></button>
+            <h2 id="school-tour-heading">用三分钟，走进校园</h2><p class="school-tour-description">从东门与毓秀湖出发，经过校园中轴与教学楼群，走进数字技术、工业机器人和智能制造实训现场。</p>
+            <div class="school-tour-spec"><span><strong>03:00</strong>每轮时长</span><span><strong>16:9</strong>大屏横屏</span><span><strong>10</strong>巡游章节</span></div>
+            <div class="school-tour-options"><label><input type="checkbox" data-tour-loop checked/> 自动循环</label><label><input type="checkbox" data-tour-fullscreen checked/> 播放时全屏</label></div>
+            <button class="school-tour-start" data-tour-start disabled><svg><use href="#school-play"/></svg>开始大屏巡游</button>
+            <p class="school-tour-status" data-tour-status role="status">正在准备展示画面</p><button data-tour-prepare-retry hidden>重新准备画面</button>
+            <p class="school-tour-record">开始后倒计时 3 秒。移动鼠标显示控制栏；空格暂停，R 从头播放，Esc 退出。录屏时将鼠标停在画面空处，控制栏会自动隐藏。</p>
+          </div>
+          <div class="school-tour-countdown" data-tour-countdown hidden role="status">3</div>
+          <div class="school-tour-controls" data-tour-controls hidden><button data-tour-pause>暂停</button><button data-tour-restart>从头播放</button><label class="school-visually-hidden" for="school-tour-seek">巡游进度，单位秒</label><input id="school-tour-seek" data-tour-seek type="range" min="0" max="180" step="0.1" value="0"/><span data-tour-time>0:00 / 3:00</span><button data-tour-exit>退出巡游</button></div>
+          <p class="school-tour-feedback" data-tour-feedback role="status"></p>
+        </section>
         <div class="school-loading" data-loading role="status"><span></span>正在构建校园场景</div>
         <div class="school-scene-error" data-scene-error hidden><p data-error-text></p><button data-retry>重新加载</button><a href={campusPanorama.source} target="_blank" rel="noopener">打开原校园全景</a></div>
         <div class="school-compass" aria-hidden="true"><svg viewBox="0 0 60 60" data-compass><circle cx="30" cy="30" r="25"/><path d="m30 9 7 29-7-5-7 5Z"/></svg><span>北</span></div>
-        <div class="school-stage-bottom"><p data-scene-help>拖动旋转 · 滚轮缩放 · 点击楼宇探索</p><div class="school-controls" aria-label="视角控制"><button data-top aria-pressed="false"><svg><use href="#school-top"/></svg><span>俯视</span></button><button data-night aria-pressed="false"><svg><use href="#school-sun"/></svg><span>夜景</span></button><button data-tour aria-pressed="false"><svg><use href="#school-play"/></svg><span>巡游</span></button><button data-reset title="重置视角" aria-label="重置视角"><svg><use href="#school-reset"/></svg></button></div></div>
+        <div class="school-stage-bottom"><p data-scene-help>拖动旋转 · 滚轮缩放 · 点击楼宇探索</p><div class="school-controls" aria-label="视角控制"><button data-top aria-pressed="false"><svg><use href="#school-top"/></svg><span>俯视</span></button><button data-night aria-pressed="false"><svg><use href="#school-sun"/></svg><span>夜景</span></button><button data-tour aria-pressed="false"><svg><use href="#school-play"/></svg><span>大屏巡游</span></button><button data-reset title="重置视角" aria-label="重置视角"><svg><use href="#school-reset"/></svg></button></div></div>
       </section>
       <aside class="school-detail" aria-label="校园地标详情">
         
@@ -35,7 +54,7 @@ const icons={home:'m3 11 9-8 9 8M5 9v12h14V9M9 21v-7h6v7',cube:'m12 2 10 5v10l-1
         <ul class="school-features" data-detail-features><li>校园建筑与湖景</li><li>教学实训与算力空间</li><li>校园生活与文化</li></ul>
         <button class="school-enter" data-enter><span>进入校园全景</span><svg><use href="#school-arrow"/></svg></button>
         <div class="school-collection"><strong>39<span>个实景</span></strong><strong>8<span>个分类</span></strong><p>来自原校园全景的场景目录</p></div>
-        <details class="school-sources"><summary>建模依据与场景说明</summary><p>依据原校园全景、导览图与学院官方航拍制作。建筑轮廓、比例和植被为展示还原，未经实测；夜景为灯光效果预览。全景保留原拍摄时的环境，不代表实时状态。</p><a href={campusPanorama.source} target="_blank" rel="noopener">原校园全景</a><a href="https://www.qyvtc.cn/info/1097/70132.htm" target="_blank" rel="noopener">学院官方航拍来源</a><a href="/images/school/source-map.webp" target="_blank" rel="noopener">查看原全景导览图</a></details>
+        <details class="school-sources"><summary>建模依据与场景说明</summary><p>依据原校园全景、导览图与学院官方航拍制作。建筑轮廓、比例和植被为展示还原，未经实测；夜景为灯光效果预览。全景保留原拍摄时的环境，不代表实时状态。</p><a href={campusPanorama.source} target="_blank" rel="noopener">原校园全景</a><a href="https://www.qyvtc.cn/info/1097/70132.htm" target="_blank" rel="noopener">学院官方航拍来源</a><a href="https://polyhaven.com" target="_blank" rel="noopener">自然材质来源 · Poly Haven CC0</a><a href="/images/school/source-map.webp" target="_blank" rel="noopener">查看原全景导览图</a></details>
       </aside>
     </div>
     <section class="school-gallery" aria-label="校园全部实景场景">

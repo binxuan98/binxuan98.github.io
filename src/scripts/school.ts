@@ -1,17 +1,19 @@
 import { campusBuildings, campusPanorama, sceneTitle, sceneThumb, type CampusBuilding } from '../data/campus';
 import { createSchoolScene } from './school-scene';
+import { createSchoolTour } from './school-tour';
 
 const app=document.querySelector<HTMLElement>('[data-school-app]');
 if(app){
   const one=<T extends HTMLElement=HTMLElement>(s:string)=>app.querySelector<T>(s)!;
   const all=<T extends HTMLElement=HTMLElement>(s:string)=>Array.from(app.querySelectorAll<T>(s));
   const host=one('[data-scene-container]'),loading=one('[data-loading]'),error=one('[data-scene-error]');
-  let engine:ReturnType<typeof createSchoolScene>|null=null,selected:CampusBuilding|undefined,currentId=3327940,mode='campus',request=0,tourTimer=0,tourIndex=0,isTop=false,night=false;
+  let engine:ReturnType<typeof createSchoolScene>|null=null,selected:CampusBuilding|undefined,currentId=3327940,mode='campus',request=0,isTop=false,night=false;
+  let showcase:ReturnType<typeof createSchoolTour>|null=null;
   const setText=(s:string,value:string)=>one(s).textContent=value;
   const announce=(message:string)=>setText('[data-announcement]',message);
   function revealStage(){if(window.innerWidth<=900)one('.school-stage').scrollIntoView({block:'start',behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth'});}
   function errorMessage(message:string){loading.hidden=true;setText('[data-error-text]',message);error.hidden=false;announce(message);}
-  function stopTour(){window.clearInterval(tourTimer);tourTimer=0;one('[data-tour]').setAttribute('aria-pressed','false');setText('[data-tour] span','巡游');}
+  function stopTour(){showcase?.stop();}
   function setMode(next:string){mode=next;app!.dataset.mode=next;all('[data-mode-button]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.modeButton===next)));setText('[data-scene-help]',next==='campus'?'拖动旋转 · 滚轮缩放 · 点击楼宇探索':'拖动环视 · 滚轮缩放 · 点击场景标记前往');}
   function setSelection(b?:CampusBuilding){selected=b;all('[data-building]').forEach(el=>{const active=el.dataset.building===b?.id;el.classList.toggle('is-active',active);el.setAttribute('aria-pressed',String(active));});one('[data-overview]').classList.toggle('is-active',!b);one('[data-overview]').setAttribute('aria-pressed',String(!b));}
   function features(items:string[]){const ul=one('[data-detail-features]');ul.replaceChildren(...items.map(text=>{const li=document.createElement('li');li.textContent=text;return li;}));}
@@ -43,8 +45,10 @@ if(app){
   one('[data-top]').addEventListener('click',()=>{stopTour();isTop=!isTop;engine?.overview(isTop);setSelection();overviewDetail();one('[data-top]').setAttribute('aria-pressed',String(isTop));setText('[data-stage-caption]',isTop?'俯视 · 校园空间布局':'东门视角 · 校园全貌');});
   one('[data-night]').addEventListener('click',()=>{night=!night;engine?.setNight(night);one('[data-night]').setAttribute('aria-pressed',String(night));setText('[data-night] span',night?'日景':'夜景');announce(night?'已切换灯光夜景预览':'已切换日景');});
   one('[data-reset]').addEventListener('click',()=>{stopTour();if(mode==='campus')showOverview();else{engine?.reset();announce('已重置全景视角');}});
-  one('[data-tour]').addEventListener('click',()=>{if(tourTimer){stopTour();return;}const tourMode=mode;const tick=()=>{if(tourMode==='campus'){const route=['east','lake','zhenshan','library','duxing','shangji','shangneng','luban','stadium'];selectBuilding(route[tourIndex++%route.length],true);}else{const visible=all('button[data-panorama]:not([hidden])');if(visible.length)openPanorama(Number(visible[tourIndex++%visible.length].dataset.panorama),undefined,true);}};tick();tourTimer=window.setInterval(tick,6500);one('[data-tour]').setAttribute('aria-pressed','true');setText('[data-tour] span','暂停');});
+  if(engine)showcase=createSchoolTour(app,engine,()=>{night=false;one('[data-night]').setAttribute('aria-pressed','false');setText('[data-night] span','夜景');showOverview();});
+  one('[data-tour]').addEventListener('click',()=>showcase?.open());
+  if(new URLSearchParams(location.search).has('showcase'))void showcase?.open();
   const fullscreen=one<HTMLButtonElement>('[data-fullscreen]');if(!document.fullscreenEnabled)fullscreen.hidden=true;fullscreen.addEventListener('click',async()=>{try{if(document.fullscreenElement)await document.exitFullscreen();else await app!.requestFullscreen();}catch{announce('浏览器未允许进入全屏。');}});document.addEventListener('fullscreenchange',()=>{fullscreen.setAttribute('aria-label',document.fullscreenElement?'退出全屏':'进入全屏');fullscreen.title=document.fullscreenElement?'退出全屏':'进入全屏';});
   one('[data-retry]').addEventListener('click',()=>{if(engine)openPanorama(currentId,selected);else location.reload();});
-  document.addEventListener('visibilitychange',()=>{if(document.hidden)stopTour();});window.addEventListener('pagehide',()=>{stopTour();engine?.dispose();},{once:true});
+window.addEventListener('pagehide',()=>{stopTour();engine?.dispose();},{once:true});
 }

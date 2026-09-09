@@ -6,3 +6,47 @@
 @media(min-width:601px) and (max-width:900px){.school-workspace{grid-template-rows:620px auto}.school-sidebar{height:620px}.school-stage{height:620px}}
 
 .school-photo-source{display:block;margin-top:5px;color:var(--school-accent)}
+
+/* A quiet cinematic surface for a 16:9 departmental display. */
+.school-app.is-showcase{position:fixed;inset:0;z-index:1000;min-height:0;background:#080f13;overflow:hidden}
+.is-showcase>.school-header,.is-showcase .school-sidebar,.is-showcase .school-detail,.is-showcase>.school-gallery,.is-showcase>.school-footer{display:none}
+.school-app.is-showcase .school-workspace{display:block;position:absolute;inset:0;height:100%;min-height:0;max-height:none}
+.school-app.is-showcase .school-stage{position:absolute;inset:0;min-height:0;height:100%;aspect-ratio:auto}
+.is-showcase .school-stage-top,.is-showcase .school-stage-bottom,.is-showcase .school-compass,.is-showcase .school-labels,.is-showcase .school-hotspots{display:none!important}
+.school-tour-shell{position:absolute;inset:0;z-index:6;pointer-events:none;color:#fff;font-family:'Noto Sans SC',sans-serif}
+.school-tour-shell::before{content:'';position:absolute;inset:0;background:linear-gradient(180deg,#07141e66,transparent 24%,transparent 53%,#071218c9);pointer-events:none}
+.school-tour-fade{position:absolute;inset:0;background:#071217;opacity:0;z-index:1}
+.school-tour-brand{position:absolute;top:5.5%;left:5%;z-index:2;line-height:1.5;text-shadow:0 2px 12px #001a22a6}
+.school-tour-brand>span{font-size:clamp(16px,1.6vw,48px);font-weight:500;letter-spacing:.16em}
+.school-tour-brand small{display:block;margin-top:.45em;font-size:clamp(6px,.56vw,20px);letter-spacing:.18em;opacity:.87}
+.school-tour-kind{position:absolute;right:5%;top:6.4%;z-index:2;font-size:clamp(10px,.85vw,28px);letter-spacing:.16em;opacity:.9;text-shadow:0 1px 7px #0c202b}
+.school-tour-caption{position:absolute;left:5%;bottom:11%;right:5%;z-index:2;text-shadow:0 2px 20px #04131d99}
+.school-tour-caption p{margin:0 0 1em;color:#f0d2a2;font-size:clamp(10px,.85vw,26px);letter-spacing:.2em}
+.school-tour-caption h2{font-size:clamp(26px,3.2vw,110px);font-weight:500;line-height:1.4;letter-spacing:.09em;margin:0 0 .3em}
+.school-tour-caption>div{font-size:clamp(12px,1.05vw,34px);font-weight:300;letter-spacing:.1em;line-height:1.7;color:#f0f0e8}
+.school-tour-progress{position:absolute;z-index:2;bottom:5%;left:5%;right:5%;height:1px;background:#d3dfdc40;overflow:hidden}
+.school-tour-progress span{display:block;width:100%;height:100%;background:#e7c397;transform:scaleX(0);transform-origin:left}
+.school-tour-intro{pointer-events:auto;position:absolute;z-index:6;top:50%;left:50%;transform:translate(-50%,-50%);width:min(570px,90vw);max-height:94svh;overflow:auto;padding:42px 42px 30px;background:#10232bf7;border:1px solid #84968c66;box-shadow:0 40px 120px #00151c99;border-radius:3px}
+.school-tour-intro~.school-tour-countdown{z-index:5}
+.school-tour-close{position:absolute;right:15px;top:10px;font-size:27px!important;width:36px;height:36px;font-weight:300}
+
+.school-tour-intro h2{margin:0 0 18px;font-weight:500;font-size:29px;letter-spacing:1px;line-height:1.5}
+.school-tour-description{font-size:13px;line-height:2;color:#d6e1df;margin:0 0 26px}
+.school-tour-spec{display:flex;gap:45px;border-top:1px solid #ffffff25;border-bottom:1px solid #ffffff25;padding:20px 0;margin:0 0 24px}
+.school-tour-spec>span{font-size:10px;color:#cad4d2;letter-spacing:1px}
+.school-tour-spec strong{display:block;font-size:27px;color:#f4ebda;font-weight:300;letter-spacing:1px;margin-bottom:5px;font-variant-numeric:tabular-nums}
+.school-tour-options{display:flex;gap:25px;margin:0 0 24px;font-size:12px}.school-tour-options label{display:flex;align-items:center;gap:7px}.school-tour-options input{accent-color:#e5c297;width:15px;height:15px}
+.school-tour-start{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;padding:15px!important;background:#e8cfab!important;color:#142b31!important;font-size:14px!important;font-weight:600}.school-tour-start:hover{background:#f3e0c4!important}
+.school-tour-status{font-size:11px;line-height:1.7;color:#d2ddda;margin:13px 0;text-align:center}
+.school-tour-record{font-size:11px;line-height:1.9;color:#aebfbc;margin:22px 0 0;border-top:1px solid #ffffff20;padding-top:16px}
+.school-tour-countdown{position:absolute;inset:0;display:grid;place-items:center;font-size:clamp(90px,14vw,360px);font-weight:200;font-variant-numeric:tabular-nums;text-shadow:0 10px 50px #00131a}
+.school-tour-controls{pointer-events:auto;position:absolute;z-index:5;left:50%;bottom:2.5%;transform:translateX(-50%);width:min(740px,94%);display:flex;align-items:center;gap:12px;padding:12px 18px;background:#0a1c25f2;border:1px solid #8da09566;border-radius:6px;transition:opacity .2s}
+.school-tour-controls button{white-space:nowrap;font-size:12px;min-height:32px;padding:0 5px}.school-tour-controls input{width:100%;min-width:50px;accent-color:#e5c297;cursor:pointer}.school-tour-controls>span{white-space:nowrap;font-size:11px;color:#cbd7d5;font-variant-numeric:tabular-nums}
+.school-tour-feedback{position:absolute;z-index:6;bottom:9%;left:50%;transform:translateX(-50%);text-align:center;font-size:12px;background:#102932dd;padding:8px 16px;color:#f3ebda}.school-tour-feedback:empty{display:none}
+.is-showcase[data-tour-playing=true][data-tour-controls=hidden]{cursor:none}
+.is-showcase[data-tour-playing=true][data-tour-controls=hidden] .school-tour-controls:not(:focus-within){opacity:0;pointer-events:none}
+.is-showcase:has(.school-tour-intro:not([hidden])) .school-tour-caption,.is-showcase:has(.school-tour-intro:not([hidden])) .school-tour-brand,.is-showcase:has(.school-tour-intro:not([hidden])) .school-tour-kind{opacity:.25}
+@media(max-width:600px){.school-tour-intro{padding:32px 25px 24px}.school-tour-intro h2{font-size:25px}.school-tour-spec{gap:35px}.school-tour-controls{gap:5px;padding:8px}.school-tour-controls button{font-size:10px}.school-tour-controls>span{font-size:9px}.school-tour-kind{top:11%;left:5%;right:auto}.school-tour-caption{bottom:18%}.school-tour-caption h2{font-size:24px}.school-tour-caption>div{font-size:11px}.school-tour-caption p{font-size:9px}.school-tour-record{font-size:10px}}
+@media(prefers-reduced-motion:reduce){.school-tour-controls{transition:none}}
+
+.school-app.is-showcase .school-canvas canvas:focus-visible{outline:none}

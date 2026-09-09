@@ -33,10 +33,15 @@ colors:
   school-enter-text: "#082a2c"
   school-mode-active: "#25484d"
   school-mode-text: "#c9ffec"
-  school-wall: "#e3e7e3"
-  school-water: "#2e9293"
-  school-grass: "#416f59"
-  school-track: "#b95c54"
+  school-wall: "#e5e6e2"
+  school-water: "#475e39"
+  school-grass: "#a1ad73"
+  school-track: "#974941"
+  school-tour-gold: "#e7c397"
+  school-tour-start: "#e8cfab"
+  school-tour-start-ink: "#142b31"
+  school-tour-white: "#ffffff"
+  school-tour-subtitle: "#f0f0e8"
 typography:
   display:
     fontFamily: '"PingFang SC", "Microsoft YaHei", sans-serif'
@@ -73,6 +78,17 @@ typography:
   school-label:
     fontSize: "10px"
     lineHeight: 1.6
+  school-tour-title:
+    fontFamily: '"Noto Sans SC", sans-serif'
+    fontSize: "clamp(26px, 3.2vw, 110px)"
+    fontWeight: 500
+    lineHeight: 1.4
+    letterSpacing: "0.09em"
+  school-tour-subtitle:
+    fontSize: "clamp(12px, 1.05vw, 34px)"
+    fontWeight: 300
+    lineHeight: 1.7
+    letterSpacing: "0.1em"
 rounded:
   landmark: "3px"
   icon-button: "4px"
@@ -81,6 +97,7 @@ rounded:
   school-card: "5px"
   school-input: "6px"
   school-toolbar: "8px"
+  school-tour-dialog: "3px"
 spacing:
   inline: "6px"
   compact: "12px"
@@ -90,6 +107,7 @@ spacing:
   school-gallery-gap: "12px"
   school-mobile-edge: "16px"
   school-stage-edge: "24px"
+  school-tour-safe-edge: "5%"
 components:
   toolbar-button:
     textColor: "{colors.text-primary}"
@@ -134,6 +152,11 @@ components:
   school-nav:
     rounded: "{rounded.school-card}"
     padding: "9px 10px"
+  school-tour-start:
+    backgroundColor: "{colors.school-tour-start}"
+    textColor: "{colors.school-tour-start-ink}"
+    padding: "15px"
+    width: "100%"
 ---
 
 # Design System: 庆阳职院数字孪生表面
@@ -170,6 +193,11 @@ components:
 
 来源地址、版本及拍摄边界保留于 `docs/design/school.md`，本期数据见 `src/data/campus.ts` 和 `src/data/campus-panorama.json`。
 
+
+### /school/ · 三分钟参观录屏
+
+用户已确认用于部门领导参观大屏的约三分钟、16:9 录屏巡游。既有深海蓝/薄荷绿探索界面保留，录屏态转为日光校园、照片来源立面、真实叶片轮廓、安静白色字幕和克制暖金进度，沿校园中轴进入四处真实实训全景。该模式不宣称测绘级复原或直接生成视频文件。
+
 ## Colors
 
 **/society/ · 一期基地（既有规范）**
@@ -193,6 +221,11 @@ Primary 为 `school-accent`，承担焦点与选中反馈；实景入口使用�
 
 Secondary 是模型中的 `school-water`、`school-grass` 与 `school-track`，共同区分湖面、绿化和跑道；`school-wall` 是浅色建筑基色。模型色受材质、光照与色调映射影响，不是建筑涂料的测量值。日夜切换只改变灯光与模型发光效果，不给来源全景添加虚构运行含义。
 
+
+### /school/ · 照片材质与录屏配色
+
+`school-wall` 等模型色现在是照片贴图与 PBR 表面的调色基值，不能作为成图完整颜色。白墙、八种窗格、中央幕墙和上层立面图集来自学院 8064 × 6048 官方航拍原图。植被来自保留透明通道的 CC0 叶片/针叶照片；环境 HDR 提供照明，原校园航拍通过 GroundedSkybox 地面投影和近地照片遮罩，仅用于远景/天空。暖金 `school-tour-gold` 是录屏章节/进度语言，开始按钮用 `school-tour-start` 与深色文字，主体字幕使用白色与柔白副标题。
+
 ## Typography
 
 **/society/ · 一期基地（既有规范）**
@@ -204,9 +237,14 @@ Secondary 是模型中的 `school-water`、`school-grass` 与 `school-track`，�
 
 ### /school/ · 本地中文字体
 
-校园使用独立的 Noto Sans SC / PingFang SC / Microsoft YaHei 字体栈。字体文件为 `public/fonts/school/noto-sans-sc-campus.woff`，保留可变字重 100–900，覆盖交付时全部校园文本和可打印 ASCII（当前共 498 个字符），以 WOFF 格式通过 `format('woff')` 和 `font-display: swap` 本地加载。字体来源与 SIL OFL 1.1 许可在相邻 README.md、OFL.txt；样式只施加于 `.school-page`，不会改动 `/society/`。新增文字后需使子集覆盖与页面保持一致。
+校园使用独立的 Noto Sans SC / PingFang SC / Microsoft YaHei 字体栈。字体文件为 `public/fonts/school/noto-sans-sc-campus.woff`，保留可变字重 100–900，覆盖交付时全部校园文本和可打印 ASCII（已为当前巡游字幕和控制文案重新生成子集），以 WOFF 格式通过 `format('woff')` 和 `font-display: swap` 本地加载。字体来源与 SIL OFL 1.1 许可在相邻 README.md、OFL.txt；样式只施加于 `.school-page`，不会改动 `/society/`。新增文字后需使子集覆盖与页面保持一致。
 
 校园主标题默认 25px / 600，字距 4px；1200px 以下为 22px、900px 以下 19px、手机 18px。详情标题为 25px / 500 / 1.4，紧凑桌面 22px、手机恢复 25px。正文默认 12px / 1.95，宽屏与手机 13px。10px 来源说明置于照片下方，不在详情标题上叠加小字眉题。39 个实景与 8 个分类使用等宽数字特性，表达来源目录数量。
+
+
+### /school/ · 录屏字幕
+
+录屏 h2 采用 frontmatter 的 school-tour-title，白色、500 字重，手机降为 24px；副标题 300 字重和更宽行距。机构名称位于左上安全区，章节序号采用暖金小字。当前本地 WOFF 已为巡游字幕、准备、播放与反馈文本重新生成，保留 100–900 可变字重；固定 498 字符旧记录不再适用。
 
 ## Layout
 
@@ -225,6 +263,11 @@ Secondary 是模型中的 `school-water`、`school-grass` 与 `school-track`，�
 
 601–900px 为左侧 180px 目录与右侧 620px 高舞台，详情另占下一整行并排正文和照片。600px 以下顺序为 88px 顶栏、490px 场景、两列分组地标目录、详情、可横向滚动的全景缩略图和页脚。全景卡片默认宽 155px、图片高 85px；手机为 142px / 80px。目录按 8 个来源分类筛选，始终有全部场景入口。
 
+
+### /school/ · 全视口录屏
+
+录屏态固定覆盖视口，隐藏探索界面的顶栏、两侧面板、全景目录、页脚、标签与热点。目标为用户确认的 16:9 录屏，CSS 填满实际视口，不强制视频输出比例。左右使用 5% 安全边距，机构名距顶 5.5%，字幕距底 11%，进度线距底 5%。准备框宽度为 min(570px, 90vw)、最高 94svh，支持滚动；手机字幕距底 18%。控制条在底部 2.5%，宽度 min(740px, 94%)。
+
 ## Elevation & Depth
 
 **/society/ · 一期基地（既有规范）**
@@ -240,7 +283,16 @@ Secondary 是模型中的 `school-water`、`school-grass` 与 `school-track`，�
 
 校园模型使用有阴影的几何体、浅色建筑、蓝绿湖面和树木形成尺度关系。实际三维体量承担深度，面板以边框和色阶分层；地标使用 `0 4px 10px #02121a40` 小投影，加载提示使用 `0 8px 35px #00101b66`，不将大阴影施加于所有卡片。
 
-模型镜头切换为 1050ms 四次缓出，减少动态效果时立即定位；手动轨道控制保留输入阻尼。巡游由用户开启，每 6500ms 推进：校园沿九处预设停靠点，全景沿当前过滤后的目录。显式选择与后台切换停止巡游；文档隐藏期间跳过场景渲染工作。全景一次加载选中场景的六面纹理，替换后释放旧纹理；过期加载不覆盖更新的选择。上下面资产在准备时旋转 180 度，以匹配 Three.js 坐标约定。
+手动模型镜头切换仍为 1050ms 四次缓出，减少动态效果时立即定位，输入阻尼保留。录屏巡游已改为 180 秒十章节连续编排：0–96 秒校园曲线路径，96–162 秒四处真实实训全景，162–180 秒回到校园收束；72–96 秒聚焦尚能楼。减少动态效果采用每章固定机位，保留章节和短淡入淡出。可见性处理器在隐藏时暂停播放，文档隐藏期间跳过渲染工作；原生隐藏标签页尚未在当前自动化环境直接观察。
+
+活动全景使用上限两张立方体的缓存，按需加载与预取六面纹理，在淘汰时释放，过期加载不覆盖新选择。模型远景另外保留用于 GroundedSkybox 的原校园航拍纹理，不计入这两张活动全景缓存；近地照片被遮去以避免重复校园。上下立方面按 Three.js 坐标约定旋转 180 度；四处重点实训全景为 1800px 六面。
+
+
+### /school/ · 写实来源与镜头层次
+
+官方航拍图集承担墙面、窗格和幕墙特征，CC0 法线/粗糙度贴图表现地面与树皮，真实透明叶片与针叶构成树冠。来源航拍经 GroundedSkybox 投影仅保留远景/天空；外围未命名的近似建筑体块和道路补充上下文，不代表核验的校外建筑。臻善楼两翼采用相同七层尺度的连续照片纹理，重复单元去掉原图屋檐条，尺寸仍是近似模型。湖水反射、屋顶、绿化位置与道路比例仍为近似。HDR 仅作为环境照明来源，不把其景观当作校园实景。官方照片不标成 CC0；逐文件来源与材质清单分别保留出处。
+
+录屏路径使用 Catmull–Rom 相机与注视曲线，真实全景只作缓慢环视与轻微视场变化。章节跨越模型/全景时采用约 1.1–1.2 秒淡入淡出。准备框用 `0 40px 120px #00151c99` 局部阴影，字幕以纵向暗色蒙层和轻文字阴影保持可读。
 
 ## Shapes
 
@@ -277,6 +329,13 @@ Secondary 是模型中的 `school-water`、`school-grass` 与 `school-track`，�
 - **全景目录**：39 张缩略图与八分类筛选，可横向滚动和选中定位；桌面左右翻组按钮在边缘禁用，手机改为直接滑动。场景间热点遵守来源导航，只有本地目录存在的目标才成为可点按钮。
 - **画布与焦点**：画布可聚焦，全景方向键环视、+ / - 缩放；所有地标都有目录键盘入口，模型浮动标签不重复进入 Tab 次序。控件使用 2px 薄荷色焦点、4px 外偏移。输入、下拉、按钮、来源 details 保留原生语义，加载与结果通过状态区域和 `aria-busy` 提示。
 - **回退与来源**：无法启动 WebGL 时保留官方航拍、文本与原全景链接，提供重试，禁用三维工具。全屏不被支持时隐藏入口。旧场景异步请求不会覆盖新选择。原 tour 和官方图片来源保持可访问。
+
+
+### /school/ · 录屏控制
+
+准备框在材料与四组全景资源预取完成后启用开始按钮；三秒倒计时后进入 180 秒/10 章时间线。默认循环及全屏可取消。暂停/继续、从头播放、0–180 秒进度、Space、R、Esc 均已实现。准备框约束 Tab 焦点并使底层画布 inert；开始后恢复并聚焦画布，点击继续或重播同样移焦画布，使控制条可自动收起；原生退出巡游申请的全屏时同步退出巡游。触摸、鼠标移动和聚焦唤出控制条，播放时 2200ms 自动隐藏且焦点仍在条内时保留可见。减少动态效果使用固定章机位；可见性处理器暂停并清除倒计时，返回后手动继续。
+
+本地浏览器 1080p 与 4K 已测，最新结果见持续刷新的 rebuild-verification.json；不在设计规范固化帧率，测试不能代替目标硬件验收。双向焦点、触摸唤出和受控隐藏状态处理通过，零记录脚本错误；原生后台或实际部门大屏尚未验收。
 
 ## Do's and Don'ts
 
