@@ -1,0 +1,50 @@
+import { campusBuildings, campusPanorama, sceneTitle, sceneThumb, type CampusBuilding } from '../data/campus';
+import { createSchoolScene } from './school-scene';
+
+const app=document.querySelector<HTMLElement>('[data-school-app]');
+if(app){
+  const one=<T extends HTMLElement=HTMLElement>(s:string)=>app.querySelector<T>(s)!;
+  const all=<T extends HTMLElement=HTMLElement>(s:string)=>Array.from(app.querySelectorAll<T>(s));
+  const host=one('[data-scene-container]'),loading=one('[data-loading]'),error=one('[data-scene-error]');
+  let engine:ReturnType<typeof createSchoolScene>|null=null,selected:CampusBuilding|undefined,currentId=3327940,mode='campus',request=0,tourTimer=0,tourIndex=0,isTop=false,night=false;
+  const setText=(s:string,value:string)=>one(s).textContent=value;
+  const announce=(message:string)=>setText('[data-announcement]',message);
+  function revealStage(){if(window.innerWidth<=900)one('.school-stage').scrollIntoView({block:'start',behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth'});}
+  function errorMessage(message:string){loading.hidden=true;setText('[data-error-text]',message);error.hidden=false;announce(message);}
+  function stopTour(){window.clearInterval(tourTimer);tourTimer=0;one('[data-tour]').setAttribute('aria-pressed','false');setText('[data-tour] span','巡游');}
+  function setMode(next:string){mode=next;app!.dataset.mode=next;all('[data-mode-button]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.modeButton===next)));setText('[data-scene-help]',next==='campus'?'拖动旋转 · 滚轮缩放 · 点击楼宇探索':'拖动环视 · 滚轮缩放 · 点击场景标记前往');}
+  function setSelection(b?:CampusBuilding){selected=b;all('[data-building]').forEach(el=>{const active=el.dataset.building===b?.id;el.classList.toggle('is-active',active);el.setAttribute('aria-pressed',String(active));});one('[data-overview]').classList.toggle('is-active',!b);one('[data-overview]').setAttribute('aria-pressed',String(!b));}
+  function features(items:string[]){const ul=one('[data-detail-features]');ul.replaceChildren(...items.map(text=>{const li=document.createElement('li');li.textContent=text;return li;}));}
+  function photo(src:string,alt:string,caption:string){const img=one<HTMLImageElement>('[data-detail-photo]');img.src=src;img.alt=alt;setText('[data-photo-caption]',caption);}
+  function overviewDetail(){setText('[data-detail-group]','校园全貌');setText('[data-detail-title]','走进庆阳职院');setText('[data-detail-text]','从毓秀湖畔到实训课堂，在三维校园中定位建筑，进入全景看见真实的教学与生活空间。');photo('/images/school/campus-aerial.webp','庆阳职业技术学院校园官方航拍','校园官方航拍 · 2026 迎新指南');features(['校园建筑与湖景','教学实训与算力空间','校园生活与文化']);setText('[data-enter] span','进入校园全景');}
+  function buildingDetail(b:CampusBuilding){setText('[data-detail-group]',b.group);setText('[data-detail-title]',b.name);setText('[data-detail-text]',b.text);features(b.features);photo(sceneThumb(b.scene),`${b.name}对应的原全景预览`,b.scene===3327940?'校园航拍 · 进入后定位建筑':'原校园全景 · 实景预览');setText('[data-enter] span',b.scene===3327940?'在航拍中查看':'进入对应实景');}
+  function selectBuilding(id:string,auto=false){const b=campusBuildings.find(b=>b.id===id);if(!b)return;if(!auto)stopTour();request++;host.setAttribute('aria-busy','false');error.hidden=true;loading.hidden=true;engine?.campus();setMode('campus');setSelection(b);buildingDetail(b);engine?.select(b);isTop=false;one('[data-top]').setAttribute('aria-pressed','false');setText('[data-stage-caption]',b.name+' · 建筑近景');announce(`已定位${b.name}`);if(!auto)revealStage();}
+  function showOverview(){stopTour();request++;host.setAttribute('aria-busy','false');engine?.campus();setMode('campus');setSelection();overviewDetail();engine?.overview();error.hidden=true;loading.hidden=true;isTop=false;one('[data-top]').setAttribute('aria-pressed','false');setText('[data-stage-caption]','东门视角 · 校园全貌');}
+  async function openPanorama(id:number,b?:CampusBuilding,auto=false){
+    const s=campusPanorama.scenes.find(s=>s.id===id);if(!s){announce('原全景中未找到此场景，请选择下方实景。');return;}if(!auto)stopTour();if(!engine){errorMessage('当前浏览器无法显示三维场景，请打开原校园全景查看。');return;}
+    const ticket=++request;currentId=id;if(!auto)revealStage();loading.hidden=false;loading.lastChild!.textContent=`正在载入${sceneTitle(s)}`;error.hidden=true;host.setAttribute('aria-busy','true');
+    try{const applied=await engine.panorama(s,b&&'ath'in b?{ath:b.ath!,atv:b.atv!}:undefined);if(!applied||ticket!==request)return;setMode('panorama');loading.hidden=true;host.setAttribute('aria-busy','false');
+      all('button[data-panorama]').forEach(el=>el.setAttribute('aria-pressed',String(Number(el.dataset.panorama)===id)));
+      if(b){setSelection(b);buildingDetail(b);setText('[data-enter] span','回到三维校园');}else{const related=id===3327940?undefined:campusBuildings.find(b=>('category'in b&&b.category===s.categoryId)||b.scene===id);setSelection(related);const category=campusPanorama.categories.find(c=>c.id===s.categoryId)!.name;setText('[data-detail-group]',category);setText('[data-detail-title]',sceneTitle(s));setText('[data-detail-text]',`正在查看原校园全景中的“${s.name}”。拖动画面环视空间，点击场景标记继续漫游，也可从下方目录切换同类实景。`);photo(sceneThumb(id),`${sceneTitle(s)}实景预览`,'原校园全景 · 拍摄存档');features([category,'360° 实景漫游']);setText('[data-enter] span','回到三维校园');}
+      setText('[data-stage-caption]',`${sceneTitle(s)} · 360° 实景`);announce(`已进入${sceneTitle(s)}全景`);
+    }catch{if(ticket!==request)return;host.setAttribute('aria-busy','false');errorMessage('实景图像暂时未能加载，请重试或打开原校园全景。');}
+  }
+  try{engine=createSchoolScene(host,selectBuilding,id=>openPanorama(id));loading.hidden=true;}catch{errorMessage('当前浏览器无法启动三维显示。可查看校园照片，或打开原校园全景。');all<HTMLButtonElement>('[data-top],[data-night],[data-tour],[data-reset]').forEach(b=>b.disabled=true);}
+  all('[data-building]').forEach(b=>b.addEventListener('click',()=>selectBuilding(b.dataset.building!)));
+  one('[data-overview]').addEventListener('click',showOverview);
+  all('[data-mode-button]').forEach(b=>b.addEventListener('click',()=>{if(b.dataset.modeButton==='campus'){stopTour();request++;host.setAttribute('aria-busy','false');engine?.campus();setMode('campus');error.hidden=true;loading.hidden=true;selected?buildingDetail(selected):overviewDetail();setText('[data-stage-caption]',selected?selected.name+' · 建筑近景':'东门视角 · 校园全貌');}else openPanorama(selected?.scene??currentId,selected);}));
+  one('[data-enter]').addEventListener('click',()=>{if(mode==='panorama')selected?selectBuilding(selected.id):showOverview();else openPanorama(selected?.scene??3327940,selected);});
+  all('button[data-panorama]').forEach(b=>b.addEventListener('click',()=>openPanorama(Number(b.dataset.panorama))));
+  one<HTMLInputElement>('[data-building-search]').addEventListener('input',e=>{const term=(e.target as HTMLInputElement).value.trim().toLowerCase();let count=0;all('[data-building]').forEach(el=>{const b=campusBuildings.find(b=>b.id===el.dataset.building)!;const visible=`${b.name}${b.group}${b.text}${b.features.join('')}`.toLowerCase().includes(term);el.hidden=!visible;if(visible)count++;});all('[data-building-group]').forEach(g=>g.hidden=!g.querySelector('[data-building]:not([hidden])'));one('[data-building-empty]').hidden=count>0;});
+  const gallery=one('[data-gallery]');
+  const updateArrows=()=>{one<HTMLButtonElement>('[data-gallery-prev]').disabled=gallery.scrollLeft<3;one<HTMLButtonElement>('[data-gallery-next]').disabled=gallery.scrollLeft+gallery.clientWidth>=gallery.scrollWidth-3;};
+  one<HTMLSelectElement>('[data-category]').addEventListener('change',e=>{const value=Number((e.target as HTMLSelectElement).value);let count=0;all('button[data-panorama]').forEach(el=>{el.hidden=value!==0&&Number(el.dataset.categoryId)!==value;if(!el.hidden)count++;});setText('[data-scene-count]',`${count} 个场景`);gallery.scrollLeft=0;updateArrows();});
+  one('[data-gallery-prev]').addEventListener('click',()=>gallery.scrollBy({left:-gallery.clientWidth*.8}));one('[data-gallery-next]').addEventListener('click',()=>gallery.scrollBy({left:gallery.clientWidth*.8}));gallery.addEventListener('scroll',updateArrows);new ResizeObserver(updateArrows).observe(gallery);
+  one('[data-top]').addEventListener('click',()=>{stopTour();isTop=!isTop;engine?.overview(isTop);setSelection();overviewDetail();one('[data-top]').setAttribute('aria-pressed',String(isTop));setText('[data-stage-caption]',isTop?'俯视 · 校园空间布局':'东门视角 · 校园全貌');});
+  one('[data-night]').addEventListener('click',()=>{night=!night;engine?.setNight(night);one('[data-night]').setAttribute('aria-pressed',String(night));setText('[data-night] span',night?'日景':'夜景');announce(night?'已切换灯光夜景预览':'已切换日景');});
+  one('[data-reset]').addEventListener('click',()=>{stopTour();if(mode==='campus')showOverview();else{engine?.reset();announce('已重置全景视角');}});
+  one('[data-tour]').addEventListener('click',()=>{if(tourTimer){stopTour();return;}const tourMode=mode;const tick=()=>{if(tourMode==='campus'){const route=['east','lake','zhenshan','library','duxing','shangji','shangneng','luban','stadium'];selectBuilding(route[tourIndex++%route.length],true);}else{const visible=all('button[data-panorama]:not([hidden])');if(visible.length)openPanorama(Number(visible[tourIndex++%visible.length].dataset.panorama),undefined,true);}};tick();tourTimer=window.setInterval(tick,6500);one('[data-tour]').setAttribute('aria-pressed','true');setText('[data-tour] span','暂停');});
+  const fullscreen=one<HTMLButtonElement>('[data-fullscreen]');if(!document.fullscreenEnabled)fullscreen.hidden=true;fullscreen.addEventListener('click',async()=>{try{if(document.fullscreenElement)await document.exitFullscreen();else await app!.requestFullscreen();}catch{announce('浏览器未允许进入全屏。');}});document.addEventListener('fullscreenchange',()=>{fullscreen.setAttribute('aria-label',document.fullscreenElement?'退出全屏':'进入全屏');fullscreen.title=document.fullscreenElement?'退出全屏':'进入全屏';});
+  one('[data-retry]').addEventListener('click',()=>{if(engine)openPanorama(currentId,selected);else location.reload();});
+  document.addEventListener('visibilitychange',()=>{if(document.hidden)stopTour();});window.addEventListener('pagehide',()=>{stopTour();engine?.dispose();},{once:true});
+}

@@ -22,6 +22,7 @@ export const navItems = [
     children: [
       { label: '中国算谷·智慧庆阳', href: '/qingyang-compute/' },
       { label: '智研社', href: '/society/' },
+      { label: '数字孪生智慧校园', href: '/school/' },
       { label: '产学研协同', href: '/qingyang-screen3/' }
     ]
   },

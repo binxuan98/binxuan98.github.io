@@ -1,0 +1,49 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { campusBuildings, campusPanorama, sceneTitle, sceneThumb } from '../data/campus';
+import '../styles/school.css';
+const icons={home:'m3 11 9-8 9 8M5 9v12h14V9M9 21v-7h6v7',cube:'m12 2 10 5v10l-10 5-10-5V7l10-5ZM2 7l10 5 10-5M12 12v10',pano:'M3 5c6 3 12 3 18 0v14c-6-3-12-3-18 0V5Zm4 7h10m-3-3 3 3-3 3',arrow:'M4 12h16m-6-6 6 6-6 6',search:'M11 18a7 7 0 1 0 0-14 7 7 0 0 0 0 14Zm5-2 5 5',reset:'M3 10a9 9 0 1 1 2 8M3 4v6h6',top:'m3 12 9-9 9 9-9 9-9-9ZM12 8v8m-4-4h8',sun:'M12 16a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm0-14v2m0 16v2M2 12h2m16 0h2M5 5l2 2m10 10 2 2M5 19l2-2M17 7l2-2',play:'m8 4 12 8-12 8V4Z',expand:'M8 3H3v5m13-5h5v5M3 16v5h5m13-5v5h-5',back:'M20 12H4m6-6-6 6 6 6',map:'m3 5 6-2 6 2 6-2v16l-6 2-6-2-6 2V5Zm6-2v16m6-14v16'};
+---
+<BaseLayout title="数字孪生智慧校园 · 庆阳职业技术学院" description="从三维校园走进真实教学现场。依据庆阳职业技术学院校园全景与官方航拍，连接校园建筑、湖景、教学实训与39个实景全景。" bodyClass="school-page" presentation={true}>
+  <svg class="school-sprites" aria-hidden="true"><defs>{Object.entries(icons).map(([name,path])=><symbol id={`school-${name}`} viewBox="0 0 24 24"><path d={path}/></symbol>)}</defs></svg>
+  <div class="school-app" data-school-app data-mode="campus">
+    <header class="school-header">
+      <a class="school-brand" href="/" aria-label="返回首页"><svg><use href="#school-cube"/></svg><span>庆阳职业技术学院<small>QINGYANG VOCATIONAL & TECHNICAL COLLEGE</small></span></a>
+      <h1>数字孪生智慧校园</h1>
+      <div class="school-header-actions"><a href="/" class="school-home"><svg><use href="#school-home"/></svg>首页</a><button data-fullscreen title="进入全屏" aria-label="进入全屏"><svg><use href="#school-expand"/></svg></button></div>
+    </header>
+    <div class="school-workspace">
+      <aside class="school-sidebar">
+        <div class="school-sidebar-heading"><h2>探索校园</h2><span>{campusBuildings.length} 处地标</span></div>
+        <label class="school-search"><svg><use href="#school-search"/></svg><input type="search" placeholder="查找楼宇或实训空间" aria-label="查找校园地标" data-building-search /></label>
+        <button class="school-overview is-active" data-overview aria-pressed="true"><svg><use href="#school-map"/></svg>校园总览<span>全貌</span></button>
+        <div class="school-building-list">{['教学实训','校园楼宇','校园风景','校园生活'].map(group=><section data-building-group><h3>{group}</h3>{campusBuildings.filter(b=>b.group===group).map(b=><button data-building={b.id} aria-pressed="false"><span>{b.name}</span><svg><use href="#school-arrow"/></svg></button>)}</section>)}<p data-building-empty hidden>没有找到相关地标，请尝试“尚能楼”或“图书馆”。</p></div>
+        <a class="school-base-link" href="/society/"><span>东数西算人才培养基地<small>查看一期室内数字孪生</small></span><svg><use href="#school-arrow"/></svg></a>
+      </aside>
+      <section class="school-stage" aria-label="校园三维模型与全景漫游">
+        <div class="school-stage-top"><div class="school-mode" role="group" aria-label="校园展示方式"><button data-mode-button="campus" aria-pressed="true"><svg><use href="#school-cube"/></svg>三维校园</button><button data-mode-button="panorama" aria-pressed="false"><svg><use href="#school-pano"/></svg>全景漫游</button></div><span class="school-stage-caption" data-stage-caption>东门视角 · 校园全貌</span></div>
+        <div class="school-canvas" data-scene-container><img class="school-fallback" src="/images/school/campus-aerial.webp" alt="庆阳职业技术学院航拍：东门、毓秀湖、教学楼及西侧体育场" width="1600" height="1067"/><div class="school-labels" data-labels></div><div class="school-hotspots" data-hotspots></div></div>
+        <div class="school-loading" data-loading role="status"><span></span>正在构建校园场景</div>
+        <div class="school-scene-error" data-scene-error hidden><p data-error-text></p><button data-retry>重新加载</button><a href={campusPanorama.source} target="_blank" rel="noopener">打开原校园全景</a></div>
+        <div class="school-compass" aria-hidden="true"><svg viewBox="0 0 60 60" data-compass><circle cx="30" cy="30" r="25"/><path d="m30 9 7 29-7-5-7 5Z"/></svg><span>北</span></div>
+        <div class="school-stage-bottom"><p data-scene-help>拖动旋转 · 滚轮缩放 · 点击楼宇探索</p><div class="school-controls" aria-label="视角控制"><button data-top aria-pressed="false"><svg><use href="#school-top"/></svg><span>俯视</span></button><button data-night aria-pressed="false"><svg><use href="#school-sun"/></svg><span>夜景</span></button><button data-tour aria-pressed="false"><svg><use href="#school-play"/></svg><span>巡游</span></button><button data-reset title="重置视角" aria-label="重置视角"><svg><use href="#school-reset"/></svg></button></div></div>
+      </section>
+      <aside class="school-detail" aria-label="校园地标详情">
+        
+        <h2 data-detail-title>走进庆阳职院</h2><p class="school-detail-intro" data-detail-text>从毓秀湖畔到实训课堂，在三维校园中定位建筑，进入全景看见真实的教学与生活空间。</p>
+        <figure class="school-detail-photo"><img data-detail-photo src="/images/school/campus-aerial.webp" alt="庆阳职业技术学院校园官方航拍" width="600" height="400"/><figcaption><span data-photo-caption>校园官方航拍 · 2026 迎新指南</span><span class="school-photo-source" data-detail-group>校园全貌</span></figcaption></figure>
+        <ul class="school-features" data-detail-features><li>校园建筑与湖景</li><li>教学实训与算力空间</li><li>校园生活与文化</li></ul>
+        <button class="school-enter" data-enter><span>进入校园全景</span><svg><use href="#school-arrow"/></svg></button>
+        <div class="school-collection"><strong>39<span>个实景</span></strong><strong>8<span>个分类</span></strong><p>来自原校园全景的场景目录</p></div>
+        <details class="school-sources"><summary>建模依据与场景说明</summary><p>依据原校园全景、导览图与学院官方航拍制作。建筑轮廓、比例和植被为展示还原，未经实测；夜景为灯光效果预览。全景保留原拍摄时的环境，不代表实时状态。</p><a href={campusPanorama.source} target="_blank" rel="noopener">原校园全景</a><a href="https://www.qyvtc.cn/info/1097/70132.htm" target="_blank" rel="noopener">学院官方航拍来源</a><a href="/images/school/source-map.webp" target="_blank" rel="noopener">查看原全景导览图</a></details>
+      </aside>
+    </div>
+    <section class="school-gallery" aria-label="校园全部实景场景">
+      <div class="school-gallery-header"><h2>实景漫游<span data-scene-count>39 个场景</span></h2><label><span class="school-visually-hidden">按实景分类筛选</span><select data-category><option value="0">全部场景</option>{campusPanorama.categories.map(c=><option value={c.id}>{c.name}</option>)}</select></label><div class="school-gallery-arrows"><button data-gallery-prev aria-label="上一组实景"><svg><use href="#school-back"/></svg></button><button data-gallery-next aria-label="下一组实景"><svg><use href="#school-arrow"/></svg></button></div></div>
+      <div class="school-scenes" data-gallery>{campusPanorama.scenes.map((s,i)=><button data-panorama={s.id} data-category-id={s.categoryId} aria-pressed="false"><img src={sceneThumb(s.id)} alt="" width="180" height="104" loading={i<8?'eager':'lazy'}/><span>{sceneTitle(s)}</span></button>)}</div>
+    </section>
+    <footer class="school-footer"><span>庆阳职业技术学院 · 数字孪生智慧校园</span><span>三维展示还原 · 全景为拍摄存档</span></footer>
+    <p class="school-visually-hidden" data-announcement role="status"></p>
+  </div>
+  <script src="../scripts/school.ts"></script>
+</BaseLayout>
