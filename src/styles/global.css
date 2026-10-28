@@ -956,6 +956,7 @@ button {
   color: rgba(255, 255, 255, 0.72);
   font-size: clamp(13px, 1vw, 17px);
   font-weight: 800;
+  line-height: 1.5;
 }
 
 .compute-source-note {

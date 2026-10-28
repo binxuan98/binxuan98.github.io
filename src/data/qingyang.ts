@@ -1,18 +1,18 @@
 export const qingyangMetrics = [
-  { value: '21.5万P', label: '智算规模达到' },
-  { value: '24.33万架', label: '在建拟建机架' },
+  { value: '30.6万P', label: '智算规模达到' },
+  { value: '12万亿次', label: '庆阳机房日均Token调用量，占全国近10%' },
   { value: '99%+', label: '智算占比' },
-  { value: '85%+', label: '清洁能源占比' }
+  { value: '85%+', label: '打造“绿电聚合+中广核绿电直连”绿电供应模式' }
 ];
 
 export const qingyangTimeline = [
   { month: '2024', value: '5.1万P', label: '智算规模突破 5 万 P' },
-  { month: '当前', value: '21.5万P', label: '智算规模达到 21.5 万 P' },
-  { month: '年底', value: '30万P+', label: '预计集群算力突破 30 万 P' }
+  { month: '2026.8', value: '21.5万P', label: '智算规模达到 21.5 万 P' },
+  { month: '当前', value: '30.6万P', label: '智算规模达到 30.6 万 P' }
 ];
 
 export const qingyangHubNodes = [
-  { name: '庆阳', subtitle: '甘肃枢纽 · 21.5万P', lon: 107.64, lat: 35.73, provinces: ['甘肃省'], color: '#f3d98a', cardX: -3.95, cardZ: 2.85, isCore: true },
+  { name: '庆阳', subtitle: '甘肃枢纽 · 30.6万P', lon: 107.64, lat: 35.73, provinces: ['甘肃省'], color: '#f3d98a', cardX: -3.95, cardZ: 2.85, isCore: true },
   { name: '中卫', subtitle: '宁夏枢纽', lon: 105.19, lat: 37.51, provinces: ['宁夏回族自治区'], color: '#4eeaff', cardX: -5.5, cardZ: 1.55 },
   { name: '和林格尔', subtitle: '内蒙古枢纽', lon: 111.82, lat: 40.38, provinces: ['内蒙古自治区'], color: '#72f29a', cardX: -1.8, cardZ: 3.6 },
   { name: '张家口', subtitle: '京津冀枢纽', lon: 114.88, lat: 40.82, provinces: ['河北省'], color: '#a8c7ff', cardX: 1.4, cardZ: 3.55 },
@@ -29,5 +29,5 @@ export const qingyangStory = {
   title: '东数西算庆阳枢纽',
   subtitle: '庆阳东数西算产业园区获批以整园创建国家级零碳园区，园区清洁能源消费占比已超85%，“中国算谷·智慧庆阳”城市品牌影响力持续提升。',
   proof: '',
-  bottomline: '751户头部企业落地，互联网出口带宽达到31.6T，庆阳成为智算占比最高、增速最快、消纳最充分的数据中心集群'
+  bottomline: '780户头部企业落地，算力网“结对子”城市达到64个，庆阳成为智算占比最高、增速最快、消纳最充分的数据中心集群'
 };
